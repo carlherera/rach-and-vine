@@ -23,7 +23,14 @@
   body{font-family:'Montserrat',sans-serif;background:var(--burgundy-deep);color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
   body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(92,31,46,0.3) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(139,45,66,0.2) 0%,transparent 50%);pointer-events:none;z-index:0}
   .app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
-  .header{padding:52px 20px 16px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(26,10,14,0.95) 0%,rgba(45,18,24,0.8) 100%);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+
+  /* Sync indicator */
+  .sync-bar{height:3px;background:var(--burgundy-deep);position:relative;overflow:hidden}
+  .sync-bar.syncing::after{content:'';position:absolute;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:syncSlide 1.2s infinite}
+  @keyframes syncSlide{to{left:200%}}
+  .sync-status{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:3px 0;background:var(--burgundy-deep)}
+
+  .header{padding:48px 20px 14px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(26,10,14,0.95) 0%,rgba(45,18,24,0.8) 100%);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
   .header-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2px}
   .header-vine{font-size:20px;opacity:0.7}
   .header-logo{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;letter-spacing:3px;color:var(--gold);font-style:italic}
@@ -33,26 +40,30 @@
   .stat{text-align:center}
   .stat-value{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);font-weight:500}
   .stat-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+
   .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--glass-bg);border-top:1px solid var(--border);backdrop-filter:blur(16px);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
-  .nav-btn{flex:1;padding:12px 4px 10px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color 0.2s;font-family:'Montserrat',sans-serif}
+  .nav-btn{flex:1;padding:12px 4px 10px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color 0.2s;font-family:'Montserrat',sans-serif;touch-action:manipulation}
   .nav-btn.active{color:var(--gold)}
   .nav-icon{font-size:20px;line-height:1}
   .nav-label{font-size:9px;letter-spacing:1px;text-transform:uppercase}
+
   .screen{display:none;flex:1;padding:16px 16px 90px;animation:fadeIn 0.3s ease}
   .screen.active{display:block}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   .section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--gold);letter-spacing:2px;margin-bottom:4px}
   .section-sub{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:16px}
+
   .search-bar{display:flex;gap:8px;margin-bottom:10px}
   .search-input{flex:1;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;outline:none}
   .search-input::placeholder{color:var(--text-muted)}
   .search-input:focus{border-color:var(--border-bright)}
   .sort-select{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;outline:none;cursor:pointer}
-  /* Filter chips - using touch-action and larger tap targets for iOS */
+
   .filter-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .filter-row::-webkit-scrollbar{display:none}
-  .filter-chip{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;transition:background 0.2s,color 0.2s,border-color 0.2s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:36px;display:flex;align-items:center}
+  .filter-chip{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;transition:all 0.2s;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:36px;display:flex;align-items:center}
   .filter-chip.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
+
   .wine-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;transition:border-color 0.2s;position:relative;overflow:hidden;touch-action:manipulation}
   .wine-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--burgundy-accent);border-radius:3px 0 0 3px}
   .wine-card.gain::before{background:var(--green)}
@@ -72,8 +83,18 @@
   .tag.blend{border-color:rgba(201,168,76,0.4);color:var(--gold-light)}
   .tag.other-v{border-color:rgba(100,180,140,0.4);color:#7abf9e}
   .wine-qty{position:absolute;top:10px;right:12px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-weight:500}
-  .fab{position:fixed;bottom:76px;right:20px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);color:var(--gold-light);font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.5);z-index:150;transition:transform 0.2s}
+
+  .fab{position:fixed;bottom:76px;right:20px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);color:var(--gold-light);font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.5);z-index:150;transition:transform 0.2s;touch-action:manipulation}
   .fab:active{transform:scale(0.92)}
+
+  /* Loading overlay */
+  .loading-overlay{position:fixed;inset:0;background:var(--burgundy-deep);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+  .loading-overlay.hidden{display:none}
+  .loading-logo{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);font-style:italic;letter-spacing:3px}
+  .loading-sub{font-size:10px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase}
+  .loading-spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
   /* Rack */
   .rack-selector{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
   .rack-selector::-webkit-scrollbar{display:none}
@@ -97,6 +118,7 @@
   .slot-popup.show{display:block}
   .slot-popup-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary)}
   .slot-popup-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
+
   /* Modals */
   .modal-overlay{position:fixed;inset:0;background:rgba(10,4,6,0.88);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
   .modal-overlay.open{display:flex}
@@ -144,6 +166,8 @@
   .drink-fill.past{background:var(--burgundy-accent)}
   .drink-fill.early{background:#4a7c5c}
   .drink-label{font-size:9px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
+
+  /* Sommelier */
   .rec-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
   .rec-type-btn{padding:14px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;text-align:center;cursor:pointer;transition:all 0.2s;touch-action:manipulation}
   .rec-type-btn.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
@@ -174,6 +198,8 @@
   .dot:nth-child(2){animation-delay:0.2s}
   .dot:nth-child(3){animation-delay:0.4s}
   @keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+  /* Settings */
   .value-insight{background:linear-gradient(135deg,rgba(61,122,92,0.15),rgba(61,122,92,0.05));border:1px solid rgba(61,122,92,0.3);border-radius:10px;padding:14px;margin-bottom:16px}
   .value-insight-title{font-size:10px;letter-spacing:2px;color:var(--green-light);text-transform:uppercase;margin-bottom:8px}
   .value-insight-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
@@ -183,7 +209,19 @@
 </style>
 </head>
 <body>
+
+<!-- Loading Screen -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-logo">Rach &amp; Vine</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-sub">Loading your cellar...</div>
+</div>
+
 <div class="app">
+  <!-- Sync indicator -->
+  <div class="sync-bar" id="sync-bar"></div>
+  <div class="sync-status" id="sync-status"></div>
+
   <div class="header">
     <div class="header-logo-wrap">
       <span class="header-vine">🌿</span>
@@ -236,12 +274,7 @@
     <div class="ai-badge">✦ Powered by Claude AI</div>
     <div class="api-setup" id="api-setup">
       <div class="api-setup-title">One-time setup required</div>
-      <div class="api-setup-text">
-        To power the Sommelier with AI, you need a free Anthropic API key.<br><br>
-        1. Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> on your Chromebook<br>
-        2. Sign up for a free account and create an API key<br>
-        3. Paste it below — you only need to do this once.
-      </div>
+      <div class="api-setup-text">To power the Sommelier with AI, you need a free Anthropic API key.<br><br>1. Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a><br>2. Sign up and create an API key<br>3. Paste it below — only needed once.</div>
       <div class="api-key-row">
         <input class="api-key-input" id="api-key-input" placeholder="sk-ant-..." type="password">
         <button class="api-key-btn" onclick="saveApiKey()">Save Key</button>
@@ -377,38 +410,109 @@
   </div>
 </div>
 
-<script>
-const YOUR_WINES=[{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:64,retail:59,qty:6},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2013",purchase:38,retail:143,qty:2},{name:"Elivette Spring Mountain District (Magnum)",varietal:"Red Blend",vintage:"2000",purchase:119,retail:null,qty:1},{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:59,qty:2},{name:"Terra Valentine K Block Spring Mountain",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:42,retail:55,qty:1},{name:"Conn Creek Special Selection",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:64,retail:70,qty:1},{name:"Raymond Generations",varietal:"Red Blend",vintage:"2020",purchase:75,retail:75,qty:1},{name:"Arcudi",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:2},{name:"Barrett & Barrett",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:129,retail:275,qty:2},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2016",purchase:38,retail:211,qty:2},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2011",purchase:32,retail:199,qty:3},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:75,qty:2},{name:"Vineyard 29",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:53,retail:65,qty:2},{name:"Keenan Reserve",varietal:"Cabernet Sauvignon",vintage:"2020",purchase:49,retail:60,qty:2},{name:"Hampton Royce",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:49,retail:55,qty:2},{name:"Kapscandy Roberta's Reserve",varietal:"Merlot",vintage:"2016",purchase:108,retail:362,qty:1},{name:"Meteor Vineyard",varietal:"Cabernet Sauvignon",vintage:"2016",purchase:68,retail:95,qty:2},{name:"Grands Joueurs Vignerons Rougiste",varietal:"Red Blend",vintage:"2022",purchase:14,retail:18,qty:2},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:75,qty:2},{name:"Sleeper",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:49,retail:39,qty:4},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:4},{name:"Grape Culture",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:75,retail:80,qty:2},{name:"Nellcote Rutherford Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:97,retail:97,qty:3},{name:"Cornerstone Cellars",varietal:"Red Blend",vintage:"2018",purchase:50,retail:60,qty:2},{name:"Cornerstone Cellars",varietal:"Cabernet Franc",vintage:"2018",purchase:42,retail:50,qty:2},{name:"Gallica",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:129,retail:145,qty:1},{name:"Nellcote Rally Eye 76",varietal:"Cabernet Sauvignon",vintage:"2017",purchase:86,retail:90,qty:2},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:56,retail:60,qty:2},{name:"Beau Vigne Old School",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:54,retail:60,qty:2},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:56,retail:60,qty:3},{name:"Reynvaan Family Vineyards The Contender",varietal:"Syrah",vintage:"2017",purchase:34,retail:50,qty:3},{name:"Waypoint Beckstoffer Georges III",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:75,retail:90,qty:2},{name:"Beringer Private Reserve",varietal:"Cabernet Sauvignon",vintage:"",purchase:118,retail:165,qty:3},{name:"Erikson & Caradin Craftsman & Wolves",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:56,retail:60,qty:3},{name:"Fattoria La Vialla Casa Conforto",varietal:"Chianti",vintage:"2020",purchase:28,retail:30,qty:3},{name:"Sleeper",varietal:"Cabernet Franc",vintage:"2021",purchase:45,retail:45,qty:3},{name:"Madrigal",varietal:"Petite Sirah",vintage:"2018",purchase:28,retail:32,qty:2},{name:"Stags Leap Winery The Investor",varietal:"Red Blend",vintage:"2020",purchase:54,retail:59,qty:2},{name:"Peju Winery",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:32,retail:40,qty:4},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:53,retail:58,qty:2},{name:"Sleeper Vine Cliff Estate",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:65,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2022",purchase:99,retail:110,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:81,retail:90,qty:3},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:122,retail:140,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:108,retail:120,qty:2},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2023",purchase:104,retail:115,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:131,retail:145,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:1},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1},{name:"Shafer Vineyards",varietal:"Red Blend",vintage:"2022",purchase:90,retail:118,qty:2},{name:"Shafer Vineyards",varietal:"Merlot",vintage:"2023",purchase:90,retail:100,qty:1},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:140,retail:122,qty:3},{name:"Sherwin Family Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:175,retail:185,qty:3},{name:"Sherwin Family Vineyards",varietal:"Red Blend",vintage:"2023",purchase:85,retail:90,qty:3},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:157,retail:191,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:128,retail:221,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:213,retail:238,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:106,retail:78,qty:2},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:71,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:170,retail:195,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:170,retail:195,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:213,retail:250,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:119,retail:195,qty:1},{name:"Inglenook Niebaum-Pennino \"1882\"",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:48,retail:55,qty:3},{name:"Muga",varietal:"Rioja",vintage:"2021",purchase:36,retail:42,qty:1},{name:"Duckhorn Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:66,qty:6},{name:"Nickel & Nickel John C. Sullenger Vineyard",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:104,retail:123,qty:3},{name:"Denner Vineyards Dirt Worshipper",varietal:"Red Blend",vintage:"2021",purchase:76,retail:85,qty:3},{name:"BV Georges de Latour Private Reserve",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:144,retail:175,qty:2},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:65,retail:137,qty:3},{name:"Overture by Opus",varietal:"Red Blend",vintage:"2021",purchase:144,retail:201,qty:2},{name:"Duckhorn Vineyards Three Palms Vineyard",varietal:"Merlot",vintage:"2021",purchase:128,retail:125,qty:2},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:126,retail:137,qty:2},{name:"Cliff Lede \"Rhythm\"",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:117,retail:130,qty:2},{name:"Titus Vineyards",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:101,retail:115,qty:2},{name:"Ghost Block",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:72,retail:80,qty:2},{name:"Tenuta Sette Cieli Indaco",varietal:"Toscana Rosso",vintage:"2017",purchase:76,retail:90,qty:2},{name:"Dominus Estate Napanook",varietal:"Red Blend",vintage:"2021",purchase:108,retail:99,qty:2}];
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, onValue, set, push, update, remove } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
-const SK='rach_vine_v6';
-let wines=JSON.parse(localStorage.getItem(SK)||'null');
-if(!wines){
-  for(const k of['rach_vine_v5','cave_wines_v4','cave_wines_v3']){const d=localStorage.getItem(k);if(d){wines=JSON.parse(d);break;}}
-  if(!wines)wines=YOUR_WINES.map((w,i)=>({...w,id:'w'+(Date.now()+i),rack:null,slotId:null,slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:new Date().toISOString()}));
-  localStorage.setItem(SK,JSON.stringify(wines));
-}
+// ── Firebase config ──
+const firebaseConfig = {
+  apiKey: "AIzaSyDMThmxgswZ2hYMHxT902JDs783leQ1W1M",
+  authDomain: "rach-and-vine.firebaseapp.com",
+  databaseURL: "https://rach-and-vine-default-rtdb.firebaseio.com",
+  projectId: "rach-and-vine",
+  storageBucket: "rach-and-vine.firebasestorage.app",
+  messagingSenderId: "362333144241",
+  appId: "1:362333144241:web:fb5d409cef989ea2be4e90"
+};
 
-let activeFilter='all',selectedRecType='meal',currentDetailId=null,editingId=null,editPhotoData=null;
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const winesRef = ref(db, 'wines');
 
-// Rack config — rows numbered 1 (top) to N (bottom)
-const RACKS=[
-  {id:'left', name:'Left Wine Rack',  rows:10,cols:12,dual:true},
-  {id:'right',name:'Right Wine Rack', rows:12,cols:12,dual:true},
-  {id:'table',name:'Wine Table',      rows:5, cols:5, dual:false},
+// ── State ──
+let wines = {};
+let activeFilter = 'all';
+let selectedRecType = 'meal';
+let currentDetailId = null;
+let editingId = null;
+let editPhotoData = null;
+let isLoaded = false;
+
+const RACKS = [
+  {id:'left', name:'Left Wine Rack',  rows:10, cols:12, dual:true},
+  {id:'right',name:'Right Wine Rack', rows:12, cols:12, dual:true},
+  {id:'table',name:'Wine Table',      rows:5,  cols:5,  dual:false},
   {id:'small',name:'Small Wine Rack', dual:false,
     specialRows:[{row:1,cols:2},{row:2,cols:3},{row:3,cols:3},{row:4,cols:3},{row:5,cols:3},{row:6,cols:3},{row:7,cols:3},{row:8,cols:3}]}
 ];
-let currentRack=RACKS[0];
+let currentRack = RACKS[0];
 
-function save(){localStorage.setItem(SK,JSON.stringify(wines));updateStats();}
-function updateStats(){
-  const total=wines.reduce((s,w)=>s+(parseInt(w.qty)||0),0);
-  const v=new Set(wines.map(w=>w.varietal).filter(Boolean)).size;
-  document.getElementById('stat-bottles').textContent=total;
-  document.getElementById('stat-varietals').textContent=v;
+// ── Firebase real-time listener ──
+function setSyncing(on) {
+  const bar = document.getElementById('sync-bar');
+  const status = document.getElementById('sync-status');
+  if (on) { bar.classList.add('syncing'); status.textContent = '⟳ Syncing...'; }
+  else { bar.classList.remove('syncing'); status.textContent = '✓ Cellar in sync'; setTimeout(()=>{ status.textContent=''; },2000); }
 }
 
-function showScreen(id,btn){
+onValue(winesRef, (snapshot) => {
+  setSyncing(false);
+  const data = snapshot.val();
+  wines = data || {};
+
+  if (!isLoaded) {
+    // First load — seed with default wines if empty
+    if (Object.keys(wines).length === 0) {
+      seedDefaultWines();
+    } else {
+      isLoaded = true;
+      hideLoading();
+      refreshAll();
+    }
+  } else {
+    refreshAll();
+  }
+});
+
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.add('hidden');
+}
+
+function refreshAll() {
+  updateStats();
+  buildFilters();
+  renderWineList();
+  if (document.getElementById('screen-rack').classList.contains('active')) renderRack();
+  if (document.getElementById('screen-settings').classList.contains('active')) renderSettings();
+}
+
+// ── Seed default wines on first load ──
+async function seedDefaultWines() {
+  const defaults = [{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:64,retail:59,qty:6},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2013",purchase:38,retail:143,qty:2},{name:"Elivette Spring Mountain District (Magnum)",varietal:"Red Blend",vintage:"2000",purchase:119,retail:null,qty:1},{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:59,qty:2},{name:"Terra Valentine K Block Spring Mountain",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:42,retail:55,qty:1},{name:"Conn Creek Special Selection",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:64,retail:70,qty:1},{name:"Raymond Generations",varietal:"Red Blend",vintage:"2020",purchase:75,retail:75,qty:1},{name:"Arcudi",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:2},{name:"Barrett & Barrett",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:129,retail:275,qty:2},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2016",purchase:38,retail:211,qty:2},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2011",purchase:32,retail:199,qty:3},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:75,qty:2},{name:"Vineyard 29",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:53,retail:65,qty:2},{name:"Keenan Reserve",varietal:"Cabernet Sauvignon",vintage:"2020",purchase:49,retail:60,qty:2},{name:"Hampton Royce",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:49,retail:55,qty:2},{name:"Kapscandy Roberta's Reserve",varietal:"Merlot",vintage:"2016",purchase:108,retail:362,qty:1},{name:"Meteor Vineyard",varietal:"Cabernet Sauvignon",vintage:"2016",purchase:68,retail:95,qty:2},{name:"Grands Joueurs Vignerons Rougiste",varietal:"Red Blend",vintage:"2022",purchase:14,retail:18,qty:2},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:75,qty:2},{name:"Sleeper",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:49,retail:39,qty:4},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:4},{name:"Grape Culture",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:75,retail:80,qty:2},{name:"Nellcote Rutherford Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:97,retail:97,qty:3},{name:"Cornerstone Cellars",varietal:"Red Blend",vintage:"2018",purchase:50,retail:60,qty:2},{name:"Cornerstone Cellars",varietal:"Cabernet Franc",vintage:"2018",purchase:42,retail:50,qty:2},{name:"Gallica",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:129,retail:145,qty:1},{name:"Nellcote Rally Eye 76",varietal:"Cabernet Sauvignon",vintage:"2017",purchase:86,retail:90,qty:2},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:56,retail:60,qty:2},{name:"Beau Vigne Old School",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:54,retail:60,qty:2},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:56,retail:60,qty:3},{name:"Reynvaan Family Vineyards The Contender",varietal:"Syrah",vintage:"2017",purchase:34,retail:50,qty:3},{name:"Waypoint Beckstoffer Georges III",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:75,retail:90,qty:2},{name:"Beringer Private Reserve",varietal:"Cabernet Sauvignon",vintage:"",purchase:118,retail:165,qty:3},{name:"Erikson & Caradin Craftsman & Wolves",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:56,retail:60,qty:3},{name:"Fattoria La Vialla Casa Conforto",varietal:"Chianti",vintage:"2020",purchase:28,retail:30,qty:3},{name:"Sleeper",varietal:"Cabernet Franc",vintage:"2021",purchase:45,retail:45,qty:3},{name:"Madrigal",varietal:"Petite Sirah",vintage:"2018",purchase:28,retail:32,qty:2},{name:"Stags Leap Winery The Investor",varietal:"Red Blend",vintage:"2020",purchase:54,retail:59,qty:2},{name:"Peju Winery",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:32,retail:40,qty:4},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:53,retail:58,qty:2},{name:"Sleeper Vine Cliff Estate",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:65,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2022",purchase:99,retail:110,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:81,retail:90,qty:3},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:122,retail:140,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:108,retail:120,qty:2},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2023",purchase:104,retail:115,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:2},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:131,retail:145,qty:1},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:1},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1},{name:"Shafer Vineyards",varietal:"Red Blend",vintage:"2022",purchase:90,retail:118,qty:2},{name:"Shafer Vineyards",varietal:"Merlot",vintage:"2023",purchase:90,retail:100,qty:1},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:140,retail:122,qty:3},{name:"Sherwin Family Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:175,retail:185,qty:3},{name:"Sherwin Family Vineyards",varietal:"Red Blend",vintage:"2023",purchase:85,retail:90,qty:3},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:157,retail:191,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:128,retail:221,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:213,retail:238,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:106,retail:78,qty:2},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:71,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:170,retail:195,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:170,retail:195,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:213,retail:250,qty:1},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:119,retail:195,qty:1},{name:"Inglenook Niebaum-Pennino \"1882\"",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:48,retail:55,qty:3},{name:"Muga",varietal:"Rioja",vintage:"2021",purchase:36,retail:42,qty:1},{name:"Duckhorn Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:66,qty:6},{name:"Nickel & Nickel John C. Sullenger Vineyard",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:104,retail:123,qty:3},{name:"Denner Vineyards Dirt Worshipper",varietal:"Red Blend",vintage:"2021",purchase:76,retail:85,qty:3},{name:"BV Georges de Latour Private Reserve",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:144,retail:175,qty:2},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:65,retail:137,qty:3},{name:"Overture by Opus",varietal:"Red Blend",vintage:"2021",purchase:144,retail:201,qty:2},{name:"Duckhorn Vineyards Three Palms Vineyard",varietal:"Merlot",vintage:"2021",purchase:128,retail:125,qty:2},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:126,retail:137,qty:2},{name:"Cliff Lede \"Rhythm\"",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:117,retail:130,qty:2},{name:"Titus Vineyards",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:101,retail:115,qty:2},{name:"Ghost Block",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:72,retail:80,qty:2},{name:"Tenuta Sette Cieli Indaco",varietal:"Toscana Rosso",vintage:"2017",purchase:76,retail:90,qty:2},{name:"Dominus Estate Napanook",varietal:"Red Blend",vintage:"2021",purchase:108,retail:99,qty:2}];
+
+  setSyncing(true);
+  const updates = {};
+  defaults.forEach(w => {
+    const newRef = push(winesRef);
+    updates[newRef.key] = {...w, rack:null, slotId:null, slotText:'', drinkFrom:'', drinkTo:'', notes:'', photo:null, added:new Date().toISOString()};
+  });
+  await set(winesRef, updates);
+  isLoaded = true;
+  hideLoading();
+}
+
+// ── Stats ──
+function updateStats() {
+  const arr = Object.values(wines);
+  const total = arr.reduce((s,w)=>s+(parseInt(w.qty)||0),0);
+  const v = new Set(arr.map(w=>w.varietal).filter(Boolean)).size;
+  document.getElementById('stat-bottles').textContent = total;
+  document.getElementById('stat-varietals').textContent = v;
+}
+
+// ── Navigation ──
+window.showScreen = function(id, btn) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
@@ -417,11 +521,12 @@ function showScreen(id,btn){
   if(id==='rack')renderRack();
   if(id==='settings')renderSettings();
   if(id==='recs')checkApiKey();
-}
+};
 
-// ── Filter chips: event delegation so iOS taps always register ──
-function buildFilters(){
-  const v=[...new Set(wines.map(w=>w.varietal).filter(Boolean))].sort();
+// ── Filter chips ──
+function buildFilters() {
+  const arr = Object.values(wines);
+  const v = [...new Set(arr.map(w=>w.varietal).filter(Boolean))].sort();
   document.getElementById('filter-row').innerHTML=
     `<div class="filter-chip active" data-filter="all">All</div>`+
     v.map(x=>`<div class="filter-chip" data-filter="${encodeURIComponent(x)}">${x}</div>`).join('');
@@ -437,10 +542,10 @@ document.getElementById('filter-row').addEventListener('click',function(e){
 function getTag(v){if(!v)return{l:'Unknown',c:''};const lv=v.toLowerCase();if(lv.includes('cabernet sauvignon'))return{l:'Cab Sauv',c:'cab'};if(lv.includes('blend')||lv.includes('rioja')||lv.includes('chianti')||lv.includes('toscana'))return{l:'Blend/Red',c:'blend'};return{l:v,c:'other-v'};}
 function gainBadge(p,r){if(!r||!p)return'';const d=r-p,pct=Math.round((d/p)*100);if(Math.abs(d)<2)return'';return`<span class="${d>0?'price-gain':'price-loss'}">${d>0?'+':''}$${Math.abs(Math.round(d))} (${d>0?'+':''}${pct}%)</span>`;}
 
-function renderWineList(){
+function renderWineList() {
   const q=document.getElementById('search-input').value.toLowerCase();
   const sort=document.getElementById('sort-select').value;
-  let list=wines.filter(w=>{
+  let list=Object.entries(wines).map(([id,w])=>({...w,id})).filter(w=>{
     const mq=!q||w.name.toLowerCase().includes(q)||(w.varietal||'').toLowerCase().includes(q)||(w.vintage||'').includes(q);
     const mf=activeFilter==='all'||w.varietal===activeFilter;
     return mq&&mf;
@@ -466,21 +571,16 @@ function renderWineList(){
 document.getElementById('search-input').addEventListener('input',renderWineList);
 document.getElementById('sort-select').addEventListener('change',renderWineList);
 
-// ── Rack rendering: top-to-bottom, dual labels for large racks ──
+// ── Rack ──
 function slotPx(cols){return cols>=12?26:cols>=8?30:36;}
-
 function colLabelsHTML(cols,sz,dual){
-  const spacer=`<div class="row-lbl"></div>`;
-  const labels=Array.from({length:cols},(_,i)=>`<div class="rack-col-label" style="width:${sz}px;flex-shrink:0;">${String.fromCharCode(65+i)}</div>`).join('');
-  return`<div class="rack-col-label-row">${spacer}${labels}${dual?spacer:''}</div>`;
+  const sp=`<div class="row-lbl"></div>`;
+  const lbls=Array.from({length:cols},(_,i)=>`<div class="rack-col-label" style="width:${sz}px;flex-shrink:0;">${String.fromCharCode(65+i)}</div>`).join('');
+  return`<div class="rack-col-label-row">${sp}${lbls}${dual?sp:''}</div>`;
 }
-
-function renderRackSelector(){
-  document.getElementById('rack-selector').innerHTML=RACKS.map(r=>`<div class="rack-tab${r.id===currentRack.id?' active':''}" onclick="selectRack('${r.id}')">${r.name}</div>`).join('');
-}
-function selectRack(id){currentRack=RACKS.find(r=>r.id===id);document.getElementById('slot-popup').classList.remove('show');renderRackSelector();renderRackGrid();}
+function renderRackSelector(){document.getElementById('rack-selector').innerHTML=RACKS.map(r=>`<div class="rack-tab${r.id===currentRack.id?' active':''}" onclick="selectRack('${r.id}')">${r.name}</div>`).join('');}
+window.selectRack=function(id){currentRack=RACKS.find(r=>r.id===id);document.getElementById('slot-popup').classList.remove('show');renderRackSelector();renderRackGrid();};
 function renderRack(){renderRackSelector();renderRackGrid();}
-
 function renderRackGrid(){
   const inner=document.getElementById('rack-inner');
   const rack=currentRack;
@@ -488,52 +588,36 @@ function renderRackGrid(){
   const maxCols=rack.specialRows?3:rack.cols;
   const sz=slotPx(maxCols);
   const dual=rack.dual;
-
-  // Build HTML as string for performance
+  const wineArr=Object.entries(wines).map(([id,w])=>({...w,id}));
   let html=colLabelsHTML(maxCols,sz,dual);
-
   rows.forEach(rd=>{
     let slots='';
     for(let c=0;c<rd.cols;c++){
       const letter=String.fromCharCode(65+c);
       const sid=`${rack.id}-${rd.row}-${letter}`;
-      const filled=wines.some(w=>w.slotId===sid);
+      const filled=wineArr.some(w=>w.slotId===sid);
       slots+=`<div class="slot${filled?' filled':''}" style="width:${sz}px;height:${sz}px;" data-sid="${sid}" data-row="${rd.row}" data-col="${letter}"></div>`;
     }
-    // Spacers for small rack short rows
-    for(let c=rd.cols;c<maxCols;c++){
-      slots+=`<div style="width:${sz}px;height:${sz}px;flex-shrink:0;"></div>`;
-    }
+    for(let c=rd.cols;c<maxCols;c++) slots+=`<div style="width:${sz}px;height:${sz}px;flex-shrink:0;"></div>`;
     html+=`<div class="rack-row"><div class="row-lbl">${rd.row}</div>${slots}${dual?`<div class="row-lbl">${rd.row}</div>`:''}</div>`;
   });
-
   if(dual)html+=colLabelsHTML(maxCols,sz,dual);
-
   inner.innerHTML=html;
-
-  // Single delegated click handler
   inner.onclick=function(e){
     const slot=e.target.closest('.slot');if(!slot)return;
     document.querySelectorAll('.slot.selected').forEach(s=>s.classList.remove('selected'));
     slot.classList.add('selected');
     const sid=slot.dataset.sid,row=slot.dataset.row,col=slot.dataset.col;
-    const wine=wines.find(w=>w.slotId===sid);
+    const wine=wineArr.find(w=>w.slotId===sid);
     const popup=document.getElementById('slot-popup');popup.classList.add('show');
-    if(wine){
-      document.getElementById('slot-wine-name').textContent=wine.name;
-      document.getElementById('slot-wine-meta').textContent=`${wine.vintage||'N/V'} · ${wine.varietal||''} · ${wine.qty||1} btl(s) — tap to view`;
-      popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};
-    }else{
-      document.getElementById('slot-wine-name').textContent='Empty Slot';
-      document.getElementById('slot-wine-meta').textContent=`Row ${row}, Column ${col} — Available`;
-      popup.style.cursor='default';popup.onclick=null;
-    }
+    if(wine){document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=`${wine.vintage||'N/V'} · ${wine.varietal||''} · ${wine.qty||1} btl(s) — tap to view`;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};}
+    else{document.getElementById('slot-wine-name').textContent='Empty Slot';document.getElementById('slot-wine-meta').textContent=`Row ${row}, Column ${col} — Available`;popup.style.cursor='default';popup.onclick=null;}
   };
 }
 
 // ── Detail ──
-function openDetail(id){
-  const w=wines.find(w=>w.id===id);if(!w)return;currentDetailId=id;
+window.openDetail = function(id) {
+  const w=wines[id];if(!w)return;currentDetailId=id;
   document.getElementById('detail-img-inner').innerHTML=w.photo?`<img src="${w.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">`:'🍷';
   document.getElementById('detail-img').querySelector('.camera-hint').style.display=w.photo?'none':'block';
   document.getElementById('detail-name').textContent=w.name;
@@ -553,112 +637,105 @@ function openDetail(id){
   const nr=document.getElementById('d-notes-row');if(w.notes){nr.style.display='block';document.getElementById('d-notes').textContent=w.notes;}else nr.style.display='none';
   document.getElementById('d-remove-btn').onclick=()=>removeWine(id);
   document.getElementById('detail-modal').classList.add('open');
-}
-function triggerDetailPhoto(){document.getElementById('detail-photo-input').click();}
-function handleDetailPhoto(input){const file=input.files[0];if(!file||!currentDetailId)return;const reader=new FileReader();reader.onload=e=>{const w=wines.find(w=>w.id===currentDetailId);if(!w)return;w.photo=e.target.result;save();document.getElementById('detail-img-inner').innerHTML=`<img src="${w.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">`;document.getElementById('detail-img').querySelector('.camera-hint').style.display='none';renderWineList();};reader.readAsDataURL(file);input.value='';}
-function openEditFromDetail(){const w=wines.find(w=>w.id===currentDetailId);if(!w)return;closeModal('detail-modal');openEditModal(w.id);}
+};
+
+window.triggerDetailPhoto=function(){document.getElementById('detail-photo-input').click();};
+window.handleDetailPhoto=function(input){
+  const file=input.files[0];if(!file||!currentDetailId)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    setSyncing(true);
+    update(ref(db,`wines/${currentDetailId}`),{photo:e.target.result}).then(()=>{
+      document.getElementById('detail-img-inner').innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">`;
+      document.getElementById('detail-img').querySelector('.camera-hint').style.display='none';
+    });
+  };
+  reader.readAsDataURL(file);input.value='';
+};
+
+window.openEditFromDetail=function(){closeModal('detail-modal');openEditModal(currentDetailId);};
 
 // ── Add / Edit ──
-function openAddModal(){editingId=null;editPhotoData=null;document.getElementById('edit-modal-title').textContent='Add Wine';document.getElementById('edit-modal-sub').textContent='Fill in the details below';document.getElementById('edit-save-btn').textContent='Add to Cellar';resetEditForm();document.getElementById('edit-modal').classList.add('open');}
+window.openAddModal=function(){editingId=null;editPhotoData=null;document.getElementById('edit-modal-title').textContent='Add Wine';document.getElementById('edit-modal-sub').textContent='Fill in the details below';document.getElementById('edit-save-btn').textContent='Add to Cellar';resetEditForm();document.getElementById('edit-modal').classList.add('open');};
+
 function openEditModal(id){
-  const w=wines.find(w=>w.id===id);if(!w)return;editingId=id;editPhotoData=w.photo||null;
+  const w=wines[id];if(!w)return;editingId=id;editPhotoData=w.photo||null;
   document.getElementById('edit-modal-title').textContent='Edit Wine';document.getElementById('edit-modal-sub').textContent=w.name;document.getElementById('edit-save-btn').textContent='Save Changes';
   document.getElementById('e-name').value=w.name||'';document.getElementById('e-varietal').value=w.varietal||'';document.getElementById('e-vintage').value=w.vintage||'';document.getElementById('e-purchase').value=w.purchase||'';document.getElementById('e-retail').value=w.retail||'';document.getElementById('e-qty').value=w.qty||1;document.getElementById('e-rack').value=w.rack||'';document.getElementById('e-slot').value=w.slotText||'';document.getElementById('e-drink-from').value=w.drinkFrom||'';document.getElementById('e-drink-to').value=w.drinkTo||'';document.getElementById('e-notes').value=w.notes||'';
-  if(w.photo){document.getElementById('edit-preview-img').src=w.photo;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';}else{document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
+  if(w.photo){document.getElementById('edit-preview-img').src=w.photo;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';}
+  else{document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
   document.getElementById('edit-modal').classList.add('open');
 }
-function handleEditPhoto(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{editPhotoData=e.target.result;document.getElementById('edit-preview-img').src=editPhotoData;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';};reader.readAsDataURL(file);input.value='';}
-function removeEditPhoto(){editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
-function saveEdit(){
+
+window.handleEditPhoto=function(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{editPhotoData=e.target.result;document.getElementById('edit-preview-img').src=editPhotoData;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';};reader.readAsDataURL(file);input.value='';};
+window.removeEditPhoto=function(){editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';};
+
+window.saveEdit=function(){
   const name=document.getElementById('e-name').value.trim();if(!name){alert('Please enter a wine name.');return;}
   const rackId=document.getElementById('e-rack').value,slotText=document.getElementById('e-slot').value.trim();
   let slotId=null;if(rackId&&slotText){const m=slotText.match(/(\d+)[,\s]*([A-Za-z])/);if(m)slotId=`${rackId}-${m[1]}-${m[2].toUpperCase()}`;}
   const fields={name,varietal:document.getElementById('e-varietal').value,vintage:document.getElementById('e-vintage').value,purchase:parseFloat(document.getElementById('e-purchase').value)||null,retail:parseFloat(document.getElementById('e-retail').value)||null,qty:parseInt(document.getElementById('e-qty').value)||1,rack:rackId||null,slotText,slotId,drinkFrom:document.getElementById('e-drink-from').value,drinkTo:document.getElementById('e-drink-to').value,notes:document.getElementById('e-notes').value,photo:editPhotoData};
-  if(editingId){const idx=wines.findIndex(w=>w.id===editingId);if(idx>-1)wines[idx]={...wines[idx],...fields};}else wines.push({id:'w'+Date.now(),...fields,added:new Date().toISOString()});
-  save();closeModal('edit-modal');buildFilters();renderWineList();
-  if(editingId){const eid=editingId;editingId=null;editPhotoData=null;setTimeout(()=>openDetail(eid),300);}else{editingId=null;editPhotoData=null;}
-}
+  setSyncing(true);
+  if(editingId){
+    update(ref(db,`wines/${editingId}`),fields).then(()=>{closeModal('edit-modal');const eid=editingId;editingId=null;editPhotoData=null;setTimeout(()=>openDetail(eid),300);});
+  } else {
+    const newRef=push(winesRef);
+    set(newRef,{...fields,added:new Date().toISOString()}).then(()=>{closeModal('edit-modal');editingId=null;editPhotoData=null;});
+  }
+};
+
 function resetEditForm(){['e-name','e-vintage','e-purchase','e-retail','e-slot','e-drink-from','e-drink-to','e-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('e-varietal').value='';document.getElementById('e-rack').value='';document.getElementById('e-qty').value='1';editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
-function removeWine(id){const w=wines.find(w=>w.id===id);const qty=parseInt(w?.qty||1);if(qty>1){if(!confirm(`Remove 1 bottle? (${qty-1} remaining)`))return;w.qty=qty-1;}else{if(!confirm('Remove this wine entirely?'))return;wines=wines.filter(w=>w.id!==id);}save();closeModal('detail-modal');buildFilters();renderWineList();}
-function closeModal(id){document.getElementById(id)?.classList.remove('open');}
+
+function removeWine(id){
+  const w=wines[id];const qty=parseInt(w?.qty||1);
+  if(qty>1){if(!confirm(`Remove 1 bottle? (${qty-1} remaining)`))return;setSyncing(true);update(ref(db,`wines/${id}`),{qty:qty-1}).then(()=>closeModal('detail-modal'));}
+  else{if(!confirm('Remove this wine entirely?'))return;setSyncing(true);remove(ref(db,`wines/${id}`)).then(()=>closeModal('detail-modal'));}
+}
+
+window.closeModal=function(id){document.getElementById(id)?.classList.remove('open');};
 document.querySelectorAll('.modal-overlay').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});});
 
 // ── API Key ──
 function getApiKey(){return localStorage.getItem('rach_vine_api_key')||'';}
-function saveApiKey(){
-  const key=document.getElementById('api-key-input').value.trim();
-  if(!key.startsWith('sk-')){alert('Please paste a valid API key (starts with sk-)');return;}
-  localStorage.setItem('rach_vine_api_key',key);
-  document.getElementById('api-key-input').value='';
-  document.getElementById('api-setup').classList.remove('show');
-  alert('✓ API key saved! The Sommelier is ready.');
-}
-function saveApiKeySettings(){
-  const key=document.getElementById('settings-api-key-input').value.trim();
-  if(!key.startsWith('sk-')){alert('Please paste a valid API key (starts with sk-)');return;}
-  localStorage.setItem('rach_vine_api_key',key);
-  document.getElementById('settings-api-key-input').value='';
-  updateApiKeyStatus();
-  alert('✓ API key updated!');
-}
-function updateApiKeyStatus(){const k=getApiKey();const el=document.getElementById('api-key-status');if(el)el.textContent=k?'✓ Saved — Sommelier is active':'Not set — visit the Sommelier tab to configure';}
+window.saveApiKey=function(){const key=document.getElementById('api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key starting with sk-');return;}localStorage.setItem('rach_vine_api_key',key);document.getElementById('api-key-input').value='';document.getElementById('api-setup').classList.remove('show');alert('✓ API key saved! The Sommelier is ready.');};
+window.saveApiKeySettings=function(){const key=document.getElementById('settings-api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key starting with sk-');return;}localStorage.setItem('rach_vine_api_key',key);document.getElementById('settings-api-key-input').value='';updateApiKeyStatus();alert('✓ API key updated!');};
+function updateApiKeyStatus(){const k=getApiKey();const el=document.getElementById('api-key-status');if(el)el.textContent=k?'✓ Saved — Sommelier is active':'Not set';}
 function checkApiKey(){document.getElementById('api-setup').classList.toggle('show',!getApiKey());}
 
 // ── Sommelier ──
-function selectRecType(btn,type){
-  document.querySelectorAll('.rec-type-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');selectedRecType=type;
-  const ph={meal:"e.g. Grilled ribeye, roasted lamb, pasta...",occasion:"e.g. Anniversary dinner, birthday, casual Friday...",window:"Show me wines at peak drinking right now...",explore:"e.g. Something bold, or a hidden gem..."};
-  document.getElementById('rec-prompt').placeholder=ph[type];
-}
-async function getRecommendations(){
-  const apiKey=getApiKey();
-  if(!apiKey){checkApiKey();document.getElementById('api-setup').scrollIntoView({behavior:'smooth'});return;}
-  const prompt=document.getElementById('rec-prompt').value.trim();
-  if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}
-  document.getElementById('rec-loading').classList.add('show');
-  document.getElementById('rec-result').classList.remove('show');
-  const cl=wines.map(w=>`- ${w.name} (${w.varietal||'unknown'}, ${w.vintage||'N/V'}, qty:${w.qty||1}${w.drinkFrom&&w.drinkTo?`, drink ${w.drinkFrom}-${w.drinkTo}`:''})`).join('\n');
-  const up=selectedRecType==='window'
-    ?`Year:${new Date().getFullYear()}. Top 5 at peak drinking from:\n${cl}\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}`
-    :`Cellar:\n${cl}\n\n${selectedRecType}: "${prompt}"\nTop 5 from this list. Return JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}`;
+window.selectRecType=function(btn,type){document.querySelectorAll('.rec-type-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedRecType=type;const ph={meal:"e.g. Grilled ribeye, roasted lamb...",occasion:"e.g. Anniversary dinner, birthday...",window:"Show me wines at peak drinking now...",explore:"e.g. Something bold, or a hidden gem..."};document.getElementById('rec-prompt').placeholder=ph[type];};
+
+window.getRecommendations=async function(){
+  const apiKey=getApiKey();if(!apiKey){checkApiKey();return;}
+  const prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}
+  document.getElementById('rec-loading').classList.add('show');document.getElementById('rec-result').classList.remove('show');
+  const arr=Object.values(wines);
+  const cl=arr.map(w=>`- ${w.name} (${w.varietal||'unknown'}, ${w.vintage||'N/V'}, qty:${w.qty||1}${w.drinkFrom&&w.drinkTo?`, drink ${w.drinkFrom}-${w.drinkTo}`:''})`).join('\n');
+  const up=selectedRecType==='window'?`Year:${new Date().getFullYear()}. Top 5 at peak drinking from:\n${cl}\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}`:`Cellar:\n${cl}\n\n${selectedRecType}: "${prompt}"\nTop 5. Return JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}`;
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'You are an expert sommelier. Only recommend wines from the exact cellar list provided. Return valid JSON only.',messages:[{role:'user',content:up}]})
-    });
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})});
     if(!resp.ok){const err=await resp.json().catch(()=>({}));throw new Error(err.error?.message||`HTTP ${resp.status}`);}
-    const data=await resp.json();
-    const text=data.content?.map(c=>c.text||'').join('')||'';
-    const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
-    document.getElementById('rec-loading').classList.remove('show');
-    document.getElementById('rec-result').classList.add('show');
-    document.getElementById('rec-list').innerHTML=(parsed.recommendations||[]).map((r,i)=>
-      `<div class="rec-wine-item"><div class="rec-rank">${i+1}</div><div><div class="rec-wine-name">${r.name}</div><div class="rec-wine-reason">${r.reason}</div></div></div>`
-    ).join('');
-  }catch(e){
-    document.getElementById('rec-loading').classList.remove('show');
-    document.getElementById('rec-result').classList.add('show');
-    document.getElementById('rec-list').innerHTML=`<div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Could not get recommendations: ${e.message}<br><br>Check your API key in Settings, or visit <a href="https://console.anthropic.com" target="_blank" style="color:var(--gold-light)">console.anthropic.com</a> to verify it's active.</div>`;
-  }
-}
+    const data=await resp.json();const text=data.content?.map(c=>c.text||'').join('')||'';const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
+    document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');
+    document.getElementById('rec-list').innerHTML=(parsed.recommendations||[]).map((r,i)=>`<div class="rec-wine-item"><div class="rec-rank">${i+1}</div><div><div class="rec-wine-name">${r.name}</div><div class="rec-wine-reason">${r.reason}</div></div></div>`).join('');
+  }catch(e){document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML=`<div style="color:var(--text-muted);font-size:13px;">Error: ${e.message}</div>`;}
+};
 
 // ── Settings ──
 function renderSettings(){
-  const tp=wines.reduce((s,w)=>s+(parseFloat(w.purchase||0))*(parseInt(w.qty)||0),0);
-  const tr=wines.reduce((s,w)=>s+(parseFloat(w.retail||w.purchase||0))*(parseInt(w.qty)||0),0);
-  const tg=tr-tp,gp=isFinite(tp)&&tp>0?Math.round((tg/tp)*100):0,wp=wines.filter(w=>w.photo).length;
-  document.getElementById('value-insight').innerHTML=`<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$${Math.round(tp).toLocaleString()}</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$${Math.round(tr).toLocaleString()}</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:${tg>=0?'var(--green-light)':'#e34a49'}">${tg>=0?'+':''}$${Math.round(tg).toLocaleString()} (${tg>=0?'+':''}${gp}%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">${wp} / ${wines.length} wines</span></div>`;
-  document.getElementById('rack-summary').innerHTML=RACKS.map(r=>{const total=r.specialRows?r.specialRows.reduce((s,row)=>s+row.cols,0):r.rows*r.cols;const used=wines.filter(w=>w.rack===r.id).length;return`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">${r.name}</span><span style="color:var(--gold-dim)">${used} / ${total} slots</span></div>`;}).join('');
-  const gainers=wines.filter(w=>w.retail&&w.purchase&&w.retail>w.purchase).map(w=>({...w,gain:w.retail-w.purchase})).sort((a,b)=>b.gain-a.gain).slice(0,5);
+  const arr=Object.values(wines);
+  const tp=arr.reduce((s,w)=>s+(parseFloat(w.purchase||0))*(parseInt(w.qty)||0),0);
+  const tr=arr.reduce((s,w)=>s+(parseFloat(w.retail||w.purchase||0))*(parseInt(w.qty)||0),0);
+  const tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(w=>w.photo).length;
+  document.getElementById('value-insight').innerHTML=`<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$${Math.round(tp).toLocaleString()}</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$${Math.round(tr).toLocaleString()}</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:${tg>=0?'var(--green-light)':'#e34a49'}">${tg>=0?'+':''}$${Math.round(tg).toLocaleString()} (${tg>=0?'+':''}${gp}%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">${wp} / ${arr.length} wines</span></div>`;
+  document.getElementById('rack-summary').innerHTML=RACKS.map(r=>{const total=r.specialRows?r.specialRows.reduce((s,row)=>s+row.cols,0):r.rows*r.cols;const used=arr.filter(w=>w.rack===r.id).length;return`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">${r.name}</span><span style="color:var(--gold-dim)">${used} / ${total} slots</span></div>`;}).join('');
+  const gainers=arr.filter(w=>w.retail&&w.purchase&&w.retail>w.purchase).map(w=>({...w,gain:w.retail-w.purchase})).sort((a,b)=>b.gain-a.gain).slice(0,5);
   document.getElementById('top-gainers').innerHTML=gainers.map(w=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${w.name} ${w.vintage||''}</span><span style="color:var(--green-light)">+$${Math.round(w.gain)}/btl</span></div>`).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';
   updateApiKeyStatus();
 }
-function clearAllData(){if(!confirm('Clear ALL wines? This cannot be undone.'))return;wines=[];save();buildFilters();renderWineList();}
 
-// ── Init ──
-updateStats();buildFilters();renderWineList();
+window.clearAllData=function(){if(!confirm('Clear ALL wines from the shared cellar? This affects both phones and cannot be undone.'))return;setSyncing(true);set(winesRef,null);};
+
 </script>
 </body>
 </html>
