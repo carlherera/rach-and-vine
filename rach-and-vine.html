@@ -761,6 +761,45 @@ function removeWine(id){
   else{if(!confirm('Remove this wine entirely?'))return;setSyncing(true);fbDelete('/wines/'+id).then(function(){delete wines[id];setSyncing(false);closeModal('detail-modal');refreshAll();});}
 }
 function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ── Haptic feedback ──
+function haptic(style){
+  // style: 'light' | 'medium' | 'heavy' | 'selection'
+  if(!window.navigator||!window.navigator.vibrate) return;
+  // iOS Safari uses a different API — try both
+  try {
+    if(window.webkit&&window.webkit.messageHandlers) return; // avoid double-firing in WKWebView
+  } catch(e){}
+  var patterns={light:[10],medium:[20],heavy:[40],selection:[5]};
+  navigator.vibrate(patterns[style]||patterns.light);
+}
+
+// Wire haptics to all interactive taps via delegation on document
+document.addEventListener('click', function(e) {
+  var el = e.target;
+  // Nav buttons
+  if(el.closest('.nav-btn')) return haptic('selection');
+  // Wine cards
+  if(el.closest('.wine-card')) return haptic('light');
+  // Filter chips
+  if(el.closest('.filter-chip')) return haptic('selection');
+  // A-Z sidebar
+  if(el.closest('.az-letter')) return haptic('selection');
+  // Rack tabs and slots
+  if(el.closest('.rack-tab')) return haptic('selection');
+  if(el.closest('.slot')) return haptic('light');
+  // Buttons inside modals
+  if(el.closest('.btn-primary')) return haptic('medium');
+  if(el.closest('.btn-secondary')) return haptic('light');
+  if(el.closest('.btn-danger')) return haptic('medium');
+  if(el.closest('.btn-edit')) return haptic('light');
+  // FAB
+  if(el.closest('.fab')) return haptic('medium');
+  // Search clear
+  if(el.closest('.search-clear')) return haptic('selection');
+  // Rec type buttons
+  if(el.closest('.rec-type-btn')) return haptic('selection');
+}, true); // capture phase so it fires before onclick handlers
 document.querySelectorAll('.modal-overlay').forEach(function(el){el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('open');});});
 
 // ── API Key ──
