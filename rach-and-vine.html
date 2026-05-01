@@ -380,9 +380,10 @@
       <div class="detail-card"><div class="detail-card-label">Purchased</div><div class="detail-card-value" id="d-purchase">—</div></div>
       <div class="detail-card"><div class="detail-card-label">Current Retail</div><div class="detail-card-value" id="d-retail">—</div><div class="detail-card-sub" id="d-gain"></div></div>
     </div>
-    <div class="location-badge">
+    <div class="location-badge" id="location-badge" onclick="goToRackFromDetail()" style="cursor:pointer;">
       <div class="location-icon">📍</div>
-      <div style="flex:1"><div class="location-text-label">Rack Locations</div><div class="location-text-value" id="d-location">Not assigned</div></div>
+      <div style="flex:1"><div class="location-text-label">Rack Locations <span id="location-tap-hint" style="color:var(--gold-dim);font-size:9px;letter-spacing:1px;"></span></div><div class="location-text-value" id="d-location">Not assigned</div></div>
+      <div id="location-arrow" style="color:var(--gold-dim);font-size:18px;display:none;">›</div>
     </div>
     <div id="d-window-row" style="display:none;margin-bottom:12px;">
       <div style="font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">Drinking Window</div>
@@ -750,14 +751,21 @@ function openDetail(id){
   // Location: show all slots
   var slots=w.slots&&w.slots.length>0?w.slots:[];
   var locText='Not assigned';
+  var hasLocation=false;
   if(slots.length>0){
     var byRack={};
     slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});var rn=r?r.name:'Unknown';if(!byRack[rn])byRack[rn]=[];var parts=s.sid.split('-');byRack[rn].push('Row '+parts[1]+' Col '+parts[2]);});
     locText=Object.keys(byRack).map(function(rn){return rn+': '+byRack[rn].join(', ');}).join('\n');
+    hasLocation=true;
   } else if(w.rack){
     locText=(RACKS.find(function(r){return r.id===w.rack;})||{name:w.rack}).name+(w.slotText?' · '+w.slotText:'');
+    hasLocation=true;
   }
   document.getElementById('d-location').textContent=locText;
+  // Show tap hint and arrow if wine has a rack location
+  document.getElementById('location-tap-hint').textContent=hasLocation?' · Tap to view on rack':'';
+  document.getElementById('location-arrow').style.display=hasLocation?'block':'none';
+  document.getElementById('location-badge').style.cursor=hasLocation?'pointer':'default';
 
   var wr=document.getElementById('d-window-row');
   if(w.drinkFrom&&w.drinkTo){wr.style.display='block';var now=new Date().getFullYear(),from=parseInt(w.drinkFrom),to=parseInt(w.drinkTo);var fill=document.getElementById('d-drink-fill'),lbl=document.getElementById('d-drink-label');if(now<from){fill.style.width='15%';fill.className='drink-fill early';lbl.textContent='Too young';}else if(now>to){fill.style.width='100%';fill.className='drink-fill past';lbl.textContent='Past peak';}else{fill.style.width=Math.round(((now-from)/(to-from))*100)+'%';fill.className='drink-fill peak';lbl.textContent='Peak drinking';}}else wr.style.display='none';
@@ -765,6 +773,67 @@ function openDetail(id){
   document.getElementById('d-remove-btn').onclick=function(){removeWine(id);};
   document.getElementById('detail-modal').classList.add('open');
 }
+function goToRackFromDetail(){
+  var w=wines[currentDetailId];if(!w)return;
+  var slots=w.slots&&w.slots.length>0?w.slots:[];
+  if(slots.length===0&&!w.rack)return;
+
+  // Close detail modal
+  closeModal('detail-modal');
+
+  // Switch to rack tab
+  var rackBtn=document.getElementById('nav-rack');
+  showScreen('rack',rackBtn);
+
+  // Determine which rack to show — use first slot's rack
+  var targetRackId=slots.length>0?slots[0].rackId:w.rack;
+  var targetRack=RACKS.find(function(r){return r.id===targetRackId;});
+  if(!targetRack)return;
+
+  // Switch to that rack
+  currentRack=targetRack;
+
+  // Re-render after a short delay to let the screen transition complete
+  setTimeout(function(){
+    renderRack();
+
+    // Highlight all slots belonging to this wine
+    setTimeout(function(){
+      // Clear previous selections
+      document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});
+
+      var slotsToHighlight=slots.filter(function(s){return s.rackId===targetRackId;});
+
+      // Legacy single slot support
+      if(slotsToHighlight.length===0&&w.rack===targetRackId&&w.slotText){
+        var m=w.slotText.match(/(\d+)[,\s]*([A-Za-z])/);
+        if(m)slotsToHighlight=[{rackId:w.rack,sid:w.rack+'-'+m[1]+'-'+m[2].toUpperCase()}];
+      }
+
+      slotsToHighlight.forEach(function(s){
+        var slotEl=document.querySelector('.slot[data-sid="'+s.sid+'"]');
+        if(slotEl){
+          slotEl.classList.add('selected');
+          // Scroll the first slot into view
+          if(s===slotsToHighlight[0]){
+            slotEl.scrollIntoView({behavior:'smooth',block:'center'});
+          }
+        }
+      });
+
+      // Show popup for first slot
+      if(slotsToHighlight.length>0){
+        var parts=slotsToHighlight[0].sid.split('-');
+        var popup=document.getElementById('slot-popup');
+        popup.classList.add('show');
+        document.getElementById('slot-wine-name').textContent=w.name;
+        document.getElementById('slot-wine-meta').textContent=(w.vintage||'N/V')+' · '+(w.varietal||'')+' · '+slotsToHighlight.length+' slot(s) highlighted';
+        popup.style.cursor='default';popup.onclick=null;
+      }
+    }, 100);
+  }, 200);
+}
+
 function triggerDetailPhoto(){document.getElementById('detail-photo-input').click();}
 function handleDetailPhoto(input){
   var file=input.files[0];if(!file||!currentDetailId)return;
