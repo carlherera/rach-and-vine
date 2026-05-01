@@ -126,6 +126,17 @@
   .slot.filled::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--gold-dim);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
   .slot:active{transform:scale(0.88)}
   .slot.selected{border-color:var(--gold)!important;background:var(--burgundy-rich)!important}
+  .rack-rearrange-bar{display:none;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(201,168,76,0.08);border:1px solid var(--gold-dim);border-radius:10px;margin-bottom:12px;}
+  .rack-rearrange-bar.show{display:flex}
+  .rack-rearrange-label{font-size:11px;letter-spacing:1px;color:var(--gold-dim);text-transform:uppercase;}
+  .rack-rearrange-hint{font-size:10px;color:var(--text-muted);}
+  .btn-rearrange{padding:7px 16px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px;}
+  .btn-rearrange.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light);}
+  .btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px;}
+  .slot.rearrange-selected{border-color:var(--gold)!important;background:var(--gold-dim)!important;animation:slotPulse 1s ease-in-out infinite;}
+  .slot.rearrange-mode{cursor:crosshair;}
+  @keyframes slotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.4)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0.1)}}
+  .rack-container.rearrange-active{border-color:var(--gold-dim);box-shadow:0 0 0 2px rgba(201,168,76,0.15);}
   .rack-legend{display:flex;gap:16px;margin-top:10px}
   .legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}
   .legend-dot{width:10px;height:10px;border-radius:50%}
@@ -274,12 +285,23 @@
 
   <!-- Rack Screen -->
   <div class="screen" id="screen-rack">
-    <div class="section-title">Wine Racks</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div class="section-title" style="margin-bottom:0;">Wine Racks</div>
+      <button class="btn-rearrange" id="btn-rearrange" onclick="toggleRearrangeMode()">⇄ Rearrange</button>
+    </div>
     <div class="section-sub">Tap a slot to see what's there</div>
     <div class="rack-selector" id="rack-selector"></div>
-    <div class="rack-container">
+    <!-- Rearrange mode bar -->
+    <div class="rack-rearrange-bar" id="rearrange-bar">
+      <div>
+        <div class="rack-rearrange-label">✦ Rearrange Mode</div>
+        <div class="rack-rearrange-hint" id="rearrange-hint">Tap a bottle to pick it up</div>
+      </div>
+      <button class="btn-done-rearrange" onclick="exitRearrangeMode()">Done</button>
+    </div>
+    <div class="rack-container" id="rack-container">
       <div class="rack-inner" id="rack-inner"></div>
-      <div class="rack-legend">
+      <div class="rack-legend" id="rack-legend">
         <div class="legend-item"><div class="legend-dot" style="background:var(--burgundy-accent)"></div>Filled</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--surface-3);border:1px solid var(--border)"></div>Empty</div>
       </div>
@@ -494,17 +516,95 @@ Promise.all([fbGet('/wines'), loadApiKey()]).then(function(results){
   document.getElementById('loading-sub').textContent='Connection error. Please check your internet.';
 });
 
-// ── Default wines ──
-var DW=[{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:64,retail:59,qty:6,country:"USA",region:"Napa Valley"},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2013",purchase:38,retail:143,qty:2,country:"USA",region:"Spring Mountain"},{name:"Elivette Spring Mountain District (Magnum)",varietal:"Red Blend",vintage:"2000",purchase:119,retail:null,qty:1,country:"USA",region:"Spring Mountain"},{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:59,qty:2,country:"USA",region:"Napa Valley"},{name:"Terra Valentine K Block Spring Mountain",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:42,retail:55,qty:1,country:"USA",region:"Spring Mountain"},{name:"Conn Creek Special Selection",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:64,retail:70,qty:1,country:"USA",region:"Napa Valley"},{name:"Raymond Generations",varietal:"Red Blend",vintage:"2020",purchase:75,retail:75,qty:1,country:"USA",region:"Napa Valley"},{name:"Arcudi",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:2,country:"USA",region:"Napa Valley"},{name:"Barrett & Barrett",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:129,retail:275,qty:2,country:"USA",region:"Napa Valley"},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2016",purchase:38,retail:211,qty:2,country:"USA",region:"Spring Mountain"},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2011",purchase:32,retail:199,qty:3,country:"USA",region:"Spring Mountain"},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:75,qty:2,country:"USA",region:"Napa Valley"},{name:"Vineyard 29",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:53,retail:65,qty:2,country:"USA",region:"Napa Valley"},{name:"Keenan Reserve",varietal:"Cabernet Sauvignon",vintage:"2020",purchase:49,retail:60,qty:2,country:"USA",region:"Spring Mountain"},{name:"Hampton Royce",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:49,retail:55,qty:2,country:"USA",region:"Napa Valley"},{name:"Kapscandy Roberta's Reserve",varietal:"Merlot",vintage:"2016",purchase:108,retail:362,qty:1,country:"USA",region:"Napa Valley"},{name:"Meteor Vineyard",varietal:"Cabernet Sauvignon",vintage:"2016",purchase:68,retail:95,qty:2,country:"USA",region:"Napa Valley"},{name:"Grands Joueurs Vignerons Rougiste",varietal:"Red Blend",vintage:"2022",purchase:14,retail:18,qty:2,country:"France",region:"Languedoc"},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:75,qty:2,country:"USA",region:"Napa Valley"},{name:"Sleeper",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:49,retail:39,qty:4,country:"USA",region:"Napa Valley"},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:4,country:"USA",region:"Napa Valley"},{name:"Grape Culture",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:75,retail:80,qty:2,country:"USA",region:"Napa Valley"},{name:"Nellcote Rutherford Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:97,retail:97,qty:3,country:"USA",region:"Napa Valley"},{name:"Cornerstone Cellars",varietal:"Red Blend",vintage:"2018",purchase:50,retail:60,qty:2,country:"USA",region:"Napa Valley"},{name:"Cornerstone Cellars",varietal:"Cabernet Franc",vintage:"2018",purchase:42,retail:50,qty:2,country:"USA",region:"Napa Valley"},{name:"Gallica",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:129,retail:145,qty:1,country:"USA",region:"Napa Valley"},{name:"Nellcote Rally Eye 76",varietal:"Cabernet Sauvignon",vintage:"2017",purchase:86,retail:90,qty:2,country:"USA",region:"Napa Valley"},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:56,retail:60,qty:2,country:"USA",region:"Napa Valley"},{name:"Beau Vigne Old School",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:54,retail:60,qty:2,country:"USA",region:"Napa Valley"},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:56,retail:60,qty:3,country:"USA",region:"Napa Valley"},{name:"Reynvaan Family Vineyards The Contender",varietal:"Syrah",vintage:"2017",purchase:34,retail:50,qty:3,country:"USA",region:"Walla Walla"},{name:"Waypoint Beckstoffer Georges III",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:75,retail:90,qty:2,country:"USA",region:"Napa Valley"},{name:"Beringer Private Reserve",varietal:"Cabernet Sauvignon",vintage:"",purchase:118,retail:165,qty:3,country:"USA",region:"Napa Valley"},{name:"Erikson & Caradin Craftsman & Wolves",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:56,retail:60,qty:3,country:"USA",region:"Napa Valley"},{name:"Fattoria La Vialla Casa Conforto",varietal:"Chianti",vintage:"2020",purchase:28,retail:30,qty:3,country:"Italy",region:"Tuscany"},{name:"Sleeper",varietal:"Cabernet Franc",vintage:"2021",purchase:45,retail:45,qty:3,country:"USA",region:"Napa Valley"},{name:"Madrigal",varietal:"Petite Sirah",vintage:"2018",purchase:28,retail:32,qty:2,country:"USA",region:"Napa Valley"},{name:"Stags Leap Winery The Investor",varietal:"Red Blend",vintage:"2020",purchase:54,retail:59,qty:2,country:"USA",region:"Napa Valley"},{name:"Peju Winery",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:32,retail:40,qty:4,country:"USA",region:"Napa Valley"},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:53,retail:58,qty:2,country:"USA",region:"Napa Valley"},{name:"Sleeper Vine Cliff Estate",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:65,qty:2,country:"USA",region:"Napa Valley"},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2022",purchase:99,retail:110,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:81,retail:90,qty:3,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:122,retail:140,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:108,retail:120,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2023",purchase:104,retail:115,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:131,retail:145,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1,country:"USA",region:"Spring Mountain"},{name:"Shafer Vineyards",varietal:"Red Blend",vintage:"2022",purchase:90,retail:118,qty:2,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Merlot",vintage:"2023",purchase:90,retail:100,qty:1,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:140,retail:122,qty:3,country:"USA",region:"Napa Valley"},{name:"Sherwin Family Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:175,retail:185,qty:3,country:"USA",region:"Spring Mountain"},{name:"Sherwin Family Vineyards",varietal:"Red Blend",vintage:"2023",purchase:85,retail:90,qty:3,country:"USA",region:"Spring Mountain"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:157,retail:191,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:128,retail:221,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:213,retail:238,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:106,retail:78,qty:2,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:71,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:170,retail:195,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:170,retail:195,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:213,retail:250,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:119,retail:195,qty:1,country:"USA",region:"Napa Valley"},{name:"Inglenook Niebaum-Pennino \"1882\"",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:48,retail:55,qty:3,country:"USA",region:"Napa Valley"},{name:"Muga",varietal:"Rioja",vintage:"2021",purchase:36,retail:42,qty:1,country:"Spain",region:"Rioja"},{name:"Duckhorn Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:66,qty:6,country:"USA",region:"Napa Valley"},{name:"Nickel & Nickel John C. Sullenger Vineyard",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:104,retail:123,qty:3,country:"USA",region:"Napa Valley"},{name:"Denner Vineyards Dirt Worshipper",varietal:"Red Blend",vintage:"2021",purchase:76,retail:85,qty:3,country:"USA",region:"Paso Robles"},{name:"BV Georges de Latour Private Reserve",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:144,retail:175,qty:2,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:65,retail:137,qty:3,country:"USA",region:"Napa Valley"},{name:"Overture by Opus",varietal:"Red Blend",vintage:"2021",purchase:144,retail:201,qty:2,country:"USA",region:"Napa Valley"},{name:"Duckhorn Vineyards Three Palms Vineyard",varietal:"Merlot",vintage:"2021",purchase:128,retail:125,qty:2,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:126,retail:137,qty:2,country:"USA",region:"Napa Valley"},{name:"Cliff Lede \"Rhythm\"",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:117,retail:130,qty:2,country:"USA",region:"Napa Valley"},{name:"Titus Vineyards",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:101,retail:115,qty:2,country:"USA",region:"Napa Valley"},{name:"Ghost Block",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:72,retail:80,qty:2,country:"USA",region:"Napa Valley"},{name:"Tenuta Sette Cieli Indaco",varietal:"Toscana Rosso",vintage:"2017",purchase:76,retail:90,qty:2,country:"Italy",region:"Tuscany"},{name:"Dominus Estate Napanook",varietal:"Red Blend",vintage:"2021",purchase:108,retail:99,qty:2,country:"USA",region:"Napa Valley"}];
+// ── Default wines (imported from Wine_Cellar.xlsx) ──
+var DW_DATA = {
+  'ws18oyqv6':{name:'Sabina Vineyards St. Helena Estate Cabernet Sauvignon',varietal:'Cabernet Sauvignon',vintage:'2008',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w7ixi8vxk':{name:'Sabina Vineyards St. Helena',varietal:'Cabernet Sauvignon',vintage:'2010',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wc49uumjm':{name:'Sabina Vineyards Rutherford',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w6u156goo':{name:'Sabina Vineyards Montagna Hill',varietal:'Cabernet Sauvignon',vintage:'2020',purchase:null,retail:null,qty:5,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-D"}, {"rackId": "left", "sid": "left-10-E"}, {"rackId": "left", "sid": "left-10-F"}, {"rackId": "left", "sid": "left-10-G"}, {"rackId": "left", "sid": "left-10-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wa9p6753o':{name:'Beaulieu Vineyard Georges De Latour Private Reserve',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:145.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-I"}, {"rackId": "left", "sid": "left-10-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wdovfn0mu':{name:'Napanook',varietal:'Red Blend',vintage:'2021',purchase:110.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-K"}, {"rackId": "left", "sid": "left-10-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w927zm2t4':{name:'The Debate Sacrashe Vineyard',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w15tsg1a6':{name:'The Debate Artalade Montagna Vineyard',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-B"}, {"rackId": "left", "sid": "left-9-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'woleup423':{name:'The Debate Sleeping Lady Vineyard',varietal:'Cabernet Franc',vintage:'2019',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-D"}, {"rackId": "left", "sid": "left-9-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w74vcez9p':{name:'Cliff Lede Beckstoffer to Kalon',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-F"}, {"rackId": "left", "sid": "left-9-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wlaindday':{name:'Cliff Lede Rhythm',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:120.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-H"}, {"rackId": "left", "sid": "left-9-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w9vbetgs9':{name:'Cliff Lede Stardust Heaven',varietal:'Cabernet Sauvignon',vintage:'2013',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wnz1xh6g7':{name:'Beringer Private Reserve',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:110.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wh0jo59tg':{name:'Beringer Private Reserve',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:110.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wua0x57fd':{name:'Shafer One Point Five',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-A"}, {"rackId": "left", "sid": "left-8-B"}, {"rackId": "left", "sid": "left-8-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w5o86ccvw':{name:'Shafer One Point Five',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:125.0,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-D"}, {"rackId": "left", "sid": "left-8-E"}, {"rackId": "left", "sid": "left-8-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wth8e8r56':{name:'Shafer TD-9',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:60.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wfhycoq2j':{name:'Shafer',varietal:'Merlot',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wv42i8ccr':{name:'Shafer Relentless',varietal:'Syrah',vintage:'2018',purchase:90.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wxah4xw2o':{name:'Shafer Relentless',varietal:'Syrah',vintage:'2022',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-J"}, {"rackId": "left", "sid": "left-8-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'why6yli4n':{name:'Cliff Lede',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wvv8buji7':{name:'Nellcote 500 Chevaux',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:75.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wh6fmcwzc':{name:'Nellcote 500 Chevaux',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:50.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-B"}, {"rackId": "left", "sid": "left-7-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wzp1ixwle':{name:'Nellcote Rallye 76',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:80.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wjj0zg8qz':{name:'Nellcote Rallye 76',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:80.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wv8osgvma':{name:'Nellcote Rutherford Reserve',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:90.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-F"}, {"rackId": "left", "sid": "left-7-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wttxg4x64':{name:'Chimney Rock Ganymede Vineyard',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:75.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-H"}, {"rackId": "left", "sid": "left-7-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wfiqyig2q':{name:'Buccella',varietal:'Cabernet Sauvignon',vintage:'2020',purchase:90.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-J"}, {"rackId": "left", "sid": "left-7-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wcb7hd828':{name:'Gallica',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:120.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wutaw614c':{name:'Barnett Vineyards Rattlesnake',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wdar9ynti':{name:'Barnett Vineyards Rattlesnake',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-B"}, {"rackId": "left", "sid": "left-6-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wkm6glfhq':{name:'Barnett Vineyards MMV',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w6zo16mm6':{name:'Barnett Vineyards Lake Block',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-E"}, {"rackId": "left", "sid": "left-6-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wg28tw4dh':{name:'Barnett Vineyards Arena Block',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wkyhfkgb7':{name:'Barnett Vineyards',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-H"}, {"rackId": "left", "sid": "left-6-I"}, {"rackId": "left", "sid": "left-6-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w9x93wg3r':{name:'Barnett Vineyards',varietal:'Cabernet Franc',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wobc35cay':{name:'Chateau Leoville Poyferre Medoc',varietal:'Bordeaux',vintage:'2018',purchase:145.0,retail:null,qty:1,country:'France',region:'',slots:[{"rackId": "left", "sid": "left-6-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wgt4afu6w':{name:'Barnett Vineyards',varietal:'Merlot',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w55yhjggu':{name:'Barnett Vineyards',varietal:'Merlot',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-B"}, {"rackId": "left", "sid": "left-5-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w3xa0b05u':{name:'Sherwin Family Vineyards',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-D"}, {"rackId": "left", "sid": "left-5-E"}, {"rackId": "left", "sid": "left-5-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wbxtj0te6':{name:'Sherwin Family Vineyards Cellar Scraps 19',varietal:'Red Blend',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-G"}, {"rackId": "left", "sid": "left-5-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wjvg227vb':{name:'Barrett & Barrett',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:120.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-I"}, {"rackId": "left", "sid": "left-5-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wxx63p1yk':{name:'Adversity The Twin',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:80.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-K"}, {"rackId": "left", "sid": "left-5-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wp9tumtb9':{name:'Stag\'s Leap S.L.V.',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wj1lplwq0':{name:'Stag\'s Leap ARMILLARY',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wdzqpgfvy':{name:'Stag\'s Leap HEART of FAY',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w7qizo1cj':{name:'Stag\'s Leap FAY Hillside',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w01sku3uz':{name:'Stag\'s Leap FAY',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wg2p5tu45':{name:'Stag\'s Leap FAY',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w2d7j7kfc':{name:'Stag\'s Leap S.L.V.',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w5x9svw99':{name:'Stag\'s Leap Soda Canyon Ranch',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'woz1dd2k3':{name:'Stag\'s Leap Artemis',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'ws8xojozy':{name:'Stag\'s Leap Artemis',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-J"}, {"rackId": "left", "sid": "left-4-K"}, {"rackId": "left", "sid": "left-4-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w1ngs73dv':{name:'Denner Vineyards Dirt Worshiper',varietal:'Syrah',vintage:'2021',purchase:75.0,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-A"}, {"rackId": "left", "sid": "left-3-B"}, {"rackId": "left", "sid": "left-3-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w6ak5lj78':{name:'Mueller Family Vineyards Diamond Mountain',varietal:'Cabernet Sauvignon',vintage:'2016',purchase:70.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wy8e5yqkq':{name:'Mueller Family Vineyards Diamond Mountain',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:70.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wpoy020u9':{name:'Mueller Family Vineyards Diamond Mountain',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:60.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-F"}, {"rackId": "left", "sid": "left-3-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w1z1ee90v':{name:'Etude',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:75.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-H"}, {"rackId": "left", "sid": "left-3-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w2o2szd3i':{name:'Lewis Cellars',varietal:'Syrah',vintage:'2018',purchase:70.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wo6w7j51x':{name:'Nickel & Nickel John C. Sullenger Vineyard',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:100.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-K"}, {"rackId": "left", "sid": "left-3-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wgu82g5le':{name:'Orin Swift Mercury Head',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wqe6cgym1':{name:'Orin Swift Papillon',varietal:'Cabernet Sauvignon',vintage:'2016',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w31ruj1v9':{name:'Orin Swift Palermo',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-C"}, {"rackId": "left", "sid": "left-2-D"}, {"rackId": "left", "sid": "left-2-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wn0nq2o77':{name:'Orin Swift Palermo',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w3pyjs761':{name:'Orin Swift Prisoner',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-G"}, {"rackId": "left", "sid": "left-2-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wwgv2x29o':{name:'Orin Swift Cuttings',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w2ty9x637':{name:'Conn Creek Special Selection',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:60.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-J"}, {"rackId": "left", "sid": "left-2-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wp0r6xj8d':{name:'Stag\'s Leap Cellarius Series',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wzmaytfgf':{name:'Ninety Plus Cellars',varietal:'Malbec',vintage:'2024',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wownx23n0':{name:'Chateau Roc De Segur',varietal:'Bordeaux',vintage:'2017',purchase:null,retail:null,qty:1,country:'France',region:'',slots:[{"rackId": "left", "sid": "left-1-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wwh2u7ou9':{name:'Indaco',varietal:'Toscana',vintage:'2017',purchase:75.0,retail:null,qty:1,country:'Italy',region:'',slots:[{"rackId": "left", "sid": "left-1-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wcno017ap':{name:'John Duval Wines',varietal:'Shiraz',vintage:'2017',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wls7lkzbd':{name:'Cyrus',varietal:'Red Blend',vintage:'2020',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wu00sejwk':{name:'Sleeper Reserve',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:60.0,retail:null,qty:5,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-F"}, {"rackId": "left", "sid": "left-1-G"}, {"rackId": "left", "sid": "left-1-H"}, {"rackId": "left", "sid": "left-1-I"}, {"rackId": "left", "sid": "left-1-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'w5ckvwddu':{name:'Muga',varietal:'Rioja',vintage:'2021',purchase:null,retail:null,qty:1,country:'Spain',region:'',slots:[{"rackId": "left", "sid": "left-1-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},
+  'wpf20g5y6':{name:'Peay',varietal:'Syrah',vintage:'2018',purchase:55.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'}
+};
 
 function seedDefaultWines(){
   document.getElementById('loading-sub').textContent='Setting up your cellar...';
-  var data={};
-  DW.forEach(function(w){
-    var key='w'+Date.now().toString(36)+Math.random().toString(36).substr(2,4);
-    data[key]={name:w.name,varietal:w.varietal,vintage:w.vintage,purchase:w.purchase,retail:w.retail||null,qty:w.qty,country:w.country||'',region:w.region||'',slots:[],rack:null,slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:new Date().toISOString()};
+  fbPut('/wines', DW_DATA).then(function(){
+    wines = DW_DATA;
+    refreshAll();
+    document.getElementById('loading-overlay').classList.add('hidden');
+  }).catch(function(e){
+    document.getElementById('loading-sub').textContent='Error: '+e.message;
   });
-  fbPut('/wines',data).then(function(){wines=data;refreshAll();document.getElementById('loading-overlay').classList.add('hidden');}).catch(function(e){document.getElementById('loading-sub').textContent='Error: '+e.message;});
 }
 
 function refreshAll(){updateStats();buildFilters();renderWineList();if(document.getElementById('screen-rack').classList.contains('active'))renderRack();if(document.getElementById('screen-settings').classList.contains('active'))renderSettings();}
@@ -679,6 +779,166 @@ function jumpToLetter(l){
 // ── Rack ──
 function slotPx(cols){return cols>=12?26:cols>=8?30:36;}
 function colLabelsHTML(cols,sz,dual){var sp='<div class="row-lbl"></div>';var lbls=Array.from({length:cols},function(_,i){return'<div class="rack-col-label" style="width:'+sz+'px;flex-shrink:0;">'+String.fromCharCode(65+i)+'</div>';}).join('');return'<div class="rack-col-label-row">'+sp+lbls+(dual?sp:'')+'</div>';}
+// ── Rearrange mode ──
+var rearrangeMode = false;
+var rearrangePickedSlot = null; // {sid, wineId, wine}
+
+function toggleRearrangeMode(){
+  rearrangeMode = !rearrangeMode;
+  if(rearrangeMode) enterRearrangeMode();
+  else exitRearrangeMode();
+}
+
+function enterRearrangeMode(){
+  rearrangeMode = true;
+  rearrangePickedSlot = null;
+  document.getElementById('rearrange-bar').classList.add('show');
+  document.getElementById('btn-rearrange').classList.add('active');
+  document.getElementById('btn-rearrange').textContent = '⇄ Rearranging...';
+  document.getElementById('rack-container').classList.add('rearrange-active');
+  document.getElementById('slot-popup').classList.remove('show');
+  document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
+  renderRackGrid();
+}
+
+function exitRearrangeMode(){
+  rearrangeMode = false;
+  rearrangePickedSlot = null;
+  document.getElementById('rearrange-bar').classList.remove('show');
+  document.getElementById('btn-rearrange').classList.remove('active');
+  document.getElementById('btn-rearrange').textContent = '⇄ Rearrange';
+  document.getElementById('rack-container').classList.remove('rearrange-active');
+  document.getElementById('slot-popup').classList.remove('show');
+  renderRackGrid();
+}
+
+function handleRearrangeSlotTap(sid, slotMap){
+  var tappedWine = slotMap[sid];
+
+  if(!rearrangePickedSlot){
+    // Nothing picked yet — must tap a filled slot
+    if(!tappedWine){
+      document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
+      return;
+    }
+    // Pick up this slot
+    rearrangePickedSlot = {sid:sid, wineId:tappedWine.id, wine:tappedWine};
+    document.getElementById('rearrange-hint').textContent = 'Now tap a slot to move it there';
+    // Highlight picked slot
+    document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});
+    var el = document.querySelector('.slot[data-sid="'+sid+'"]');
+    if(el) el.classList.add('rearrange-selected');
+  } else {
+    // Already holding a slot
+    if(sid === rearrangePickedSlot.sid){
+      // Tapped same slot — put it back
+      rearrangePickedSlot = null;
+      document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
+      document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});
+      return;
+    }
+
+    if(!tappedWine){
+      // Move to empty slot
+      moveSlot(rearrangePickedSlot.sid, sid, rearrangePickedSlot.wineId, null);
+    } else {
+      // Occupied — ask to swap
+      var fromWine = wines[rearrangePickedSlot.wineId];
+      var toWine = tappedWine;
+      var fromName = fromWine ? fromWine.name : 'Unknown';
+      var toName = toWine ? toWine.name : 'Unknown';
+      var fromSid = rearrangePickedSlot.sid;
+      var fromWineId = rearrangePickedSlot.wineId;
+      var toWineId = toWine.id;
+
+      // Show confirmation popup
+      showSwapConfirm(fromName, toName, function(){
+        swapSlots(fromSid, sid, fromWineId, toWineId);
+      });
+    }
+  }
+}
+
+function moveSlot(fromSid, toSid, wineId){
+  var w = wines[wineId];
+  if(!w) return;
+
+  // Update slots array — replace fromSid with toSid
+  var newSlots = (w.slots||[]).map(function(s){
+    return s.sid === fromSid ? {rackId: toSid.split('-')[0], sid: toSid} : s;
+  });
+
+  setSyncing(true);
+  fbPatch('/wines/'+wineId, {slots: newSlots}).then(function(){
+    wines[wineId].slots = newSlots;
+    setSyncing(false);
+    rearrangePickedSlot = null;
+    document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
+    renderRackGrid();
+  });
+}
+
+function swapSlots(fromSid, toSid, fromWineId, toWineId){
+  var fromWine = wines[fromWineId];
+  var toWine = wines[toWineId];
+  if(!fromWine || !toWine) return;
+
+  // Swap the specific slots between the two wines
+  var newFromSlots = (fromWine.slots||[]).map(function(s){
+    return s.sid === fromSid ? {rackId: toSid.split('-')[0], sid: toSid} : s;
+  });
+  var newToSlots = (toWine.slots||[]).map(function(s){
+    return s.sid === toSid ? {rackId: fromSid.split('-')[0], sid: fromSid} : s;
+  });
+
+  setSyncing(true);
+  var updates = {};
+  updates[fromWineId] = Object.assign({}, fromWine, {slots: newFromSlots});
+  updates[toWineId] = Object.assign({}, toWine, {slots: newToSlots});
+
+  // Remove photos from updates to avoid huge payloads
+  delete updates[fromWineId].photo;
+  delete updates[toWineId].photo;
+
+  fbPatch('/wines', updates).then(function(){
+    wines[fromWineId].slots = newFromSlots;
+    wines[toWineId].slots = newToSlots;
+    setSyncing(false);
+    rearrangePickedSlot = null;
+    document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
+    renderRackGrid();
+  });
+}
+
+function showSwapConfirm(nameA, nameB, onConfirm){
+  var popup = document.getElementById('slot-popup');
+  popup.classList.add('show');
+  document.getElementById('slot-wine-name').textContent = 'Swap bottles?';
+  document.getElementById('slot-wine-meta').innerHTML =
+    '<span style="color:var(--text-secondary)">' + nameA + '</span>' +
+    '<span style="color:var(--text-muted)"> ⇄ </span>' +
+    '<span style="color:var(--text-secondary)">' + nameB + '</span>' +
+    '<br><span style="color:var(--gold-dim);font-size:11px;margin-top:6px;display:inline-block;">' +
+    '<button onclick="confirmSwap()" style="background:var(--burgundy-mid);border:1px solid var(--gold-dim);color:var(--gold-light);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;margin-right:8px;touch-action:manipulation;">Swap</button>' +
+    '<button onclick="cancelSwap()" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;">Cancel</button>' +
+    '</span>';
+  window._pendingSwapCallback = onConfirm;
+}
+
+function confirmSwap(){
+  if(window._pendingSwapCallback) window._pendingSwapCallback();
+  window._pendingSwapCallback = null;
+  document.getElementById('slot-popup').classList.remove('show');
+}
+
+function cancelSwap(){
+  window._pendingSwapCallback = null;
+  rearrangePickedSlot = null;
+  document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});
+  document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
+  document.getElementById('slot-popup').classList.remove('show');
+}
+
 function renderRackSelector(){document.getElementById('rack-selector').innerHTML=RACKS.map(function(r){return'<div class="rack-tab'+(r.id===currentRack.id?' active':'')+'" onclick="selectRack(\''+r.id+'\')">'+r.name+'</div>';}).join('');}
 function selectRack(id){currentRack=RACKS.find(function(r){return r.id===id;});document.getElementById('slot-popup').classList.remove('show');renderRackSelector();renderRackGrid();}
 function renderRack(){renderRackSelector();renderRackGrid();}
@@ -711,8 +971,21 @@ function renderRackGrid(){
   inner.innerHTML=html;
   inner.onclick=function(e){
     var slot=e.target.closest('.slot');if(!slot)return;
-    document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});slot.classList.add('selected');
     var sid=slot.dataset.sid,row=slot.dataset.row,col=slot.dataset.col,wine=slotMap[sid];
+
+    // ── Rearrange mode ──
+    if(rearrangeMode){
+      handleRearrangeSlotTap(sid, slotMap);
+      // Re-highlight picked slot after re-render
+      if(rearrangePickedSlot){
+        var pickedEl=document.querySelector('.slot[data-sid="'+rearrangePickedSlot.sid+'"]');
+        if(pickedEl)pickedEl.classList.add('rearrange-selected');
+      }
+      return;
+    }
+
+    // ── Normal mode ──
+    document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});slot.classList.add('selected');
     var popup=document.getElementById('slot-popup');popup.classList.add('show');
     if(wine){document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=(wine.vintage||'N/V')+' · '+(wine.varietal||'')+' · Row '+row+', Col '+col;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};}
     else{document.getElementById('slot-wine-name').textContent='Empty Slot';document.getElementById('slot-wine-meta').textContent='Row '+row+', Column '+col+' — Available';popup.style.cursor='default';popup.onclick=null;}
