@@ -126,17 +126,6 @@
   .slot.filled::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--gold-dim);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
   .slot:active{transform:scale(0.88)}
   .slot.selected{border-color:var(--gold)!important;background:var(--burgundy-rich)!important}
-  .rack-rearrange-bar{display:none;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(201,168,76,0.08);border:1px solid var(--gold-dim);border-radius:10px;margin-bottom:12px;}
-  .rack-rearrange-bar.show{display:flex}
-  .rack-rearrange-label{font-size:11px;letter-spacing:1px;color:var(--gold-dim);text-transform:uppercase;}
-  .rack-rearrange-hint{font-size:10px;color:var(--text-muted);}
-  .btn-rearrange{padding:7px 16px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px;}
-  .btn-rearrange.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light);}
-  .btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px;}
-  .slot.rearrange-selected{border-color:var(--gold)!important;background:var(--gold-dim)!important;animation:slotPulse 1s ease-in-out infinite;}
-  .slot.rearrange-mode{cursor:crosshair;}
-  @keyframes slotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.4)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0.1)}}
-  .rack-container.rearrange-active{border-color:var(--gold-dim);box-shadow:0 0 0 2px rgba(201,168,76,0.15);}
   .rack-legend{display:flex;gap:16px;margin-top:10px}
   .legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}
   .legend-dot{width:10px;height:10px;border-radius:50%}
@@ -285,23 +274,12 @@
 
   <!-- Rack Screen -->
   <div class="screen" id="screen-rack">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-      <div class="section-title" style="margin-bottom:0;">Wine Racks</div>
-      <button class="btn-rearrange" id="btn-rearrange" onclick="toggleRearrangeMode()">⇄ Rearrange</button>
-    </div>
+    <div class="section-title">Wine Racks</div>
     <div class="section-sub">Tap a slot to see what's there</div>
     <div class="rack-selector" id="rack-selector"></div>
-    <!-- Rearrange mode bar -->
-    <div class="rack-rearrange-bar" id="rearrange-bar">
-      <div>
-        <div class="rack-rearrange-label">✦ Rearrange Mode</div>
-        <div class="rack-rearrange-hint" id="rearrange-hint">Tap a bottle to pick it up</div>
-      </div>
-      <button class="btn-done-rearrange" onclick="exitRearrangeMode()">Done</button>
-    </div>
-    <div class="rack-container" id="rack-container">
+    <div class="rack-container">
       <div class="rack-inner" id="rack-inner"></div>
-      <div class="rack-legend" id="rack-legend">
+      <div class="rack-legend">
         <div class="legend-item"><div class="legend-dot" style="background:var(--burgundy-accent)"></div>Filled</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--surface-3);border:1px solid var(--border)"></div>Empty</div>
       </div>
@@ -701,166 +679,6 @@ function jumpToLetter(l){
 // ── Rack ──
 function slotPx(cols){return cols>=12?26:cols>=8?30:36;}
 function colLabelsHTML(cols,sz,dual){var sp='<div class="row-lbl"></div>';var lbls=Array.from({length:cols},function(_,i){return'<div class="rack-col-label" style="width:'+sz+'px;flex-shrink:0;">'+String.fromCharCode(65+i)+'</div>';}).join('');return'<div class="rack-col-label-row">'+sp+lbls+(dual?sp:'')+'</div>';}
-// ── Rearrange mode ──
-var rearrangeMode = false;
-var rearrangePickedSlot = null; // {sid, wineId, wine}
-
-function toggleRearrangeMode(){
-  rearrangeMode = !rearrangeMode;
-  if(rearrangeMode) enterRearrangeMode();
-  else exitRearrangeMode();
-}
-
-function enterRearrangeMode(){
-  rearrangeMode = true;
-  rearrangePickedSlot = null;
-  document.getElementById('rearrange-bar').classList.add('show');
-  document.getElementById('btn-rearrange').classList.add('active');
-  document.getElementById('btn-rearrange').textContent = '⇄ Rearranging...';
-  document.getElementById('rack-container').classList.add('rearrange-active');
-  document.getElementById('slot-popup').classList.remove('show');
-  document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
-  renderRackGrid();
-}
-
-function exitRearrangeMode(){
-  rearrangeMode = false;
-  rearrangePickedSlot = null;
-  document.getElementById('rearrange-bar').classList.remove('show');
-  document.getElementById('btn-rearrange').classList.remove('active');
-  document.getElementById('btn-rearrange').textContent = '⇄ Rearrange';
-  document.getElementById('rack-container').classList.remove('rearrange-active');
-  document.getElementById('slot-popup').classList.remove('show');
-  renderRackGrid();
-}
-
-function handleRearrangeSlotTap(sid, slotMap){
-  var tappedWine = slotMap[sid];
-
-  if(!rearrangePickedSlot){
-    // Nothing picked yet — must tap a filled slot
-    if(!tappedWine){
-      document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
-      return;
-    }
-    // Pick up this slot
-    rearrangePickedSlot = {sid:sid, wineId:tappedWine.id, wine:tappedWine};
-    document.getElementById('rearrange-hint').textContent = 'Now tap a slot to move it there';
-    // Highlight picked slot
-    document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});
-    var el = document.querySelector('.slot[data-sid="'+sid+'"]');
-    if(el) el.classList.add('rearrange-selected');
-  } else {
-    // Already holding a slot
-    if(sid === rearrangePickedSlot.sid){
-      // Tapped same slot — put it back
-      rearrangePickedSlot = null;
-      document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
-      document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});
-      return;
-    }
-
-    if(!tappedWine){
-      // Move to empty slot
-      moveSlot(rearrangePickedSlot.sid, sid, rearrangePickedSlot.wineId, null);
-    } else {
-      // Occupied — ask to swap
-      var fromWine = wines[rearrangePickedSlot.wineId];
-      var toWine = tappedWine;
-      var fromName = fromWine ? fromWine.name : 'Unknown';
-      var toName = toWine ? toWine.name : 'Unknown';
-      var fromSid = rearrangePickedSlot.sid;
-      var fromWineId = rearrangePickedSlot.wineId;
-      var toWineId = toWine.id;
-
-      // Show confirmation popup
-      showSwapConfirm(fromName, toName, function(){
-        swapSlots(fromSid, sid, fromWineId, toWineId);
-      });
-    }
-  }
-}
-
-function moveSlot(fromSid, toSid, wineId){
-  var w = wines[wineId];
-  if(!w) return;
-
-  // Update slots array — replace fromSid with toSid
-  var newSlots = (w.slots||[]).map(function(s){
-    return s.sid === fromSid ? {rackId: toSid.split('-')[0], sid: toSid} : s;
-  });
-
-  setSyncing(true);
-  fbPatch('/wines/'+wineId, {slots: newSlots}).then(function(){
-    wines[wineId].slots = newSlots;
-    setSyncing(false);
-    rearrangePickedSlot = null;
-    document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
-    renderRackGrid();
-  });
-}
-
-function swapSlots(fromSid, toSid, fromWineId, toWineId){
-  var fromWine = wines[fromWineId];
-  var toWine = wines[toWineId];
-  if(!fromWine || !toWine) return;
-
-  // Swap the specific slots between the two wines
-  var newFromSlots = (fromWine.slots||[]).map(function(s){
-    return s.sid === fromSid ? {rackId: toSid.split('-')[0], sid: toSid} : s;
-  });
-  var newToSlots = (toWine.slots||[]).map(function(s){
-    return s.sid === toSid ? {rackId: fromSid.split('-')[0], sid: fromSid} : s;
-  });
-
-  setSyncing(true);
-  var updates = {};
-  updates[fromWineId] = Object.assign({}, fromWine, {slots: newFromSlots});
-  updates[toWineId] = Object.assign({}, toWine, {slots: newToSlots});
-
-  // Remove photos from updates to avoid huge payloads
-  delete updates[fromWineId].photo;
-  delete updates[toWineId].photo;
-
-  fbPatch('/wines', updates).then(function(){
-    wines[fromWineId].slots = newFromSlots;
-    wines[toWineId].slots = newToSlots;
-    setSyncing(false);
-    rearrangePickedSlot = null;
-    document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
-    renderRackGrid();
-  });
-}
-
-function showSwapConfirm(nameA, nameB, onConfirm){
-  var popup = document.getElementById('slot-popup');
-  popup.classList.add('show');
-  document.getElementById('slot-wine-name').textContent = 'Swap bottles?';
-  document.getElementById('slot-wine-meta').innerHTML =
-    '<span style="color:var(--text-secondary)">' + nameA + '</span>' +
-    '<span style="color:var(--text-muted)"> ⇄ </span>' +
-    '<span style="color:var(--text-secondary)">' + nameB + '</span>' +
-    '<br><span style="color:var(--gold-dim);font-size:11px;margin-top:6px;display:inline-block;">' +
-    '<button onclick="confirmSwap()" style="background:var(--burgundy-mid);border:1px solid var(--gold-dim);color:var(--gold-light);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;margin-right:8px;touch-action:manipulation;">Swap</button>' +
-    '<button onclick="cancelSwap()" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;">Cancel</button>' +
-    '</span>';
-  window._pendingSwapCallback = onConfirm;
-}
-
-function confirmSwap(){
-  if(window._pendingSwapCallback) window._pendingSwapCallback();
-  window._pendingSwapCallback = null;
-  document.getElementById('slot-popup').classList.remove('show');
-}
-
-function cancelSwap(){
-  window._pendingSwapCallback = null;
-  rearrangePickedSlot = null;
-  document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});
-  document.getElementById('rearrange-hint').textContent = 'Tap a filled slot to pick it up';
-  document.getElementById('slot-popup').classList.remove('show');
-}
-
 function renderRackSelector(){document.getElementById('rack-selector').innerHTML=RACKS.map(function(r){return'<div class="rack-tab'+(r.id===currentRack.id?' active':'')+'" onclick="selectRack(\''+r.id+'\')">'+r.name+'</div>';}).join('');}
 function selectRack(id){currentRack=RACKS.find(function(r){return r.id===id;});document.getElementById('slot-popup').classList.remove('show');renderRackSelector();renderRackGrid();}
 function renderRack(){renderRackSelector();renderRackGrid();}
@@ -893,21 +711,8 @@ function renderRackGrid(){
   inner.innerHTML=html;
   inner.onclick=function(e){
     var slot=e.target.closest('.slot');if(!slot)return;
-    var sid=slot.dataset.sid,row=slot.dataset.row,col=slot.dataset.col,wine=slotMap[sid];
-
-    // ── Rearrange mode ──
-    if(rearrangeMode){
-      handleRearrangeSlotTap(sid, slotMap);
-      // Re-highlight picked slot after re-render
-      if(rearrangePickedSlot){
-        var pickedEl=document.querySelector('.slot[data-sid="'+rearrangePickedSlot.sid+'"]');
-        if(pickedEl)pickedEl.classList.add('rearrange-selected');
-      }
-      return;
-    }
-
-    // ── Normal mode ──
     document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});slot.classList.add('selected');
+    var sid=slot.dataset.sid,row=slot.dataset.row,col=slot.dataset.col,wine=slotMap[sid];
     var popup=document.getElementById('slot-popup');popup.classList.add('show');
     if(wine){document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=(wine.vintage||'N/V')+' · '+(wine.varietal||'')+' · Row '+row+', Col '+col;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};}
     else{document.getElementById('slot-wine-name').textContent='Empty Slot';document.getElementById('slot-wine-meta').textContent='Row '+row+', Column '+col+' — Available';popup.style.cursor='default';popup.onclick=null;}
