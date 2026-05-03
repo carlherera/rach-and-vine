@@ -9,226 +9,213 @@
 <title>Rach & Vine</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --burgundy-deep:#1a0a0e;--burgundy-mid:#5c1f2e;
-    --burgundy-rich:#8b2d42;--burgundy-accent:#b5435a;--burgundy-light:#d4768a;
-    --gold:#c9a84c;--gold-light:#e8c97a;--gold-dim:#8a6f30;
-    --text-primary:#f5efe6;--text-secondary:#c8bfb4;--text-muted:#8a7d72;
-    --surface-2:#3d1a24;--surface-3:#4d2030;
-    --border:rgba(201,168,76,0.2);--border-bright:rgba(201,168,76,0.5);
-    --glass-bg:rgba(45,18,24,0.85);
-    --green:#3d7a5c;--green-light:#7abf9e;--red-neg:#e34a49;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{font-family:'Montserrat',sans-serif;background:var(--burgundy-deep);color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
-  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(92,31,46,0.3) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(139,45,66,0.2) 0%,transparent 50%);pointer-events:none;z-index:0}
-  .app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
-  .loading-overlay{position:fixed;inset:0;background:var(--burgundy-deep);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s}
-  .loading-overlay.hidden{opacity:0;pointer-events:none}
-  .loading-logo{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);font-style:italic;letter-spacing:3px}
-  .loading-sub{font-size:10px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:0 20px}
-  .loading-spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .sync-bar{height:3px;background:transparent;position:relative;overflow:hidden}
-  .sync-bar.syncing::after{content:'';position:absolute;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:syncSlide 1s infinite}
-  @keyframes syncSlide{to{left:200%}}
-  .sync-status{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:2px 0;min-height:16px}
-  .header{padding:44px 20px 14px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(26,10,14,0.95) 0%,rgba(45,18,24,0.8) 100%);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
-  .header-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2px}
-  .header-vine{font-size:20px;opacity:0.7}
-  .header-logo{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;letter-spacing:3px;color:var(--gold);font-style:italic}
-  .header-ampersand{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-dim);font-style:normal;margin:0 2px}
-  .header-subtitle{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px}
-  .header-stats{display:flex;justify-content:center;gap:24px;margin-top:10px}
-  .stat{text-align:center}
-  .stat-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:500}
-  .stat-label{font-size:8px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
-  .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--glass-bg);border-top:1px solid var(--border);backdrop-filter:blur(16px);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
-  .nav-btn{flex:1;padding:12px 4px 10px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
-  .nav-btn.active{color:var(--gold)}
-  .nav-icon{font-size:20px;line-height:1}
-  .nav-label{font-size:9px;letter-spacing:1px;text-transform:uppercase}
-  .screen{display:none;flex:1;padding:16px 16px 90px;animation:fadeIn 0.3s ease}
-  .screen.active{display:block}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  .section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--gold);letter-spacing:2px;margin-bottom:4px}
-  .section-sub{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
-
-  /* Search with clear button */
-  .search-bar{display:flex;gap:8px;margin-bottom:8px}
-  .search-wrap{flex:1;position:relative;display:flex;align-items:center}
-  .search-input{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 32px 10px 14px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;outline:none}
-  .search-input::placeholder{color:var(--text-muted)}
-  .search-input:focus{border-color:var(--border-bright)}
-  .search-clear{position:absolute;right:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:4px;display:none;touch-action:manipulation}
-  .search-clear.show{display:block}
-  .sort-select{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;outline:none;cursor:pointer;flex-shrink:0}
-
-  /* Filter rows */
-  .filter-section-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;margin-top:8px}
-  .filter-row{display:flex;gap:6px;margin-bottom:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .filter-row::-webkit-scrollbar{display:none}
-  .filter-chip{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:32px;display:flex;align-items:center}
-  .filter-chip.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
-
-  /* Cellar layout with A-Z sidebar */
-  .cellar-wrap{display:flex;gap:0;position:relative}
-  .wine-list-wrap{flex:1;min-width:0;padding-right:24px}
-  .az-sidebar{position:fixed;right:4px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;z-index:50;max-height:70vh;overflow:hidden}
-  .az-letter{font-size:10px;color:var(--text-muted);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:600;touch-action:manipulation;line-height:1.4;border-radius:3px}
-  .az-letter:active{color:var(--gold);background:var(--surface-2)}
-  .az-letter.has-wines{color:var(--gold-dim)}
-  .letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-dim);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px}
-
-  .wine-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation}
-  .wine-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--burgundy-accent);border-radius:3px 0 0 3px}
-  .wine-card.gain::before{background:var(--green)}
-  .wine-card:active{border-color:var(--gold-dim);background:var(--surface-3)}
-  .wine-thumb{width:48px;height:64px;border-radius:6px;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
-  .wine-thumb img{width:100%;height:100%;object-fit:cover;border-radius:5px}
-  .wine-info{flex:1;min-width:0}
-  .wine-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .wine-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
-  .wine-price-row{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
-  .wine-price{font-size:11px;color:var(--text-muted)}
-  .price-gain{font-size:10px;padding:1px 6px;border-radius:10px;background:rgba(61,122,92,0.2);color:var(--green-light);border:1px solid rgba(61,122,92,0.4)}
-  .price-loss{font-size:10px;padding:1px 6px;border-radius:10px;background:rgba(227,74,73,0.15);color:#e34a49;border:1px solid rgba(227,74,73,0.3)}
-  .wine-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
-  .tag{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted)}
-  .tag.cab{border-color:rgba(181,67,90,0.5);color:var(--burgundy-light)}
-  .tag.blend{border-color:rgba(201,168,76,0.4);color:var(--gold-light)}
-  .tag.other-v{border-color:rgba(100,180,140,0.4);color:#7abf9e}
-  .wine-qty{position:absolute;top:10px;right:12px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-weight:500}
-
-  /* Centered Add Wine nav button */
-  .nav-add{flex:1.2}
-  .nav-add-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);color:var(--gold-light);font-size:22px;display:flex;align-items:center;justify-content:center;margin-bottom:1px;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
-  .nav-add .nav-label{color:var(--gold-dim)}
-  .nav-add:active .nav-add-circle{transform:scale(0.9)}
-  /* Scroll to top button */
-  .scroll-top-btn{position:fixed;bottom:82px;right:16px;width:40px;height:40px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-bright);color:var(--gold);font-size:18px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:150;touch-action:manipulation;box-shadow:0 2px 12px rgba(0,0,0,0.4)}
-  .scroll-top-btn.show{display:flex}
-  .scroll-top-btn:active{transform:scale(0.9)}
-
-  /* Rack */
-  .rack-selector{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-  .rack-selector::-webkit-scrollbar{display:none}
-  .rack-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;touch-action:manipulation}
-  .rack-tab.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
-  .rack-container{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .rack-inner{display:inline-block;min-width:100%}
-  .rack-col-label-row{display:flex;gap:4px;align-items:center;padding:3px 0}
-  .rack-col-label{font-size:9px;color:var(--text-muted);text-align:center;font-family:'Cormorant Garamond',serif;letter-spacing:1px;flex-shrink:0;font-weight:600}
-  .rack-row{display:flex;gap:4px;align-items:center;margin-bottom:4px}
-  .row-lbl{font-size:10px;color:var(--text-muted);width:22px;text-align:center;flex-shrink:0;font-family:'Cormorant Garamond',serif;font-weight:600}
-  .slot{border-radius:50%;border:1px solid var(--border);background:var(--surface-3);cursor:pointer;flex-shrink:0;position:relative;touch-action:manipulation}
-  .slot.filled{background:var(--burgundy-mid);border-color:var(--burgundy-accent)}
-  .slot.filled::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--gold-dim);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
-  .slot:active{transform:scale(0.88)}
-  .slot.selected{border-color:var(--gold)!important;background:var(--burgundy-rich)!important}
-  .rack-legend{display:flex;gap:16px;margin-top:10px}
-  .legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}
-  .legend-dot{width:10px;height:10px;border-radius:50%}
-  .slot-popup{background:var(--surface-2);border:1px solid var(--border-bright);border-radius:10px;padding:12px 14px;margin-top:12px;display:none}
-  .slot-popup.show{display:block}
-  .slot-popup-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary)}
-  .slot-popup-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
-
-  /* Modals */
-  .modal-overlay{position:fixed;inset:0;background:rgba(10,4,6,0.88);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-  .modal-overlay.open{display:flex}
-  .modal{background:var(--surface-2);border:1px solid var(--border-bright);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:20px 20px 40px;animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1)}
-  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .modal-handle{width:40px;height:4px;border-radius:2px;background:var(--border-bright);margin:0 auto 20px}
-  .modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);margin-bottom:4px}
-  .modal-subtitle{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:20px}
-  .field-group{margin-bottom:14px}
-  .field-label{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;display:block}
-  .field-hint{font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5}
-  .field-input,.field-select{width:100%;background:var(--surface-3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;outline:none}
-  .field-input:focus,.field-select:focus{border-color:var(--border-bright)}
-  .field-select option{background:var(--surface-2)}
-  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-  .photo-upload{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;color:var(--text-muted);font-size:12px}
-  .photo-upload-icon{font-size:26px;margin-bottom:6px;display:block}
-  .current-photo-wrap{position:relative;display:inline-block;margin-bottom:10px}
-  .current-photo-wrap img{height:100px;border-radius:8px;border:1px solid var(--border);display:block}
-  .photo-remove-btn{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--red-neg);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-  .btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:10px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:8px}
-  .btn-secondary{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
-  .btn-danger{width:100%;padding:12px;background:transparent;border:1px solid rgba(227,74,73,0.4);border-radius:10px;color:#e34a49;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
-  .btn-edit{padding:8px 18px;background:rgba(201,168,76,0.12);border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
-  .detail-header{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
-  .detail-label-img{width:80px;height:110px;border-radius:8px;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
-  .detail-label-img img{width:100%;height:100%;object-fit:cover;border-radius:7px}
-  .camera-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);font-size:9px;text-align:center;padding:4px;letter-spacing:1px;color:#ccc;text-transform:uppercase}
-  .detail-title-block{flex:1;min-width:0}
-  .detail-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-primary);margin-bottom:2px;line-height:1.2}
-  .detail-vintage{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:8px}
-  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
-  .detail-card{background:var(--surface-3);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
-  .detail-card-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
-  .detail-card-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary);margin-top:2px}
-  .detail-card-sub{font-size:10px;color:var(--green-light);margin-top:2px}
-  .detail-card-sub.neg{color:#e34a49}
-  .location-badge{background:var(--burgundy-mid);border:1px solid var(--gold-dim);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin:0 0 12px}
-  .location-icon{font-size:20px}
-  .location-text-label{font-size:9px;letter-spacing:2px;color:var(--gold-dim);text-transform:uppercase}
-  .location-text-value{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-light);line-height:1.4}
-  .drink-window{display:flex;align-items:center;gap:6px;margin-top:6px}
-  .drink-bar{flex:1;height:4px;border-radius:2px;background:var(--surface-3);overflow:hidden}
-  .drink-fill{height:100%;border-radius:2px}
-  .drink-fill.peak{background:var(--gold)}
-  .drink-fill.past{background:var(--burgundy-accent)}
-  .drink-fill.early{background:#4a7c5c}
-  .drink-label{font-size:9px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
-  .rec-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-  .rec-type-btn{padding:14px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;text-align:center;cursor:pointer;touch-action:manipulation}
-  .rec-type-btn.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
-  .rec-type-icon{font-size:22px;display:block;margin-bottom:4px}
-  .rec-input-area{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
-  .rec-textarea{width:100%;background:transparent;border:none;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;resize:none;outline:none;min-height:60px}
-  .rec-textarea::placeholder{color:var(--text-muted)}
-  .ai-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(201,168,76,0.12);border:1px solid var(--gold-dim);border-radius:20px;padding:3px 10px;font-size:9px;letter-spacing:2px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:12px}
-  .api-setup{background:var(--surface-2);border:1px solid var(--gold-dim);border-radius:12px;padding:16px;margin-bottom:16px;display:none}
-  .api-setup.show{display:block}
-  .api-setup-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
-  .api-setup-text{font-size:11px;color:var(--text-muted);line-height:1.8;margin-bottom:12px}
-  .api-setup-text a{color:var(--gold-light);text-decoration:none}
-  .api-key-row{display:flex;gap:8px}
-  .api-key-input{flex:1;background:var(--surface-3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none}
-  .api-key-btn{padding:10px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px}
-  .rec-result{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;display:none}
-  .rec-result.show{display:block}
-  .rec-result-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);margin-bottom:12px}
-  .rec-wine-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
-  .rec-wine-item:last-child{border-bottom:none}
-  .rec-rank{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--burgundy-accent);font-weight:300;width:20px;flex-shrink:0}
-  .rec-wine-name{font-size:13px;color:var(--text-primary);font-weight:500}
-  .rec-wine-reason{font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.5}
-  .loading-dots{display:none;gap:4px;align-items:center;justify-content:center;padding:20px}
-  .loading-dots.show{display:flex}
-  .dot{width:6px;height:6px;border-radius:50%;background:var(--gold-dim);animation:pulse 1.2s ease-in-out infinite}
-  .dot:nth-child(2){animation-delay:0.2s}
-  .dot:nth-child(3){animation-delay:0.4s}
-  @keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
-  .value-insight{background:linear-gradient(135deg,rgba(61,122,92,0.15),rgba(61,122,92,0.05));border:1px solid rgba(61,122,92,0.3);border-radius:10px;padding:14px;margin-bottom:16px}
-  .value-insight-title{font-size:10px;letter-spacing:2px;color:var(--green-light);text-transform:uppercase;margin-bottom:8px}
-  .value-insight-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
-  ::-webkit-scrollbar{width:3px}
-  ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+:root{--burgundy-deep:#1a0a0e;--burgundy-mid:#5c1f2e;--burgundy-rich:#8b2d42;--burgundy-accent:#b5435a;--burgundy-light:#d4768a;--gold:#c9a84c;--gold-light:#e8c97a;--gold-dim:#8a6f30;--text-primary:#f5efe6;--text-secondary:#c8bfb4;--text-muted:#8a7d72;--surface-2:#3d1a24;--surface-3:#4d2030;--border:rgba(201,168,76,0.2);--border-bright:rgba(201,168,76,0.5);--glass-bg:rgba(45,18,24,0.85);--green:#3d7a5c;--green-light:#7abf9e;--red-neg:#e34a49}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Montserrat',sans-serif;background:var(--burgundy-deep);color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(92,31,46,0.3) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(139,45,66,0.2) 0%,transparent 50%);pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+.loading-overlay{position:fixed;inset:0;background:var(--burgundy-deep);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s}
+.loading-overlay.hidden{opacity:0;pointer-events:none}
+.loading-logo{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--gold);font-style:italic;letter-spacing:3px}
+.loading-sub{font-size:10px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:0 20px}
+.loading-spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync-bar{height:3px;background:transparent;position:relative;overflow:hidden}
+.sync-bar.syncing::after{content:'';position:absolute;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:syncSlide 1s infinite}
+@keyframes syncSlide{to{left:200%}}
+.sync-status{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:2px 0;min-height:16px}
+.header{padding:44px 20px 10px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(26,10,14,0.95) 0%,rgba(45,18,24,0.8) 100%);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.header-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2px}
+.header-vine{font-size:20px;opacity:0.7}
+.header-logo{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;letter-spacing:3px;color:var(--gold);font-style:italic}
+.header-ampersand{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-dim);font-style:normal;margin:0 2px}
+.header-subtitle{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px}
+.header-stats{display:flex;justify-content:center;gap:24px;margin-top:8px}
+.stat{text-align:center}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);font-weight:500}
+.stat-label{font-size:8px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+.view-toggle{display:flex;justify-content:center;gap:6px;margin-top:8px}
+.view-btn{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);padding:5px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.view-btn.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--glass-bg);border-top:1px solid var(--border);backdrop-filter:blur(16px);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:12px 4px 10px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
+.nav-btn.active{color:var(--gold)}
+.nav-icon{font-size:20px;line-height:1}
+.nav-label{font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.nav-add{flex:1.2}
+.nav-add-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);color:var(--gold-light);font-size:22px;display:flex;align-items:center;justify-content:center;margin-bottom:1px;box-shadow:0 2px 10px rgba(0,0,0,0.4)}
+.nav-add .nav-label{color:var(--gold-dim)}
+.nav-add:active .nav-add-circle{transform:scale(0.9)}
+.scroll-top-btn{position:fixed;bottom:82px;right:16px;width:40px;height:40px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-bright);color:var(--gold);font-size:18px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:150;touch-action:manipulation;box-shadow:0 2px 12px rgba(0,0,0,0.4)}
+.scroll-top-btn.show{display:flex}
+.screen{display:none;flex:1;padding:16px 16px 90px;animation:fadeIn 0.3s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--gold);letter-spacing:2px;margin-bottom:4px}
+.section-sub{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+.search-bar{display:flex;gap:8px;margin-bottom:8px}
+.search-wrap{flex:1;position:relative;display:flex;align-items:center}
+.search-input{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 32px 10px 14px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;outline:none}
+.search-input::placeholder{color:var(--text-muted)}
+.search-input:focus{border-color:var(--border-bright)}
+.search-clear{position:absolute;right:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;padding:4px;display:none;touch-action:manipulation}
+.search-clear.show{display:block}
+.sort-select{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;outline:none;cursor:pointer;flex-shrink:0}
+.filter-section-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;margin-top:6px}
+.filter-row{display:flex;gap:6px;margin-bottom:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:32px;display:flex;align-items:center}
+.filter-chip.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
+.cellar-wrap{display:flex;gap:0;position:relative}
+.wine-list-wrap{flex:1;min-width:0;padding-right:24px}
+.az-sidebar{position:fixed;right:4px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;z-index:50;max-height:70vh;overflow:hidden}
+.az-letter{font-size:10px;color:var(--text-muted);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:600;touch-action:manipulation;line-height:1.4;border-radius:3px}
+.az-letter:active,.az-letter.has-wines{color:var(--gold-dim)}
+.letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-dim);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px}
+.wine-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation}
+.wine-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--burgundy-accent);border-radius:3px 0 0 3px}
+.wine-card.gain::before{background:var(--green)}
+.wine-card:active{border-color:var(--gold-dim);background:var(--surface-3)}
+.wine-thumb{width:48px;height:64px;border-radius:6px;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.wine-thumb img{width:100%;height:100%;object-fit:cover;border-radius:5px}
+.wine-info{flex:1;min-width:0}
+.wine-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wine-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
+.wine-price-row{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.wine-price{font-size:11px;color:var(--text-muted)}
+.wine-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted)}
+.tag.other-v{border-color:rgba(100,180,140,0.4);color:#7abf9e}
+.wine-qty{position:absolute;top:10px;right:12px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-weight:500}
+.wine-list-item{display:flex;align-items:center;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer;touch-action:manipulation;gap:10px}
+.wine-list-item:active{background:var(--surface-3)}
+.wine-list-item-main{flex:1;min-width:0}
+.wine-list-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wine-list-meta{font-size:11px;color:var(--text-muted);margin-top:1px}
+.wine-list-price{font-size:12px;color:var(--gold-dim);flex-shrink:0;text-align:right}
+.wine-list-qty{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);width:20px;text-align:center;flex-shrink:0}
+.rack-selector{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.rack-selector::-webkit-scrollbar{display:none}
+.rack-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;touch-action:manipulation}
+.rack-tab.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
+.rack-container{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.rack-container.rearrange-active{border-color:var(--gold-dim);box-shadow:0 0 0 2px rgba(201,168,76,0.15)}
+.rack-inner{display:inline-block;min-width:100%}
+.rack-col-label-row{display:flex;gap:4px;align-items:center;padding:3px 0}
+.rack-col-label{font-size:9px;color:var(--text-muted);text-align:center;font-family:'Cormorant Garamond',serif;letter-spacing:1px;flex-shrink:0;font-weight:600}
+.rack-row{display:flex;gap:4px;align-items:center;margin-bottom:4px}
+.row-lbl{font-size:10px;color:var(--text-muted);width:22px;text-align:center;flex-shrink:0;font-family:'Cormorant Garamond',serif;font-weight:600}
+.slot{border-radius:50%;border:1.5px solid var(--border);background:var(--surface-3);cursor:pointer;flex-shrink:0;position:relative;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
+.slot.filled{background:var(--surface-2);border-color:var(--gold-dim)}
+.slot.filled::after{content:'';width:38%;height:38%;border-radius:50%;background:var(--gold);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.slot.selected{border-color:#3d7a5c!important;background:#1a3d2e!important;box-shadow:0 0 0 3px rgba(61,122,92,0.25)!important}
+.slot.selected::after{background:#7abf9e!important}
+.slot:active{transform:scale(0.88)}
+.slot-popup{background:var(--surface-2);border:1px solid var(--border-bright);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:none}
+.slot-popup.show{display:block}
+.slot-popup-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary)}
+.slot-popup-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
+.rack-legend{display:flex;gap:16px;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.rack-rearrange-bar{display:none;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(201,168,76,0.08);border:1px solid var(--gold-dim);border-radius:10px;margin-bottom:12px}
+.rack-rearrange-bar.show{display:flex}
+.rack-rearrange-label{font-size:11px;letter-spacing:1px;color:var(--gold-dim);text-transform:uppercase}
+.rack-rearrange-hint{font-size:10px;color:var(--text-muted)}
+.btn-rearrange{padding:7px 16px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
+.btn-rearrange.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
+.btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
+.slot.rearrange-selected{border-color:var(--gold)!important;background:var(--gold-dim)!important;animation:slotPulse 1s ease-in-out infinite}
+.slot.rearrange-selected::after{background:var(--burgundy-deep)!important}
+@keyframes slotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.4)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0.1)}}
+.modal-overlay{position:fixed;inset:0;background:rgba(10,4,6,0.88);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface-2);border:1px solid var(--border-bright);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:20px 20px 40px;animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:40px;height:4px;border-radius:2px;background:var(--border-bright);margin:0 auto 20px}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);margin-bottom:4px}
+.modal-subtitle{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:20px}
+.field-group{margin-bottom:14px}
+.field-label{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;display:block}
+.field-hint{font-size:10px;color:var(--text-muted);margin-top:4px;line-height:1.5}
+.field-input,.field-select{width:100%;background:var(--surface-3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;outline:none}
+.field-input:focus,.field-select:focus{border-color:var(--border-bright)}
+.field-select option{background:var(--surface-2)}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.photo-upload{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;color:var(--text-muted);font-size:12px}
+.photo-upload-icon{font-size:26px;margin-bottom:6px;display:block}
+.current-photo-wrap{position:relative;display:inline-block;margin-bottom:10px}
+.current-photo-wrap img{height:100px;border-radius:8px;border:1px solid var(--border);display:block}
+.photo-remove-btn{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--red-neg);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:10px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:8px}
+.btn-secondary{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
+.btn-danger{width:100%;padding:12px;background:transparent;border:1px solid rgba(227,74,73,0.4);border-radius:10px;color:#e34a49;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
+.btn-edit{padding:8px 18px;background:rgba(201,168,76,0.12);border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+.detail-header{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+.detail-label-img{width:80px;height:110px;border-radius:8px;background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
+.detail-label-img img{width:100%;height:100%;object-fit:cover;border-radius:7px}
+.camera-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);font-size:9px;text-align:center;padding:4px;letter-spacing:1px;color:#ccc;text-transform:uppercase}
+.detail-title-block{flex:1;min-width:0}
+.detail-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-primary);margin-bottom:2px;line-height:1.2}
+.detail-vintage{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--gold);margin-bottom:8px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
+.detail-card{background:var(--surface-3);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.detail-card-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+.detail-card-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary);margin-top:2px}
+.detail-card-sub{font-size:10px;color:var(--green-light);margin-top:2px}
+.detail-card-sub.neg{color:#e34a49}
+.location-badge{background:var(--burgundy-mid);border:1px solid var(--gold-dim);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin:0 0 12px}
+.location-icon{font-size:20px}
+.location-text-label{font-size:9px;letter-spacing:2px;color:var(--gold-dim);text-transform:uppercase}
+.location-text-value{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-light);line-height:1.4}
+.drink-window{display:flex;align-items:center;gap:6px;margin-top:6px}
+.drink-bar{flex:1;height:4px;border-radius:2px;background:var(--surface-3);overflow:hidden}
+.drink-fill{height:100%;border-radius:2px}
+.drink-fill.peak{background:var(--gold)}.drink-fill.past{background:var(--burgundy-accent)}.drink-fill.early{background:#4a7c5c}
+.drink-label{font-size:9px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
+.rec-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.rec-type-btn{padding:14px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;text-align:center;cursor:pointer;touch-action:manipulation}
+.rec-type-btn.active{background:var(--burgundy-mid);border-color:var(--gold-dim);color:var(--gold-light)}
+.rec-type-icon{font-size:22px;display:block;margin-bottom:4px}
+.rec-input-area{background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;position:relative}
+.rec-textarea{width:100%;background:transparent;border:none;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;resize:none;outline:none;min-height:60px;padding-right:28px}
+.rec-textarea::placeholder{color:var(--text-muted)}
+.rec-clear{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;touch-action:manipulation}
+.rec-clear.show{display:block}
+.ai-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(201,168,76,0.12);border:1px solid var(--gold-dim);border-radius:20px;padding:3px 10px;font-size:9px;letter-spacing:2px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:12px}
+.api-setup{background:var(--surface-2);border:1px solid var(--gold-dim);border-radius:12px;padding:16px;margin-bottom:16px;display:none}
+.api-setup.show{display:block}
+.api-setup-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);margin-bottom:8px}
+.api-setup-text{font-size:11px;color:var(--text-muted);line-height:1.8;margin-bottom:12px}
+.api-setup-text a{color:var(--gold-light);text-decoration:none}
+.api-key-row{display:flex;gap:8px}
+.api-key-input{flex:1;background:var(--surface-3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none}
+.api-key-btn{padding:10px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold-light);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px}
+.rec-result{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;display:none}
+.rec-result.show{display:block}
+.rec-result-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);margin-bottom:12px}
+.rec-wine-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.rec-wine-item:last-child{border-bottom:none}
+.rec-rank{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--burgundy-accent);font-weight:300;width:20px;flex-shrink:0}
+.rec-wine-name{font-size:13px;color:var(--text-primary);font-weight:500}
+.rec-wine-reason{font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.5}
+.loading-dots{display:none;gap:4px;align-items:center;justify-content:center;padding:20px}
+.loading-dots.show{display:flex}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gold-dim);animation:pulse 1.2s ease-in-out infinite}
+.dot:nth-child(2){animation-delay:0.2s}.dot:nth-child(3){animation-delay:0.4s}
+@keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
+.value-insight{background:linear-gradient(135deg,rgba(61,122,92,0.15),rgba(61,122,92,0.05));border:1px solid rgba(61,122,92,0.3);border-radius:10px;padding:14px;margin-bottom:16px}
+.value-insight-title{font-size:10px;letter-spacing:2px;color:var(--green-light);text-transform:uppercase;margin-bottom:8px}
+.value-insight-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
 </head>
 <body>
-
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-logo">Rach &amp; Vine</div>
   <div class="loading-spinner"></div>
   <div class="loading-sub" id="loading-sub">Loading your cellar...</div>
 </div>
-
 <div class="app">
   <div class="sync-bar" id="sync-bar"></div>
   <div class="sync-status" id="sync-status"></div>
@@ -244,9 +231,16 @@
       <div class="stat"><div class="stat-value" id="stat-vineyards">0</div><div class="stat-label">Vineyards</div></div>
       <div class="stat"><div class="stat-value" id="stat-varietals">0</div><div class="stat-label">Varietals</div></div>
     </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btn-grid-view" onclick="setView('grid')" title="Tile view">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6" rx="1"/><rect x="8" y="0" width="6" height="6" rx="1"/><rect x="0" y="8" width="6" height="6" rx="1"/><rect x="8" y="8" width="6" height="6" rx="1"/></svg>
+      </button>
+      <button class="view-btn" id="btn-list-view" onclick="setView('list')" title="List view">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="1" width="14" height="2" rx="1"/><rect x="0" y="6" width="14" height="2" rx="1"/><rect x="0" y="11" width="14" height="2" rx="1"/></svg>
+      </button>
+    </div>
   </div>
 
-  <!-- Cellar Screen -->
   <div class="screen active" id="screen-cellar">
     <div class="section-title">My Cellar</div>
     <div class="section-sub">Tap a bottle to view details</div>
@@ -258,7 +252,7 @@
       <select class="sort-select" id="sort-select">
         <option value="name">Name</option><option value="varietal">Varietal</option>
         <option value="country">Country</option><option value="vintage">Vintage</option>
-        <option value="price_asc">Price Low → High</option><option value="price_desc">Price High → Low</option>
+        <option value="price_asc">Price Low→High</option><option value="price_desc">Price High→Low</option>
         <option value="gain">Best Gain</option><option value="qty">Quantity</option>
       </select>
     </div>
@@ -272,25 +266,34 @@
     </div>
   </div>
 
-  <!-- Rack Screen -->
   <div class="screen" id="screen-rack">
-    <div class="section-title">Wine Racks</div>
-    <div class="section-sub">Tap a slot to see what's there</div>
-    <div class="rack-selector" id="rack-selector"></div>
-    <div class="rack-container">
-      <div class="rack-inner" id="rack-inner"></div>
-      <div class="rack-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--burgundy-accent)"></div>Filled</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--surface-3);border:1px solid var(--border)"></div>Empty</div>
-      </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div class="section-title" style="margin-bottom:0;">Wine Racks</div>
+      <button class="btn-rearrange" id="btn-rearrange" onclick="toggleRearrangeMode()">⇄ Rearrange</button>
     </div>
+    <div class="section-sub">Tap a slot to see what's there</div>
     <div class="slot-popup" id="slot-popup">
       <div class="slot-popup-name" id="slot-wine-name">—</div>
       <div class="slot-popup-meta" id="slot-wine-meta">—</div>
     </div>
+    <div class="rack-rearrange-bar" id="rearrange-bar">
+      <div>
+        <div class="rack-rearrange-label">✦ Rearrange Mode</div>
+        <div class="rack-rearrange-hint" id="rearrange-hint">Tap a bottle to pick it up</div>
+      </div>
+      <button class="btn-done-rearrange" onclick="exitRearrangeMode()">Done</button>
+    </div>
+    <div class="rack-selector" id="rack-selector"></div>
+    <div class="rack-container" id="rack-container">
+      <div class="rack-inner" id="rack-inner"></div>
+      <div class="rack-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--gold-dim)"></div>Filled</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--surface-3);border:1px solid var(--border)"></div>Empty</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3d7a5c"></div>Selected</div>
+      </div>
+    </div>
   </div>
 
-  <!-- Sommelier Screen -->
   <div class="screen" id="screen-recs">
     <div class="section-title">Sommelier</div>
     <div class="section-sub">AI-powered recommendations</div>
@@ -309,9 +312,9 @@
       <div class="rec-type-btn" onclick="selectRecType(this,'window')"><span class="rec-type-icon">📅</span>Drinking Window</div>
       <div class="rec-type-btn" onclick="selectRecType(this,'explore')"><span class="rec-type-icon">🔍</span>Explore</div>
     </div>
-    <div class="rec-input-area" style="position:relative;">
-      <textarea class="rec-textarea" id="rec-prompt" placeholder="Describe your meal, occasion, or what you're looking for..." style="padding-right:28px;"></textarea>
-      <button id="rec-clear" onclick="clearRecPrompt()" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;touch-action:manipulation;">✕</button>
+    <div class="rec-input-area">
+      <textarea class="rec-textarea" id="rec-prompt" placeholder="Describe your meal, occasion, or what you're looking for..."></textarea>
+      <button class="rec-clear" id="rec-clear" onclick="clearRecPrompt()">✕</button>
     </div>
     <button class="btn-primary" onclick="getRecommendations()">Get Top 5 Recommendations →</button>
     <div class="loading-dots" id="rec-loading"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
@@ -321,7 +324,6 @@
     </div>
   </div>
 
-  <!-- Settings Screen -->
   <div class="screen" id="screen-settings">
     <div class="section-title">Cellar Settings</div>
     <div class="section-sub">Overview &amp; management</div>
@@ -413,9 +415,9 @@
     <div class="field-group"><label class="field-label">Wine Name</label><input class="field-input" id="e-name" placeholder="e.g. Stag's Leap Artemis" type="text"></div>
     <div class="row-2">
       <div class="field-group"><label class="field-label">Varietal</label>
-        <select class="field-select" id="e-varietal"><option value="">Select...</option><optgroup label="Red"><option>Cabernet Sauvignon</option><option>Merlot</option><option>Cabernet Franc</option><option>Pinot Noir</option><option>Malbec</option><option>Syrah / Shiraz</option><option>Petite Sirah</option><option>Grenache</option><option>Tempranillo</option><option>Zinfandel</option><option>Sangiovese</option><option>Nebbiolo</option><option>Barbera</option><option>Montepulciano</option><option>Primitivo</option><option>Mourvèdre</option><option>Carménère</option><option>Petit Verdot</option></optgroup><optgroup label="Blends"><option>Red Blend</option><option>Bordeaux Blend</option><option>Rhône Blend</option><option>GSM Blend</option><option>Rioja</option><option>Chianti</option><option>Toscana Rosso</option><option>Super Tuscan</option></optgroup><optgroup label="White"><option>Chardonnay</option><option>Sauvignon Blanc</option><option>Pinot Grigio / Gris</option><option>Riesling</option><option>Viognier</option><option>Albariño</option><option>Gewürztraminer</option><option>Chenin Blanc</option><option>White Blend</option></optgroup><optgroup label="Other"><option>Champagne / Sparkling</option><option>Rosé</option><option>Dessert / Port</option><option>Other</option></optgroup></select>
+        <select class="field-select" id="e-varietal"><option value="">Select...</option><optgroup label="Red"><option>Cabernet Sauvignon</option><option>Merlot</option><option>Cabernet Franc</option><option>Pinot Noir</option><option>Malbec</option><option>Syrah / Shiraz</option><option>Petite Sirah</option><option>Grenache</option><option>Tempranillo</option><option>Zinfandel</option><option>Sangiovese</option><option>Nebbiolo</option><option>Barbera</option><option>Montepulciano</option><option>Mourvèdre</option><option>Carménère</option><option>Petit Verdot</option></optgroup><optgroup label="Blends"><option>Red Blend</option><option>Bordeaux Blend</option><option>Bordeaux</option><option>Rhône Blend</option><option>GSM Blend</option><option>Rioja</option><option>Chianti</option><option>Toscana</option><option>Toscana Rosso</option><option>Super Tuscan</option></optgroup><optgroup label="White"><option>Chardonnay</option><option>Sauvignon Blanc</option><option>Pinot Grigio / Gris</option><option>Riesling</option><option>Viognier</option><option>Albariño</option><option>Chenin Blanc</option><option>White Blend</option></optgroup><optgroup label="Other"><option>Champagne / Sparkling</option><option>Rosé</option><option>Shiraz</option><option>Dessert / Port</option><option>Other</option></optgroup></select>
       </div>
-      <div class="field-group"><label class="field-label">Vintage</label><input class="field-input" id="e-vintage" placeholder="2021" type="number" min="1900" max="2030"></div>
+      <div class="field-group"><label class="field-label">Vintage</label><input class="field-input" id="e-vintage" placeholder="2021" type="number" min="1900" max="2035"></div>
     </div>
     <div class="row-2">
       <div class="field-group"><label class="field-label">Country</label>
@@ -428,8 +430,6 @@
       <div class="field-group"><label class="field-label">Current Retail</label><input class="field-input" id="e-retail" placeholder="$0.00" type="number" step="0.01"></div>
     </div>
     <div class="field-group"><label class="field-label">Quantity</label><input class="field-input" id="e-qty" placeholder="1" type="number" min="1" value="1"></div>
-
-    <!-- Multi-slot rack location -->
     <div class="field-group">
       <label class="field-label">Rack Location(s)</label>
       <div class="row-2" style="margin-bottom:8px;">
@@ -440,9 +440,9 @@
         <input class="field-input" id="e-slot-col-from" placeholder="Col from (e.g. A)" type="text" maxlength="1" style="text-transform:uppercase">
         <input class="field-input" id="e-slot-col-to" placeholder="Col to (e.g. C)" type="text" maxlength="1" style="text-transform:uppercase">
       </div>
-      <div class="field-hint">Enter a single column or a range (e.g. A to C = slots 3A, 3B, 3C). Leave col-to blank for a single slot.</div>
+      <div class="field-hint">Single col or range (A to C = slots 3A, 3B, 3C). Leave col-to blank for one slot.</div>
+      <div id="rack-suggest-hint" style="font-size:10px;color:var(--gold-dim);margin-top:6px;cursor:pointer;letter-spacing:0.5px;"></div>
     </div>
-
     <div class="field-group"><label class="field-label">Drinking Window</label>
       <div class="row-2"><input class="field-input" id="e-drink-from" placeholder="From: 2024" type="number"><input class="field-input" id="e-drink-to" placeholder="To: 2032" type="number"></div>
     </div>
@@ -453,7 +453,6 @@
 </div>
 
 <script>
-// ── Firebase REST API ──
 var FB='https://rach-and-vine-default-rtdb.firebaseio.com';
 function fbGet(p){return fetch(FB+p+'.json').then(function(r){return r.json();});}
 function fbPut(p,d){return fetch(FB+p+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json();});}
@@ -461,7 +460,6 @@ function fbPatch(p,d){return fetch(FB+p+'.json',{method:'PATCH',headers:{'Conten
 function fbPost(p,d){return fetch(FB+p+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json();});}
 function fbDelete(p){return fetch(FB+p+'.json',{method:'DELETE'});}
 
-// ── State ──
 var wines={};
 var activeVarietal='all';
 var activeCountry='all';
@@ -469,6 +467,9 @@ var selectedRecType='meal';
 var currentDetailId=null;
 var editingId=null;
 var editPhotoData=null;
+var currentView='grid';
+var cellarScrollPos=0;
+var cachedApiKey='';
 
 var RACKS=[
   {id:'left',name:'Left Wine Rack',rows:10,cols:12,dual:true},
@@ -477,64 +478,34 @@ var RACKS=[
   {id:'small',name:'Small Wine Rack',dual:false,specialRows:[{row:1,cols:2},{row:2,cols:3},{row:3,cols:3},{row:4,cols:3},{row:5,cols:3},{row:6,cols:3},{row:7,cols:3},{row:8,cols:3}]}
 ];
 var currentRack=RACKS[0];
+var rearrangeMode=false;
+var rearrangePickedSlot=null;
 
-// ── Sync UI ──
-function setSyncing(on){
-  var bar=document.getElementById('sync-bar'),st=document.getElementById('sync-status');
-  if(on){bar.classList.add('syncing');st.textContent='⟳ Saving...';}
-  else{bar.classList.remove('syncing');st.textContent='✓ Saved';setTimeout(function(){st.textContent='';},2000);}
-}
+function setSyncing(on){var bar=document.getElementById('sync-bar'),st=document.getElementById('sync-status');if(on){bar.classList.add('syncing');st.textContent='⟳ Saving...';}else{bar.classList.remove('syncing');st.textContent='✓ Saved';setTimeout(function(){st.textContent='';},2000);}}
 
-// ── Load once on open — wines + API key together ──
-Promise.all([fbGet('/wines'), loadApiKey()]).then(function(results){
+function loadApiKey(){return fbGet('/config/apiKey').then(function(val){if(val&&typeof val==='string'&&val.startsWith('sk-')){cachedApiKey=val;}}).catch(function(){});}
+
+Promise.all([fbGet('/wines'),loadApiKey()]).then(function(results){
   wines=results[0]||{};
   if(Object.keys(wines).length===0){seedDefaultWines();}
   else{document.getElementById('loading-overlay').classList.add('hidden');refreshAll();}
-}).catch(function(){
-  document.getElementById('loading-sub').textContent='Connection error. Please check your internet.';
-});
+}).catch(function(){document.getElementById('loading-sub').textContent='Connection error. Please check your internet.';});
 
-// ── Default wines ──
-var DW=[{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:64,retail:59,qty:6,country:"USA",region:"Napa Valley"},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2013",purchase:38,retail:143,qty:2,country:"USA",region:"Spring Mountain"},{name:"Elivette Spring Mountain District (Magnum)",varietal:"Red Blend",vintage:"2000",purchase:119,retail:null,qty:1,country:"USA",region:"Spring Mountain"},{name:"Sleeper Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:59,qty:2,country:"USA",region:"Napa Valley"},{name:"Terra Valentine K Block Spring Mountain",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:42,retail:55,qty:1,country:"USA",region:"Spring Mountain"},{name:"Conn Creek Special Selection",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:64,retail:70,qty:1,country:"USA",region:"Napa Valley"},{name:"Raymond Generations",varietal:"Red Blend",vintage:"2020",purchase:75,retail:75,qty:1,country:"USA",region:"Napa Valley"},{name:"Arcudi",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:2,country:"USA",region:"Napa Valley"},{name:"Barrett & Barrett",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:129,retail:275,qty:2,country:"USA",region:"Napa Valley"},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2016",purchase:38,retail:211,qty:2,country:"USA",region:"Spring Mountain"},{name:"Elivette Spring Mountain District",varietal:"Red Blend",vintage:"2011",purchase:32,retail:199,qty:3,country:"USA",region:"Spring Mountain"},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:75,qty:2,country:"USA",region:"Napa Valley"},{name:"Vineyard 29",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:53,retail:65,qty:2,country:"USA",region:"Napa Valley"},{name:"Keenan Reserve",varietal:"Cabernet Sauvignon",vintage:"2020",purchase:49,retail:60,qty:2,country:"USA",region:"Spring Mountain"},{name:"Hampton Royce",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:49,retail:55,qty:2,country:"USA",region:"Napa Valley"},{name:"Kapscandy Roberta's Reserve",varietal:"Merlot",vintage:"2016",purchase:108,retail:362,qty:1,country:"USA",region:"Napa Valley"},{name:"Meteor Vineyard",varietal:"Cabernet Sauvignon",vintage:"2016",purchase:68,retail:95,qty:2,country:"USA",region:"Napa Valley"},{name:"Grands Joueurs Vignerons Rougiste",varietal:"Red Blend",vintage:"2022",purchase:14,retail:18,qty:2,country:"France",region:"Languedoc"},{name:"Teeter-Totter Panache",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:75,qty:2,country:"USA",region:"Napa Valley"},{name:"Sleeper",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:49,retail:39,qty:4,country:"USA",region:"Napa Valley"},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:49,retail:55,qty:4,country:"USA",region:"Napa Valley"},{name:"Grape Culture",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:75,retail:80,qty:2,country:"USA",region:"Napa Valley"},{name:"Nellcote Rutherford Reserve",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:97,retail:97,qty:3,country:"USA",region:"Napa Valley"},{name:"Cornerstone Cellars",varietal:"Red Blend",vintage:"2018",purchase:50,retail:60,qty:2,country:"USA",region:"Napa Valley"},{name:"Cornerstone Cellars",varietal:"Cabernet Franc",vintage:"2018",purchase:42,retail:50,qty:2,country:"USA",region:"Napa Valley"},{name:"Gallica",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:129,retail:145,qty:1,country:"USA",region:"Napa Valley"},{name:"Nellcote Rally Eye 76",varietal:"Cabernet Sauvignon",vintage:"2017",purchase:86,retail:90,qty:2,country:"USA",region:"Napa Valley"},{name:"Dolum Estates Cask #14",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:56,retail:60,qty:2,country:"USA",region:"Napa Valley"},{name:"Beau Vigne Old School",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:54,retail:60,qty:2,country:"USA",region:"Napa Valley"},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:56,retail:60,qty:3,country:"USA",region:"Napa Valley"},{name:"Reynvaan Family Vineyards The Contender",varietal:"Syrah",vintage:"2017",purchase:34,retail:50,qty:3,country:"USA",region:"Walla Walla"},{name:"Waypoint Beckstoffer Georges III",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:75,retail:90,qty:2,country:"USA",region:"Napa Valley"},{name:"Beringer Private Reserve",varietal:"Cabernet Sauvignon",vintage:"",purchase:118,retail:165,qty:3,country:"USA",region:"Napa Valley"},{name:"Erikson & Caradin Craftsman & Wolves",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:56,retail:60,qty:3,country:"USA",region:"Napa Valley"},{name:"Fattoria La Vialla Casa Conforto",varietal:"Chianti",vintage:"2020",purchase:28,retail:30,qty:3,country:"Italy",region:"Tuscany"},{name:"Sleeper",varietal:"Cabernet Franc",vintage:"2021",purchase:45,retail:45,qty:3,country:"USA",region:"Napa Valley"},{name:"Madrigal",varietal:"Petite Sirah",vintage:"2018",purchase:28,retail:32,qty:2,country:"USA",region:"Napa Valley"},{name:"Stags Leap Winery The Investor",varietal:"Red Blend",vintage:"2020",purchase:54,retail:59,qty:2,country:"USA",region:"Napa Valley"},{name:"Peju Winery",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:32,retail:40,qty:4,country:"USA",region:"Napa Valley"},{name:"Conn Creek AVA Series Atlas Peak",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:53,retail:58,qty:2,country:"USA",region:"Napa Valley"},{name:"Sleeper Vine Cliff Estate",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:64,retail:65,qty:2,country:"USA",region:"Napa Valley"},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2022",purchase:99,retail:110,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:81,retail:90,qty:3,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:122,retail:140,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:108,retail:120,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Franc",vintage:"2023",purchase:104,retail:115,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:81,retail:90,qty:2,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:131,retail:145,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:270,retail:310,qty:1,country:"USA",region:"Spring Mountain"},{name:"Barnett Vineyards",varietal:"Merlot",vintage:"2023",purchase:79,retail:90,qty:1,country:"USA",region:"Spring Mountain"},{name:"Shafer Vineyards",varietal:"Red Blend",vintage:"2022",purchase:90,retail:118,qty:2,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Merlot",vintage:"2023",purchase:90,retail:100,qty:1,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2018",purchase:140,retail:122,qty:3,country:"USA",region:"Napa Valley"},{name:"Sherwin Family Vineyards",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:175,retail:185,qty:3,country:"USA",region:"Spring Mountain"},{name:"Sherwin Family Vineyards",varietal:"Red Blend",vintage:"2023",purchase:85,retail:90,qty:3,country:"USA",region:"Spring Mountain"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:157,retail:191,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:128,retail:221,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:213,retail:238,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:106,retail:78,qty:2,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:64,retail:71,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:170,retail:195,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:170,retail:195,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:140,retail:233,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2023",purchase:213,retail:250,qty:1,country:"USA",region:"Napa Valley"},{name:"Stag's Leap",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:119,retail:195,qty:1,country:"USA",region:"Napa Valley"},{name:"Inglenook Niebaum-Pennino \"1882\"",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:48,retail:55,qty:3,country:"USA",region:"Napa Valley"},{name:"Muga",varietal:"Rioja",vintage:"2021",purchase:36,retail:42,qty:1,country:"Spain",region:"Rioja"},{name:"Duckhorn Vineyards",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:68,retail:66,qty:6,country:"USA",region:"Napa Valley"},{name:"Nickel & Nickel John C. Sullenger Vineyard",varietal:"Cabernet Sauvignon",vintage:"2022",purchase:104,retail:123,qty:3,country:"USA",region:"Napa Valley"},{name:"Denner Vineyards Dirt Worshipper",varietal:"Red Blend",vintage:"2021",purchase:76,retail:85,qty:3,country:"USA",region:"Paso Robles"},{name:"BV Georges de Latour Private Reserve",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:144,retail:175,qty:2,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:65,retail:137,qty:3,country:"USA",region:"Napa Valley"},{name:"Overture by Opus",varietal:"Red Blend",vintage:"2021",purchase:144,retail:201,qty:2,country:"USA",region:"Napa Valley"},{name:"Duckhorn Vineyards Three Palms Vineyard",varietal:"Merlot",vintage:"2021",purchase:128,retail:125,qty:2,country:"USA",region:"Napa Valley"},{name:"Shafer Vineyards",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:126,retail:137,qty:2,country:"USA",region:"Napa Valley"},{name:"Cliff Lede \"Rhythm\"",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:117,retail:130,qty:2,country:"USA",region:"Napa Valley"},{name:"Titus Vineyards",varietal:"Cabernet Sauvignon",vintage:"2019",purchase:101,retail:115,qty:2,country:"USA",region:"Napa Valley"},{name:"Ghost Block",varietal:"Cabernet Sauvignon",vintage:"2021",purchase:72,retail:80,qty:2,country:"USA",region:"Napa Valley"},{name:"Tenuta Sette Cieli Indaco",varietal:"Toscana Rosso",vintage:"2017",purchase:76,retail:90,qty:2,country:"Italy",region:"Tuscany"},{name:"Dominus Estate Napanook",varietal:"Red Blend",vintage:"2021",purchase:108,retail:99,qty:2,country:"USA",region:"Napa Valley"}];
+var DW_DATA={'wtlru0bfx':{name:'Sabina Vineyards St. Helena Estate Cabernet Sauvignon',varietal:'Cabernet Sauvignon',vintage:'2008',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w5pjckm7x':{name:'Sabina Vineyards St. Helena',varietal:'Cabernet Sauvignon',vintage:'2010',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w07escn8p':{name:'Sabina Vineyards Rutherford',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wdb5nu56x':{name:'Sabina Vineyards Montagna Hill',varietal:'Cabernet Sauvignon',vintage:'2020',purchase:null,retail:null,qty:5,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-D"}, {"rackId": "left", "sid": "left-10-E"}, {"rackId": "left", "sid": "left-10-F"}, {"rackId": "left", "sid": "left-10-G"}, {"rackId": "left", "sid": "left-10-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wt9ar3qzm':{name:'Beaulieu Vineyard Georges De Latour Private Reserve',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:145.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-I"}, {"rackId": "left", "sid": "left-10-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wa3a3v98l':{name:'Napanook',varietal:'Red Blend',vintage:'2021',purchase:110.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-10-K"}, {"rackId": "left", "sid": "left-10-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w6vxazozh':{name:'The Debate Sacrashe Vineyard',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wetpnpl24':{name:'The Debate Artalade Montagna Vineyard',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-B"}, {"rackId": "left", "sid": "left-9-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wnjed6b3n':{name:'The Debate Sleeping Lady Vineyard',varietal:'Cabernet Franc',vintage:'2019',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-D"}, {"rackId": "left", "sid": "left-9-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'ws4vgp86l':{name:'Cliff Lede Beckstoffer to Kalon',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-F"}, {"rackId": "left", "sid": "left-9-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wov97tvi1':{name:'Cliff Lede Rhythm',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:120.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-H"}, {"rackId": "left", "sid": "left-9-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wja116ohw':{name:'Cliff Lede Stardust Heaven',varietal:'Cabernet Sauvignon',vintage:'2013',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wftr2u7ws':{name:'Beringer Private Reserve',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:110.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w0wv7ajdy':{name:'Beringer Private Reserve',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:110.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-9-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wq1n3dgy0':{name:'Shafer One Point Five',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-A"}, {"rackId": "left", "sid": "left-8-B"}, {"rackId": "left", "sid": "left-8-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wxhowynt1':{name:'Shafer One Point Five',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:125.0,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-D"}, {"rackId": "left", "sid": "left-8-E"}, {"rackId": "left", "sid": "left-8-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wddq3qljf':{name:'Shafer TD-9',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:60.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wsc37f919':{name:'Shafer',varietal:'Merlot',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wdlatl1wa':{name:'Shafer Relentless',varietal:'Syrah',vintage:'2018',purchase:90.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wghiuy0pj':{name:'Shafer Relentless',varietal:'Syrah',vintage:'2022',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-J"}, {"rackId": "left", "sid": "left-8-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wsdzn2bxt':{name:'Cliff Lede',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-8-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wriiyuex3':{name:'Nellcote 500 Chevaux',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:75.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wx94hrtnz':{name:'Nellcote 500 Chevaux',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:50.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-B"}, {"rackId": "left", "sid": "left-7-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wzrxszheq':{name:'Nellcote Rallye 76',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:80.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wpem2ltyl':{name:'Nellcote Rallye 76',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:80.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wi39gq7ol':{name:'Nellcote Rutherford Reserve',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:90.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-F"}, {"rackId": "left", "sid": "left-7-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wha9fysmp':{name:'Chimney Rock Ganymede Vineyard',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:75.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-H"}, {"rackId": "left", "sid": "left-7-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wfms0v5du':{name:'Buccella',varietal:'Cabernet Sauvignon',vintage:'2020',purchase:90.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-J"}, {"rackId": "left", "sid": "left-7-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wghw1qqzl':{name:'Gallica',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:120.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-7-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'we423az97':{name:'Barnett Vineyards Rattlesnake',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wnuskrwkp':{name:'Barnett Vineyards Rattlesnake',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-B"}, {"rackId": "left", "sid": "left-6-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w9wuu1q87':{name:'Barnett Vineyards MMV',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wb7h5btlm':{name:'Barnett Vineyards Lake Block',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-E"}, {"rackId": "left", "sid": "left-6-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w181rt55g':{name:'Barnett Vineyards Arena Block',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wwg6hk0vt':{name:'Barnett Vineyards',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-H"}, {"rackId": "left", "sid": "left-6-I"}, {"rackId": "left", "sid": "left-6-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'ww9stzvhc':{name:'Barnett Vineyards',varietal:'Cabernet Franc',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-6-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wcyndj2ue':{name:'Chateau Leoville Poyferre Medoc',varietal:'Bordeaux',vintage:'2018',purchase:145.0,retail:null,qty:1,country:'France',region:'',slots:[{"rackId": "left", "sid": "left-6-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wli3i6mq1':{name:'Barnett Vineyards',varietal:'Merlot',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'woismrnfh':{name:'Barnett Vineyards',varietal:'Merlot',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-B"}, {"rackId": "left", "sid": "left-5-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wt8ddpct7':{name:'Sherwin Family Vineyards',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-D"}, {"rackId": "left", "sid": "left-5-E"}, {"rackId": "left", "sid": "left-5-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w1r5bfwpf':{name:'Sherwin Family Vineyards Cellar Scraps 19',varietal:'Red Blend',vintage:'2023',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-G"}, {"rackId": "left", "sid": "left-5-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wrhremmf8':{name:'Barrett & Barrett',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:120.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-I"}, {"rackId": "left", "sid": "left-5-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wppwd4xbp':{name:'Adversity The Twin',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:80.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-5-K"}, {"rackId": "left", "sid": "left-5-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w859fotun':{name:'Stag\'s Leap S.L.V.',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wdndpk6jw':{name:'Stag\'s Leap ARMILLARY',varietal:'Cabernet Sauvignon',vintage:'2021',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wvq43rw2x':{name:'Stag\'s Leap HEART of FAY',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w822x60y3':{name:'Stag\'s Leap FAY Hillside',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wo7efytna':{name:'Stag\'s Leap FAY',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wu20p6wep':{name:'Stag\'s Leap FAY',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wcb1ss594':{name:'Stag\'s Leap S.L.V.',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wuqern723':{name:'Stag\'s Leap Soda Canyon Ranch',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wehp2do8i':{name:'Stag\'s Leap Artemis',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wgu9vs5p1':{name:'Stag\'s Leap Artemis',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-4-J"}, {"rackId": "left", "sid": "left-4-K"}, {"rackId": "left", "sid": "left-4-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wnwc1uq30':{name:'Denner Vineyards Dirt Worshiper',varietal:'Syrah',vintage:'2021',purchase:75.0,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-A"}, {"rackId": "left", "sid": "left-3-B"}, {"rackId": "left", "sid": "left-3-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w9ycdr2oq':{name:'Mueller Family Vineyards Diamond Mountain',varietal:'Cabernet Sauvignon',vintage:'2016',purchase:70.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'ww9ihwj1i':{name:'Mueller Family Vineyards Diamond Mountain',varietal:'Cabernet Sauvignon',vintage:'2017',purchase:70.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'ws3o6c9c3':{name:'Mueller Family Vineyards Diamond Mountain',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:60.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-F"}, {"rackId": "left", "sid": "left-3-G"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wt9o17wuq':{name:'Etude',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:75.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-H"}, {"rackId": "left", "sid": "left-3-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wsa3apawk':{name:'Lewis Cellars',varietal:'Syrah',vintage:'2018',purchase:70.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'ws7z3qjuw':{name:'Nickel & Nickel John C. Sullenger Vineyard',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:100.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-3-K"}, {"rackId": "left", "sid": "left-3-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wbh9fjvpg':{name:'Orin Swift Mercury Head',varietal:'Cabernet Sauvignon',vintage:'2015',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wts6kg9qz':{name:'Orin Swift Papillon',varietal:'Cabernet Sauvignon',vintage:'2016',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wneks8olj':{name:'Orin Swift Palermo',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:null,retail:null,qty:3,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-C"}, {"rackId": "left", "sid": "left-2-D"}, {"rackId": "left", "sid": "left-2-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wwlpa2lv7':{name:'Orin Swift Palermo',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-F"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wo54sd0vi':{name:'Orin Swift Prisoner',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:null,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-G"}, {"rackId": "left", "sid": "left-2-H"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w6q8ye2cc':{name:'Orin Swift Cuttings',varietal:'Cabernet Sauvignon',vintage:'2018',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-I"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wj0c9stlz':{name:'Conn Creek Special Selection',varietal:'Cabernet Sauvignon',vintage:'2019',purchase:60.0,retail:null,qty:2,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-J"}, {"rackId": "left", "sid": "left-2-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w3gpqj1l1':{name:'Stag\'s Leap Cellarius Series',varietal:'Cabernet Sauvignon',vintage:'2022',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-2-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wam6thi83':{name:'Ninety Plus Cellars',varietal:'Malbec',vintage:'2024',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-A"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wotzuyadk':{name:'Chateau Roc De Segur',varietal:'Bordeaux',vintage:'2017',purchase:null,retail:null,qty:1,country:'France',region:'',slots:[{"rackId": "left", "sid": "left-1-B"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wv2khgz2j':{name:'Indaco',varietal:'Toscana',vintage:'2017',purchase:75.0,retail:null,qty:1,country:'Italy',region:'',slots:[{"rackId": "left", "sid": "left-1-C"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wwk07ytzv':{name:'John Duval Wines',varietal:'Shiraz',vintage:'2017',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-D"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w4jkyql2m':{name:'Cyrus',varietal:'Red Blend',vintage:'2020',purchase:null,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-E"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'wnqy088l8':{name:'Sleeper Reserve',varietal:'Cabernet Sauvignon',vintage:'2023',purchase:60.0,retail:null,qty:5,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-F"}, {"rackId": "left", "sid": "left-1-G"}, {"rackId": "left", "sid": "left-1-H"}, {"rackId": "left", "sid": "left-1-I"}, {"rackId": "left", "sid": "left-1-J"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'whaxairxs':{name:'Muga',varietal:'Rioja',vintage:'2021',purchase:null,retail:null,qty:1,country:'Spain',region:'',slots:[{"rackId": "left", "sid": "left-1-K"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'},'w2mdenrn0':{name:'Peay',varietal:'Syrah',vintage:'2018',purchase:55.0,retail:null,qty:1,country:'USA',region:'',slots:[{"rackId": "left", "sid": "left-1-L"}],rack:'left',slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:'2025-01-01T00:00:00.000Z'}};
 
 function seedDefaultWines(){
   document.getElementById('loading-sub').textContent='Setting up your cellar...';
-  var data={};
-  DW.forEach(function(w){
-    var key='w'+Date.now().toString(36)+Math.random().toString(36).substr(2,4);
-    data[key]={name:w.name,varietal:w.varietal,vintage:w.vintage,purchase:w.purchase,retail:w.retail||null,qty:w.qty,country:w.country||'',region:w.region||'',slots:[],rack:null,slotText:'',drinkFrom:'',drinkTo:'',notes:'',photo:null,added:new Date().toISOString()};
-  });
-  fbPut('/wines',data).then(function(){wines=data;refreshAll();document.getElementById('loading-overlay').classList.add('hidden');}).catch(function(e){document.getElementById('loading-sub').textContent='Error: '+e.message;});
+  fbPut('/wines',DW_DATA).then(function(){wines=DW_DATA;refreshAll();document.getElementById('loading-overlay').classList.add('hidden');}).catch(function(e){document.getElementById('loading-sub').textContent='Error: '+e.message;});
 }
 
-function refreshAll(){updateStats();buildFilters();renderWineList();if(document.getElementById('screen-rack').classList.contains('active'))renderRack();if(document.getElementById('screen-settings').classList.contains('active'))renderSettings();}
+function refreshAll(){buildFilters();renderWineList();if(document.getElementById('screen-rack').classList.contains('active'))renderRack();if(document.getElementById('screen-settings').classList.contains('active'))renderSettings();}
 
-// ── Stats: bottles, vineyards (deduplicated by producer), varietals ──
-function extractVineyard(name){
-  if(!name)return '';
-  // Remove 4-digit years
-  var n=name.replace(/[0-9]{4}/g,'').trim();
-  // Split into words, take first 1-2 meaningful words as the vineyard/producer name
-  var descriptors=['cabernet','sauvignon','merlot','pinot','noir','blanc','chardonnay','malbec','syrah','zinfandel','franc','blend','red','white','rose','petit','petite','sirah','reserve','estate','single','block','series','ava','private','special','selection','classic'];
-  var words=n.split(/\s+/).filter(Boolean);
-  var parts=[];
-  for(var i=0;i<Math.min(words.length,3);i++){
-    if(i>0 && descriptors.indexOf(words[i].toLowerCase())>-1) break;
-    parts.push(words[i]);
-  }
-  return parts.join(' ').replace(/['"]/g,'').trim();
-}
-function updateStats(){
-  var arr=Object.values(wines);
-  var bottles=arr.reduce(function(s,w){return s+(parseInt(w.qty)||0);},0);
-  var vineyards=new Set(arr.map(function(w){return extractVineyard(w.name);})).size;
-  var varietals=new Set(arr.map(function(w){return w.varietal;}).filter(Boolean)).size;
-  document.getElementById('stat-bottles').textContent=bottles;
-  document.getElementById('stat-vineyards').textContent=vineyards;
-  document.getElementById('stat-varietals').textContent=varietals;
-}
+function extractVineyard(name){if(!name)return'';var n=name.replace(/[0-9]{4}/g,'').trim();var descriptors=['cabernet','sauvignon','merlot','pinot','noir','blanc','chardonnay','malbec','syrah','zinfandel','franc','blend','red','white','rose','petit','petite','sirah','reserve','estate','single','block','series','ava','private','special','selection','classic','shiraz','grenache','relentless','rhythm','one','point','five'];var words=n.split(/\s+/).filter(Boolean);var parts=[];for(var i=0;i<Math.min(words.length,3);i++){if(i>0&&descriptors.indexOf(words[i].toLowerCase())>-1)break;parts.push(words[i]);}return parts.join(' ').replace(/['"]/g,'').trim();}
+
+function updateStats(filteredList){var arr=filteredList||Object.values(wines);var bottles=arr.reduce(function(s,w){return s+(parseInt(w.qty)||0);},0);var vineyards=new Set(arr.map(function(w){return extractVineyard(w.name);})).size;var varietals=new Set(arr.map(function(w){return w.varietal;}).filter(Boolean)).size;document.getElementById('stat-bottles').textContent=bottles;document.getElementById('stat-vineyards').textContent=vineyards;document.getElementById('stat-varietals').textContent=varietals;}
 
 function showScreen(id,btn){
+  if(document.getElementById('screen-cellar').classList.contains('active')&&id!=='cellar'){cellarScrollPos=window.scrollY;}
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.nav-btn:not(.nav-add)').forEach(function(b){b.classList.remove('active');});
   document.getElementById('screen-'+id).classList.add('active');
@@ -542,28 +513,14 @@ function showScreen(id,btn){
   if(id==='rack')renderRack();
   if(id==='settings')renderSettings();
   if(id==='recs')checkApiKey();
-  // Show scroll-to-top only on cellar
-  document.getElementById('scroll-top-btn').classList.toggle('show', id==='cellar' && window.scrollY > 200);
+  if(id==='cellar'){setTimeout(function(){window.scrollTo(0,cellarScrollPos);},50);}
+  else{window.scrollTo(0,0);}
+  document.getElementById('scroll-top-btn').classList.toggle('show',id==='cellar'&&cellarScrollPos>200);
 }
-
 function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'});}
+window.addEventListener('scroll',function(){var onCellar=document.getElementById('screen-cellar').classList.contains('active');document.getElementById('scroll-top-btn').classList.toggle('show',onCellar&&window.scrollY>200);});
+function setView(v){currentView=v;document.getElementById('btn-grid-view').classList.toggle('active',v==='grid');document.getElementById('btn-list-view').classList.toggle('active',v==='list');renderWineList();}
 
-// Show/hide scroll-to-top button based on scroll position
-window.addEventListener('scroll',function(){
-  var onCellar=document.getElementById('screen-cellar').classList.contains('active');
-  document.getElementById('scroll-top-btn').classList.toggle('show', onCellar && window.scrollY > 200);
-});
-
-// ── Search with clear button ──
-document.getElementById('search-input').addEventListener('input',function(){
-  document.getElementById('search-clear').classList.toggle('show',this.value.length>0);
-  renderWineList();
-});
-function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-clear').classList.remove('show');renderWineList();}
-
-document.getElementById('sort-select').addEventListener('change',renderWineList);
-
-// ── Filters ──
 function buildFilters(){
   var arr=Object.values(wines);
   var vs=Array.from(new Set(arr.map(function(w){return w.varietal;}).filter(Boolean))).sort();
@@ -574,48 +531,30 @@ function buildFilters(){
 document.getElementById('filter-varietal').addEventListener('click',function(e){
   var chip=e.target.closest('.filter-chip');if(!chip)return;
   var val=decodeURIComponent(chip.dataset.filter);
-  if(val==='all'){
-    document.querySelectorAll('#filter-varietal .filter-chip').forEach(function(c){c.classList.remove('active');});
-    chip.classList.add('active');activeVarietal='all';
-  } else if(chip.classList.contains('active')){
-    // Deselect — revert to All
-    chip.classList.remove('active');
-    document.querySelector('#filter-varietal .filter-chip[data-filter="all"]').classList.add('active');
-    activeVarietal='all';
-  } else {
-    document.querySelectorAll('#filter-varietal .filter-chip').forEach(function(c){c.classList.remove('active');});
-    chip.classList.add('active');activeVarietal=val;
-  }
+  if(val==='all'){document.querySelectorAll('#filter-varietal .filter-chip').forEach(function(c){c.classList.remove('active');});chip.classList.add('active');activeVarietal='all';}
+  else if(chip.classList.contains('active')){chip.classList.remove('active');document.querySelector('#filter-varietal .filter-chip[data-filter="all"]').classList.add('active');activeVarietal='all';}
+  else{document.querySelectorAll('#filter-varietal .filter-chip').forEach(function(c){c.classList.remove('active');});chip.classList.add('active');activeVarietal=val;}
   renderWineList();
 });
 document.getElementById('filter-country').addEventListener('click',function(e){
   var chip=e.target.closest('.filter-chip');if(!chip)return;
   var val=decodeURIComponent(chip.dataset.filter);
-  if(val==='all'){
-    document.querySelectorAll('#filter-country .filter-chip').forEach(function(c){c.classList.remove('active');});
-    chip.classList.add('active');activeCountry='all';
-  } else if(chip.classList.contains('active')){
-    chip.classList.remove('active');
-    document.querySelector('#filter-country .filter-chip[data-filter="all"]').classList.add('active');
-    activeCountry='all';
-  } else {
-    document.querySelectorAll('#filter-country .filter-chip').forEach(function(c){c.classList.remove('active');});
-    chip.classList.add('active');activeCountry=val;
-  }
+  if(val==='all'){document.querySelectorAll('#filter-country .filter-chip').forEach(function(c){c.classList.remove('active');});chip.classList.add('active');activeCountry='all';}
+  else if(chip.classList.contains('active')){chip.classList.remove('active');document.querySelector('#filter-country .filter-chip[data-filter="all"]').classList.add('active');activeCountry='all';}
+  else{document.querySelectorAll('#filter-country .filter-chip').forEach(function(c){c.classList.remove('active');});chip.classList.add('active');activeCountry=val;}
   renderWineList();
 });
 
-function getTag(v){if(!v)return{l:'Unknown',c:''};var lv=v.toLowerCase();if(lv.indexOf('cabernet sauvignon')>-1)return{l:'Cab Sauv',c:'cab'};if(lv.indexOf('blend')>-1||lv.indexOf('rioja')>-1||lv.indexOf('chianti')>-1||lv.indexOf('toscana')>-1)return{l:'Blend/Red',c:'blend'};return{l:v,c:'other-v'};}
-function gainBadge(p,r){if(!r||!p)return'';var d=r-p,pct=Math.round((d/p)*100);if(Math.abs(d)<2)return'';return'<span class="'+(d>0?'price-gain':'price-loss')+'">'+(d>0?'+':'')+'$'+Math.abs(Math.round(d))+' ('+(d>0?'+':'')+pct+'%)</span>';}
+document.getElementById('search-input').addEventListener('input',function(){document.getElementById('search-clear').classList.toggle('show',this.value.length>0);renderWineList();});
+function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-clear').classList.remove('show');renderWineList();}
+document.getElementById('sort-select').addEventListener('change',renderWineList);
 
-// ── Render wine list with A-Z grouping ──
 function renderWineList(){
   var q=document.getElementById('search-input').value.toLowerCase();
   var sort=document.getElementById('sort-select').value;
   var list=Object.entries(wines).map(function(e){return Object.assign({},e[1],{id:e[0]});}).filter(function(w){
     return(!q||w.name.toLowerCase().indexOf(q)>-1||(w.varietal||'').toLowerCase().indexOf(q)>-1||(w.vintage||'').indexOf(q)>-1||(w.country||'').toLowerCase().indexOf(q)>-1)
-      &&(activeVarietal==='all'||w.varietal===activeVarietal)
-      &&(activeCountry==='all'||w.country===activeCountry);
+      &&(activeVarietal==='all'||w.varietal===activeVarietal)&&(activeCountry==='all'||w.country===activeCountry);
   });
   list.sort(function(a,b){
     if(sort==='name')return a.name.localeCompare(b.name);
@@ -628,470 +567,112 @@ function renderWineList(){
     if(sort==='qty')return parseInt(b.qty||0)-parseInt(a.qty||0);
     return 0;
   });
-
+  updateStats(list);
   var el=document.getElementById('wine-list');
   if(!list.length){el.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--text-muted)"><div style="font-size:40px;margin-bottom:12px">🔍</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--text-secondary)">No wines found</div></div>';buildAZSidebar([]);return;}
-
-  // Group by first letter when sorted by name
-  var html='';
-  var lettersWithWines=[];
-  if(sort==='name'){
-    var groups={};
-    list.forEach(function(w){var l=w.name[0].toUpperCase();if(!groups[l])groups[l]=[];groups[l].push(w);});
-    Object.keys(groups).sort().forEach(function(l){
-      lettersWithWines.push(l);
-      html+='<div class="letter-group-header" id="letter-'+l+'">'+l+'</div>';
-      groups[l].forEach(function(w){html+=wineCardHTML(w);});
-    });
-  } else {
-    list.forEach(function(w){html+=wineCardHTML(w);});
+  if(currentView==='list'){
+    el.innerHTML=list.map(function(w){var price=w.retail?'$'+parseFloat(w.retail).toFixed(0):(w.purchase?'$'+parseFloat(w.purchase).toFixed(0):'—');return'<div class="wine-list-item" onclick="openDetail(\''+w.id+'\')"><div class="wine-list-item-main"><div class="wine-list-name">'+w.name+'</div><div class="wine-list-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+'</div></div><div class="wine-list-price">'+price+'</div><div class="wine-list-qty">'+(w.qty||1)+'</div></div>';}).join('');
+    buildAZSidebar([]);return;
   }
-  el.innerHTML=html;
-  buildAZSidebar(lettersWithWines);
+  var html='',lettersWithWines=[];
+  if(sort==='name'){var groups={};list.forEach(function(w){var l=w.name[0].toUpperCase();if(!groups[l])groups[l]=[];groups[l].push(w);});Object.keys(groups).sort().forEach(function(l){lettersWithWines.push(l);html+='<div class="letter-group-header" id="letter-'+l+'">'+l+'</div>';groups[l].forEach(function(w){html+=wineCardHTML(w);});});}
+  else{list.forEach(function(w){html+=wineCardHTML(w);});}
+  el.innerHTML=html;buildAZSidebar(lettersWithWines);
 }
 
 function wineCardHTML(w){
   var hg=w.retail&&w.retail>w.purchase;
   var slots=w.slots&&w.slots.length>0?w.slots:[];
-  var rackNames=[];
-  slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});if(r)rackNames.push(r.name.replace(' Wine','').replace(' Rack',''));});
+  var rackNames=[];slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});if(r)rackNames.push(r.name.replace(' Wine','').replace(' Rack',''));});
   var uniqueRacks=Array.from(new Set(rackNames));
   var rn=uniqueRacks.length>0?uniqueRacks[0]:(w.rack?(RACKS.find(function(r){return r.id===w.rack;})||{name:w.rack}).name.replace(' Wine','').replace(' Rack',''):'');
-  var retailStr=w.retail?'$'+parseFloat(w.retail).toFixed(0):'—';
-  return'<div class="wine-card'+(hg?' gain':'')+(w.photo?' has-photo':'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">Retail '+retailStr+'</span></div><div class="wine-tags">'+(rn?'<span class="tag">'+rn+'</span>':'')+' '+(w.photo?'<span class="tag other-v">📷 Photo</span>':'')+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
+  var retailStr=w.retail?'$'+parseFloat(w.retail).toFixed(0):(w.purchase?'$'+parseFloat(w.purchase).toFixed(0):'—');
+  return'<div class="wine-card'+(hg?' gain':'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">'+retailStr+'</span></div><div class="wine-tags">'+(rn?'<span class="tag">'+rn+'</span>':'')+' '+(w.photo?'<span class="tag other-v">📷 Photo</span>':'')+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
 }
 
-// ── A-Z Sidebar ──
 var ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-function buildAZSidebar(activeLetters){
-  var sort=document.getElementById('sort-select').value;
-  var sidebar=document.getElementById('az-sidebar');
-  if(sort!=='name'||activeLetters.length===0){sidebar.innerHTML='';return;}
-  sidebar.innerHTML=ALPHABET.map(function(l){
-    var has=activeLetters.indexOf(l)>-1;
-    return'<div class="az-letter'+(has?' has-wines':'')+'" onclick="jumpToLetter(\''+l+'\')">'+l+'</div>';
-  }).join('');
-}
-function jumpToLetter(l){
-  var el=document.getElementById('letter-'+l);
-  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function buildAZSidebar(activeLetters){var sort=document.getElementById('sort-select').value;var sidebar=document.getElementById('az-sidebar');if(sort!=='name'||activeLetters.length===0){sidebar.innerHTML='';return;}sidebar.innerHTML=ALPHABET.map(function(l){var has=activeLetters.indexOf(l)>-1;return'<div class="az-letter'+(has?' has-wines':'')+'" onclick="jumpToLetter(\''+l+'\')">'+l+'</div>';}).join('');}
+function jumpToLetter(l){var el=document.getElementById('letter-'+l);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 
-// ── Rack ──
 function slotPx(cols){return cols>=12?26:cols>=8?30:36;}
 function colLabelsHTML(cols,sz,dual){var sp='<div class="row-lbl"></div>';var lbls=Array.from({length:cols},function(_,i){return'<div class="rack-col-label" style="width:'+sz+'px;flex-shrink:0;">'+String.fromCharCode(65+i)+'</div>';}).join('');return'<div class="rack-col-label-row">'+sp+lbls+(dual?sp:'')+'</div>';}
 function renderRackSelector(){document.getElementById('rack-selector').innerHTML=RACKS.map(function(r){return'<div class="rack-tab'+(r.id===currentRack.id?' active':'')+'" onclick="selectRack(\''+r.id+'\')">'+r.name+'</div>';}).join('');}
 function selectRack(id){currentRack=RACKS.find(function(r){return r.id===id;});document.getElementById('slot-popup').classList.remove('show');renderRackSelector();renderRackGrid();}
 function renderRack(){renderRackSelector();renderRackGrid();}
+
 function renderRackGrid(){
   var inner=document.getElementById('rack-inner'),rack=currentRack;
   var rows=rack.specialRows||Array.from({length:rack.rows},function(_,i){return{row:i+1,cols:rack.cols};});
   var maxCols=rack.specialRows?3:rack.cols,sz=slotPx(maxCols),dual=rack.dual;
   var wa=Object.entries(wines).map(function(e){return Object.assign({},e[1],{id:e[0]});});
-
-  // Build slot occupancy map from multi-slot system
   var slotMap={};
-  wa.forEach(function(w){
-    var slots=w.slots&&w.slots.length>0?w.slots:[];
-    if(slots.length===0&&w.rack&&w.slotText){
-      // Legacy single slot
-      var m=w.slotText.match(/(\d+)[,\s]*([A-Za-z])/);
-      if(m)slots=[{rackId:w.rack,sid:w.rack+'-'+m[1]+'-'+m[2].toUpperCase()}];
-    }
-    slots.forEach(function(s){if(s.rackId===rack.id)slotMap[s.sid]=w;});
-  });
-
+  wa.forEach(function(w){var slots=w.slots&&w.slots.length>0?w.slots:[];if(slots.length===0&&w.rack&&w.slotText){var m=w.slotText.match(/(\d+)[,\s]*([A-Za-z])/);if(m)slots=[{rackId:w.rack,sid:w.rack+'-'+m[1]+'-'+m[2].toUpperCase()}];}slots.forEach(function(s){if(s.rackId===rack.id)slotMap[s.sid]=w;});});
   var html=colLabelsHTML(maxCols,sz,dual);
-  rows.forEach(function(rd){
-    var slots='';
-    for(var c=0;c<rd.cols;c++){var l=String.fromCharCode(65+c),sid=rack.id+'-'+rd.row+'-'+l,filled=!!slotMap[sid];slots+='<div class="slot'+(filled?' filled':'')+'" style="width:'+sz+'px;height:'+sz+'px;" data-sid="'+sid+'" data-row="'+rd.row+'" data-col="'+l+'"></div>';}
-    for(var c2=rd.cols;c2<maxCols;c2++)slots+='<div style="width:'+sz+'px;height:'+sz+'px;flex-shrink:0;"></div>';
-    html+='<div class="rack-row"><div class="row-lbl">'+rd.row+'</div>'+slots+(dual?'<div class="row-lbl">'+rd.row+'</div>':'')+'</div>';
-  });
+  rows.forEach(function(rd){var slots='';for(var c=0;c<rd.cols;c++){var l=String.fromCharCode(65+c),sid=rack.id+'-'+rd.row+'-'+l,filled=!!slotMap[sid];slots+='<div class="slot'+(filled?' filled':'')+'" style="width:'+sz+'px;height:'+sz+'px;" data-sid="'+sid+'" data-row="'+rd.row+'" data-col="'+l+'"></div>';}for(var c2=rd.cols;c2<maxCols;c2++)slots+='<div style="width:'+sz+'px;height:'+sz+'px;flex-shrink:0;"></div>';html+='<div class="rack-row"><div class="row-lbl">'+rd.row+'</div>'+slots+(dual?'<div class="row-lbl">'+rd.row+'</div>':'')+'</div>';});
   if(dual)html+=colLabelsHTML(maxCols,sz,dual);
   inner.innerHTML=html;
   inner.onclick=function(e){
     var slot=e.target.closest('.slot');if(!slot)return;
-    document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});slot.classList.add('selected');
     var sid=slot.dataset.sid,row=slot.dataset.row,col=slot.dataset.col,wine=slotMap[sid];
-    var popup=document.getElementById('slot-popup');popup.classList.add('show');
-    if(wine){document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=(wine.vintage||'N/V')+' · '+(wine.varietal||'')+' · Row '+row+', Col '+col;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};}
+    if(rearrangeMode){handleRearrangeSlotTap(sid,slotMap);if(rearrangePickedSlot){var pe=document.querySelector('.slot[data-sid="'+rearrangePickedSlot.sid+'"]');if(pe)pe.classList.add('rearrange-selected');}return;}
+    var popup=document.getElementById('slot-popup');
+    var wasSelected=slot.classList.contains('selected');
+    document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});
+    if(wasSelected){popup.classList.remove('show');return;}
+    slot.classList.add('selected');popup.classList.add('show');
+    popup.scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(wine){var priceStr=wine.purchase?'$'+parseFloat(wine.purchase).toFixed(0)+' paid':'';document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=(wine.vintage||'N/V')+' · '+(wine.varietal||'')+(priceStr?' · '+priceStr:'')+' · Row '+row+' Col '+col;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};}
     else{document.getElementById('slot-wine-name').textContent='Empty Slot';document.getElementById('slot-wine-meta').textContent='Row '+row+', Column '+col+' — Available';popup.style.cursor='default';popup.onclick=null;}
   };
 }
 
-// ── Parse slot range e.g. rack=left, row=3, colFrom=A, colTo=C → [{rackId,sid},...]  ──
-function parseSlots(rackId,row,colFrom,colTo){
-  if(!rackId||!row||!colFrom)return[];
-  colFrom=colFrom.toUpperCase();
-  colTo=colTo?colTo.toUpperCase():colFrom;
-  var fromCode=colFrom.charCodeAt(0),toCode=colTo.charCodeAt(0);
-  if(toCode<fromCode)toCode=fromCode;
-  var slots=[];
-  for(var c=fromCode;c<=toCode;c++){
-    var letter=String.fromCharCode(c);
-    slots.push({rackId:rackId,sid:rackId+'-'+row+'-'+letter});
-  }
-  return slots;
-}
+function toggleRearrangeMode(){rearrangeMode=!rearrangeMode;if(rearrangeMode)enterRearrangeMode();else exitRearrangeMode();}
+function enterRearrangeMode(){rearrangeMode=true;rearrangePickedSlot=null;document.getElementById('rearrange-bar').classList.add('show');document.getElementById('btn-rearrange').classList.add('active');document.getElementById('btn-rearrange').textContent='⇄ Rearranging...';document.getElementById('rack-container').classList.add('rearrange-active');document.getElementById('slot-popup').classList.remove('show');document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';renderRackGrid();}
+function exitRearrangeMode(){rearrangeMode=false;rearrangePickedSlot=null;document.getElementById('rearrange-bar').classList.remove('show');document.getElementById('btn-rearrange').classList.remove('active');document.getElementById('btn-rearrange').textContent='⇄ Rearrange';document.getElementById('rack-container').classList.remove('rearrange-active');document.getElementById('slot-popup').classList.remove('show');renderRackGrid();}
+function handleRearrangeSlotTap(sid,slotMap){var tappedWine=slotMap[sid];if(!rearrangePickedSlot){if(!tappedWine){document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';return;}rearrangePickedSlot={sid:sid,wineId:tappedWine.id,wine:tappedWine};document.getElementById('rearrange-hint').textContent='Now tap a slot to move it there';document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});var el=document.querySelector('.slot[data-sid="'+sid+'"]');if(el)el.classList.add('rearrange-selected');}else{if(sid===rearrangePickedSlot.sid){rearrangePickedSlot=null;document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});return;}if(!tappedWine){moveSlot(rearrangePickedSlot.sid,sid,rearrangePickedSlot.wineId);}else{var fromWine=wines[rearrangePickedSlot.wineId],toWine=tappedWine,fromSid=rearrangePickedSlot.sid,fromWineId=rearrangePickedSlot.wineId,toWineId=toWine.id;showSwapConfirm(fromWine?fromWine.name:'?',toWine.name,function(){swapSlots(fromSid,sid,fromWineId,toWineId);});}}}
+function moveSlot(fromSid,toSid,wineId){var w=wines[wineId];if(!w)return;var newSlots=(w.slots||[]).map(function(s){return s.sid===fromSid?{rackId:toSid.split('-')[0],sid:toSid}:s;});setSyncing(true);fbPatch('/wines/'+wineId,{slots:newSlots}).then(function(){wines[wineId].slots=newSlots;setSyncing(false);rearrangePickedSlot=null;document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';renderRackGrid();});}
+function swapSlots(fromSid,toSid,fromWineId,toWineId){var fw=wines[fromWineId],tw=wines[toWineId];if(!fw||!tw)return;var newFromSlots=(fw.slots||[]).map(function(s){return s.sid===fromSid?{rackId:toSid.split('-')[0],sid:toSid}:s;});var newToSlots=(tw.slots||[]).map(function(s){return s.sid===toSid?{rackId:fromSid.split('-')[0],sid:fromSid}:s;});setSyncing(true);var updates={};updates[fromWineId]=Object.assign({},fw,{slots:newFromSlots,photo:undefined});updates[toWineId]=Object.assign({},tw,{slots:newToSlots,photo:undefined});fbPatch('/wines',updates).then(function(){wines[fromWineId].slots=newFromSlots;wines[toWineId].slots=newToSlots;setSyncing(false);rearrangePickedSlot=null;document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';renderRackGrid();});}
+function showSwapConfirm(nameA,nameB,onConfirm){var popup=document.getElementById('slot-popup');popup.classList.add('show');document.getElementById('slot-wine-name').textContent='Swap bottles?';document.getElementById('slot-wine-meta').innerHTML='<span style="color:var(--text-secondary)">'+nameA+'</span><span style="color:var(--text-muted)"> ⇄ </span><span style="color:var(--text-secondary)">'+nameB+'</span><br><span style="color:var(--gold-dim);font-size:11px;margin-top:6px;display:inline-block;"><button onclick="confirmSwap()" style="background:var(--burgundy-mid);border:1px solid var(--gold-dim);color:var(--gold-light);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;margin-right:8px;touch-action:manipulation;">Swap</button><button onclick="cancelSwap()" style="background:var(--surface-2);border:1px solid var(--border);color:var(--text-muted);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;">Cancel</button></span>';window._pendingSwapCallback=onConfirm;}
+function confirmSwap(){if(window._pendingSwapCallback)window._pendingSwapCallback();window._pendingSwapCallback=null;document.getElementById('slot-popup').classList.remove('show');}
+function cancelSwap(){window._pendingSwapCallback=null;rearrangePickedSlot=null;document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';document.getElementById('slot-popup').classList.remove('show');}
 
-// ── Detail ──
-function openDetail(id){
-  var w=wines[id];if(!w)return;currentDetailId=id;
-  document.getElementById('detail-img-inner').innerHTML=w.photo?'<img src="'+w.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">':'🍷';
-  document.getElementById('detail-img').querySelector('.camera-hint').style.display=w.photo?'none':'block';
-  document.getElementById('detail-name').textContent=w.name;
-  document.getElementById('detail-vintage').textContent=w.vintage?w.vintage+' Vintage':'Non-Vintage';
-  document.getElementById('d-varietal').textContent=w.varietal||'—';
-  document.getElementById('d-qty').textContent=w.qty||1;
-  document.getElementById('d-purchase').textContent=w.purchase?'$'+parseFloat(w.purchase).toFixed(2):'—';
-  document.getElementById('d-retail').textContent=w.retail?'$'+parseFloat(w.retail).toFixed(2):'—';
-  var ge=document.getElementById('d-gain');
-  if(w.retail&&w.purchase){var d=w.retail-w.purchase,pct=Math.round((d/w.purchase)*100);if(Math.abs(d)>=2){ge.textContent=(d>0?'+':'')+'$'+Math.round(d)+'/btl ('+(d>0?'+':'')+pct+'%)';ge.className='detail-card-sub'+(d<0?' neg':'');}else ge.textContent='';}else ge.textContent='';
+function goToRackFromDetail(){var w=wines[currentDetailId];if(!w)return;var slots=w.slots&&w.slots.length>0?w.slots:[];if(slots.length===0&&!w.rack)return;closeModal('detail-modal');var rackBtn=document.getElementById('nav-rack');showScreen('rack',rackBtn);var targetRackId=slots.length>0?slots[0].rackId:w.rack;var targetRack=RACKS.find(function(r){return r.id===targetRackId;});if(!targetRack)return;currentRack=targetRack;setTimeout(function(){renderRack();setTimeout(function(){document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});var sth=slots.filter(function(s){return s.rackId===targetRackId;});if(sth.length===0&&w.rack===targetRackId&&w.slotText){var m=w.slotText.match(/(\d+)[,\s]*([A-Za-z])/);if(m)sth=[{rackId:w.rack,sid:w.rack+'-'+m[1]+'-'+m[2].toUpperCase()}];}sth.forEach(function(s){var se=document.querySelector('.slot[data-sid="'+s.sid+'"]');if(se){se.classList.add('selected');if(s===sth[0])se.scrollIntoView({behavior:'smooth',block:'center'});}});if(sth.length>0){var parts=sth[0].sid.split('-');var popup=document.getElementById('slot-popup');popup.classList.add('show');document.getElementById('slot-wine-name').textContent=w.name;document.getElementById('slot-wine-meta').textContent=(w.vintage||'N/V')+' · '+(w.varietal||'')+' · '+sth.length+' slot(s) highlighted';popup.style.cursor='default';popup.onclick=null;}},100);},200);}
 
-  // Location: show all slots
-  var slots=w.slots&&w.slots.length>0?w.slots:[];
-  var locText='Not assigned';
-  var hasLocation=false;
-  if(slots.length>0){
-    var byRack={};
-    slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});var rn=r?r.name:'Unknown';if(!byRack[rn])byRack[rn]=[];var parts=s.sid.split('-');byRack[rn].push('Row '+parts[1]+' Col '+parts[2]);});
-    locText=Object.keys(byRack).map(function(rn){return rn+': '+byRack[rn].join(', ');}).join('\n');
-    hasLocation=true;
-  } else if(w.rack){
-    locText=(RACKS.find(function(r){return r.id===w.rack;})||{name:w.rack}).name+(w.slotText?' · '+w.slotText:'');
-    hasLocation=true;
-  }
-  document.getElementById('d-location').textContent=locText;
-  // Show tap hint and arrow if wine has a rack location
-  document.getElementById('location-tap-hint').textContent=hasLocation?' · Tap to view on rack':'';
-  document.getElementById('location-arrow').style.display=hasLocation?'block':'none';
-  document.getElementById('location-badge').style.cursor=hasLocation?'pointer':'default';
-
-  var wr=document.getElementById('d-window-row');
-  if(w.drinkFrom&&w.drinkTo){wr.style.display='block';var now=new Date().getFullYear(),from=parseInt(w.drinkFrom),to=parseInt(w.drinkTo);var fill=document.getElementById('d-drink-fill'),lbl=document.getElementById('d-drink-label');if(now<from){fill.style.width='15%';fill.className='drink-fill early';lbl.textContent='Too young';}else if(now>to){fill.style.width='100%';fill.className='drink-fill past';lbl.textContent='Past peak';}else{fill.style.width=Math.round(((now-from)/(to-from))*100)+'%';fill.className='drink-fill peak';lbl.textContent='Peak drinking';}}else wr.style.display='none';
-  var nr=document.getElementById('d-notes-row');if(w.notes){nr.style.display='block';document.getElementById('d-notes').textContent=w.notes;}else nr.style.display='none';
-  document.getElementById('d-remove-btn').onclick=function(){removeWine(id);};
-  document.getElementById('detail-modal').classList.add('open');
-}
-function goToRackFromDetail(){
-  var w=wines[currentDetailId];if(!w)return;
-  var slots=w.slots&&w.slots.length>0?w.slots:[];
-  if(slots.length===0&&!w.rack)return;
-
-  // Close detail modal
-  closeModal('detail-modal');
-
-  // Switch to rack tab
-  var rackBtn=document.getElementById('nav-rack');
-  showScreen('rack',rackBtn);
-
-  // Determine which rack to show — use first slot's rack
-  var targetRackId=slots.length>0?slots[0].rackId:w.rack;
-  var targetRack=RACKS.find(function(r){return r.id===targetRackId;});
-  if(!targetRack)return;
-
-  // Switch to that rack
-  currentRack=targetRack;
-
-  // Re-render after a short delay to let the screen transition complete
-  setTimeout(function(){
-    renderRack();
-
-    // Highlight all slots belonging to this wine
-    setTimeout(function(){
-      // Clear previous selections
-      document.querySelectorAll('.slot.selected').forEach(function(s){s.classList.remove('selected');});
-
-      var slotsToHighlight=slots.filter(function(s){return s.rackId===targetRackId;});
-
-      // Legacy single slot support
-      if(slotsToHighlight.length===0&&w.rack===targetRackId&&w.slotText){
-        var m=w.slotText.match(/(\d+)[,\s]*([A-Za-z])/);
-        if(m)slotsToHighlight=[{rackId:w.rack,sid:w.rack+'-'+m[1]+'-'+m[2].toUpperCase()}];
-      }
-
-      slotsToHighlight.forEach(function(s){
-        var slotEl=document.querySelector('.slot[data-sid="'+s.sid+'"]');
-        if(slotEl){
-          slotEl.classList.add('selected');
-          // Scroll the first slot into view
-          if(s===slotsToHighlight[0]){
-            slotEl.scrollIntoView({behavior:'smooth',block:'center'});
-          }
-        }
-      });
-
-      // Show popup for first slot
-      if(slotsToHighlight.length>0){
-        var parts=slotsToHighlight[0].sid.split('-');
-        var popup=document.getElementById('slot-popup');
-        popup.classList.add('show');
-        document.getElementById('slot-wine-name').textContent=w.name;
-        document.getElementById('slot-wine-meta').textContent=(w.vintage||'N/V')+' · '+(w.varietal||'')+' · '+slotsToHighlight.length+' slot(s) highlighted';
-        popup.style.cursor='default';popup.onclick=null;
-      }
-    }, 100);
-  }, 200);
-}
-
+function openDetail(id){var w=wines[id];if(!w)return;currentDetailId=id;document.getElementById('detail-img-inner').innerHTML=w.photo?'<img src="'+w.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">':'🍷';document.getElementById('detail-img').querySelector('.camera-hint').style.display=w.photo?'none':'block';document.getElementById('detail-name').textContent=w.name;document.getElementById('detail-vintage').textContent=w.vintage?w.vintage+' Vintage':'Non-Vintage';document.getElementById('d-varietal').textContent=w.varietal||'—';document.getElementById('d-qty').textContent=w.qty||1;document.getElementById('d-purchase').textContent=w.purchase?'$'+parseFloat(w.purchase).toFixed(2):'—';document.getElementById('d-retail').textContent=w.retail?'$'+parseFloat(w.retail).toFixed(2):'—';var ge=document.getElementById('d-gain');if(w.retail&&w.purchase){var d=w.retail-w.purchase,pct=Math.round((d/w.purchase)*100);if(Math.abs(d)>=2){ge.textContent=(d>0?'+':'')+'$'+Math.round(d)+'/btl ('+(d>0?'+':'')+pct+'%)';ge.className='detail-card-sub'+(d<0?' neg':'');}else ge.textContent='';}else ge.textContent='';var slots=w.slots&&w.slots.length>0?w.slots:[];var locText='Not assigned';var hasLocation=false;if(slots.length>0){var byRack={};slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});var rn=r?r.name:'Unknown';if(!byRack[rn])byRack[rn]=[];var parts=s.sid.split('-');byRack[rn].push('Row '+parts[1]+' Col '+parts[2]);});locText=Object.keys(byRack).map(function(rn){return rn+': '+byRack[rn].join(', ');}).join('\n');hasLocation=true;}else if(w.rack){locText=(RACKS.find(function(r){return r.id===w.rack;})||{name:w.rack}).name+(w.slotText?' · '+w.slotText:'');hasLocation=true;}document.getElementById('d-location').textContent=locText;document.getElementById('location-tap-hint').textContent=hasLocation?' · Tap to view on rack':'';document.getElementById('location-arrow').style.display=hasLocation?'block':'none';document.getElementById('location-badge').style.cursor=hasLocation?'pointer':'default';var wr=document.getElementById('d-window-row');if(w.drinkFrom&&w.drinkTo){wr.style.display='block';var now=new Date().getFullYear(),from=parseInt(w.drinkFrom),to=parseInt(w.drinkTo);var fill=document.getElementById('d-drink-fill'),lbl=document.getElementById('d-drink-label');if(now<from){fill.style.width='15%';fill.className='drink-fill early';lbl.textContent='Too young';}else if(now>to){fill.style.width='100%';fill.className='drink-fill past';lbl.textContent='Past peak';}else{fill.style.width=Math.round(((now-from)/(to-from))*100)+'%';fill.className='drink-fill peak';lbl.textContent='Peak drinking';}}else wr.style.display='none';var nr=document.getElementById('d-notes-row');if(w.notes){nr.style.display='block';document.getElementById('d-notes').textContent=w.notes;}else nr.style.display='none';document.getElementById('d-remove-btn').onclick=function(){removeWine(id);};document.getElementById('detail-modal').classList.add('open');}
 function triggerDetailPhoto(){document.getElementById('detail-photo-input').click();}
-function handleDetailPhoto(input){
-  var file=input.files[0];if(!file||!currentDetailId)return;
-  var reader=new FileReader();
-  reader.onload=function(e){setSyncing(true);fbPatch('/wines/'+currentDetailId,{photo:e.target.result}).then(function(){wines[currentDetailId].photo=e.target.result;document.getElementById('detail-img-inner').innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">';document.getElementById('detail-img').querySelector('.camera-hint').style.display='none';setSyncing(false);renderWineList();});};
-  reader.readAsDataURL(file);input.value='';
-}
+function handleDetailPhoto(input){var file=input.files[0];if(!file||!currentDetailId)return;var reader=new FileReader();reader.onload=function(e){setSyncing(true);fbPatch('/wines/'+currentDetailId,{photo:e.target.result}).then(function(){wines[currentDetailId].photo=e.target.result;document.getElementById('detail-img-inner').innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">';document.getElementById('detail-img').querySelector('.camera-hint').style.display='none';setSyncing(false);renderWineList();});};reader.readAsDataURL(file);input.value='';}
 function openEditFromDetail(){closeModal('detail-modal');openEditModal(currentDetailId);}
 
-// ── Add / Edit ──
-function suggestRackLocation(wineName){
-  if(!wineName)return;
-  var rackEl=document.getElementById('e-rack');
-  var rowEl=document.getElementById('e-slot-row');
-  // Only suggest if rack fields are currently empty
-  if(rackEl.value||rowEl.value)return;
-
-  // Find wines from the same vineyard
-  var vineyard=extractVineyard(wineName);
-  var sameVineyard=Object.values(wines).filter(function(w){
-    return extractVineyard(w.name)===vineyard && w.slots && w.slots.length>0;
-  });
-
-  if(sameVineyard.length===0)return;
-
-  // Collect all occupied slots grouped by rack
-  var allSlots=[];
-  sameVineyard.forEach(function(w){
-    w.slots.forEach(function(s){allSlots.push(s);});
-  });
-
-  if(allSlots.length===0)return;
-
-  // Find the rack with the most wines from this vineyard
-  var rackCounts={};
-  allSlots.forEach(function(s){rackCounts[s.rackId]=(rackCounts[s.rackId]||0)+1;});
-  var bestRack=Object.keys(rackCounts).sort(function(a,b){return rackCounts[b]-rackCounts[a];})[0];
-
-  // Find all slots in that rack from this vineyard, then find the next empty adjacent slot
-  var occupiedInRack=allSlots.filter(function(s){return s.rackId===bestRack;});
-  if(occupiedInRack.length===0)return;
-
-  // Parse slot positions and find highest row/col to suggest next to
-  var positions=occupiedInRack.map(function(s){
-    var parts=s.sid.split('-');
-    return{row:parseInt(parts[1]),col:parts[2].charCodeAt(0)-65};
-  }).sort(function(a,b){return a.row-b.row||a.col-b.col;});
-
-  // Suggest the slot right after the last one
-  var last=positions[positions.length-1];
-  var rack=RACKS.find(function(r){return r.id===bestRack;});
-  var maxCols=rack?rack.cols:12;
-
-  var sugRow=last.row, sugCol=last.col+1;
-  if(sugCol>=maxCols){sugCol=0;sugRow=last.row+1;}
-
-  var sugColLetter=String.fromCharCode(65+sugCol);
-  var hint='Suggested: '+rack.name+', Row '+sugRow+', Col '+sugColLetter+' (near other '+vineyard+' wines)';
-
-  // Show hint below rack fields
-  var hintEl=document.getElementById('rack-suggest-hint');
-  if(!hintEl){
-    hintEl=document.createElement('div');
-    hintEl.id='rack-suggest-hint';
-    hintEl.style.cssText='font-size:10px;color:var(--gold-dim);margin-top:6px;cursor:pointer;letter-spacing:0.5px;';
-    document.getElementById('e-slot-col-to').parentNode.parentNode.appendChild(hintEl);
-  }
-  hintEl.textContent='💡 '+hint+' — tap to use';
-  hintEl.onclick=function(){
-    rackEl.value=bestRack;
-    rowEl.value=sugRow;
-    document.getElementById('e-slot-col-from').value=sugColLetter;
-    document.getElementById('e-slot-col-to').value='';
-    hintEl.textContent='✓ Location applied!';
-    hintEl.onclick=null;
-  };
-}
-
+function suggestRackLocation(wineName){if(!wineName)return;var rackEl=document.getElementById('e-rack');var rowEl=document.getElementById('e-slot-row');if(rackEl.value||rowEl.value)return;var vineyard=extractVineyard(wineName);var sameVineyard=Object.values(wines).filter(function(w){return extractVineyard(w.name)===vineyard&&w.slots&&w.slots.length>0;});if(sameVineyard.length===0)return;var allSlots=[];sameVineyard.forEach(function(w){w.slots.forEach(function(s){allSlots.push(s);});});if(allSlots.length===0)return;var rackCounts={};allSlots.forEach(function(s){rackCounts[s.rackId]=(rackCounts[s.rackId]||0)+1;});var bestRack=Object.keys(rackCounts).sort(function(a,b){return rackCounts[b]-rackCounts[a];})[0];var occupiedInRack=allSlots.filter(function(s){return s.rackId===bestRack;});if(occupiedInRack.length===0)return;var positions=occupiedInRack.map(function(s){var parts=s.sid.split('-');return{row:parseInt(parts[1]),col:parts[2].charCodeAt(0)-65};}).sort(function(a,b){return a.row-b.row||a.col-b.col;});var last=positions[positions.length-1];var rack=RACKS.find(function(r){return r.id===bestRack;});var maxCols=rack?rack.cols:12;var sugRow=last.row,sugCol=last.col+1;if(sugCol>=maxCols){sugCol=0;sugRow=last.row+1;}var sugColLetter=String.fromCharCode(65+sugCol);var hint='Suggested: '+rack.name+', Row '+sugRow+', Col '+sugColLetter+' (near other '+vineyard+' wines)';var hintEl=document.getElementById('rack-suggest-hint');hintEl.textContent='💡 '+hint+' — tap to use';hintEl.onclick=function(){rackEl.value=bestRack;rowEl.value=sugRow;document.getElementById('e-slot-col-from').value=sugColLetter;document.getElementById('e-slot-col-to').value='';hintEl.textContent='✓ Location applied!';hintEl.onclick=null;};}
 function openAddModal(){editingId=null;editPhotoData=null;document.getElementById('edit-modal-title').textContent='Add Wine';document.getElementById('edit-modal-sub').textContent='Fill in the details below';document.getElementById('edit-save-btn').textContent='Add to Cellar';resetEditForm();document.getElementById('edit-modal').classList.add('open');}
-function openEditModal(id){
-  var w=wines[id];if(!w)return;editingId=id;editPhotoData=w.photo||null;
-  document.getElementById('edit-modal-title').textContent='Edit Wine';document.getElementById('edit-modal-sub').textContent=w.name;document.getElementById('edit-save-btn').textContent='Save Changes';
-  document.getElementById('e-name').value=w.name||'';document.getElementById('e-varietal').value=w.varietal||'';document.getElementById('e-vintage').value=w.vintage||'';document.getElementById('e-country').value=w.country||'';document.getElementById('e-region').value=w.region||'';document.getElementById('e-purchase').value=w.purchase||'';document.getElementById('e-retail').value=w.retail||'';document.getElementById('e-qty').value=w.qty||1;document.getElementById('e-drink-from').value=w.drinkFrom||'';document.getElementById('e-drink-to').value=w.drinkTo||'';document.getElementById('e-notes').value=w.notes||'';
-  // Pre-fill rack fields from first slot
-  var slots=w.slots&&w.slots.length>0?w.slots:[];
-  if(slots.length>0){
-    document.getElementById('e-rack').value=slots[0].rackId;
-    var parts=slots[0].sid.split('-');
-    document.getElementById('e-slot-row').value=parts[1];
-    document.getElementById('e-slot-col-from').value=parts[2];
-    if(slots.length>1){var lastParts=slots[slots.length-1].sid.split('-');document.getElementById('e-slot-col-to').value=lastParts[2];}
-    else document.getElementById('e-slot-col-to').value='';
-  } else {document.getElementById('e-rack').value=w.rack||'';document.getElementById('e-slot-row').value='';document.getElementById('e-slot-col-from').value='';document.getElementById('e-slot-col-to').value='';}
-  if(w.photo){document.getElementById('edit-preview-img').src=w.photo;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';}
-  else{document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
-  document.getElementById('edit-modal').classList.add('open');
-}
+function openEditModal(id){var w=wines[id];if(!w)return;editingId=id;editPhotoData=w.photo||null;document.getElementById('edit-modal-title').textContent='Edit Wine';document.getElementById('edit-modal-sub').textContent=w.name;document.getElementById('edit-save-btn').textContent='Save Changes';document.getElementById('e-name').value=w.name||'';document.getElementById('e-varietal').value=w.varietal||'';document.getElementById('e-vintage').value=w.vintage||'';document.getElementById('e-country').value=w.country||'';document.getElementById('e-region').value=w.region||'';document.getElementById('e-purchase').value=w.purchase||'';document.getElementById('e-retail').value=w.retail||'';document.getElementById('e-qty').value=w.qty||1;document.getElementById('e-drink-from').value=w.drinkFrom||'';document.getElementById('e-drink-to').value=w.drinkTo||'';document.getElementById('e-notes').value=w.notes||'';var slots=w.slots&&w.slots.length>0?w.slots:[];if(slots.length>0){document.getElementById('e-rack').value=slots[0].rackId;var parts=slots[0].sid.split('-');document.getElementById('e-slot-row').value=parts[1];document.getElementById('e-slot-col-from').value=parts[2];if(slots.length>1){var lp=slots[slots.length-1].sid.split('-');document.getElementById('e-slot-col-to').value=lp[2];}else document.getElementById('e-slot-col-to').value='';}else{document.getElementById('e-rack').value=w.rack||'';document.getElementById('e-slot-row').value='';document.getElementById('e-slot-col-from').value='';document.getElementById('e-slot-col-to').value='';}if(w.photo){document.getElementById('edit-preview-img').src=w.photo;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';}else{document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}document.getElementById('edit-modal').classList.add('open');}
 function handleEditPhoto(input){var file=input.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){editPhotoData=e.target.result;document.getElementById('edit-preview-img').src=editPhotoData;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';};reader.readAsDataURL(file);input.value='';}
 function removeEditPhoto(){editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
-function saveEdit(){
-  // Prevent double-fire on iOS (touchend + click firing on same tap)
-  var btn=document.getElementById('edit-save-btn');
-  if(btn.disabled)return;
-  btn.disabled=true;
-
-  var name=document.getElementById('e-name').value.trim();if(!name){alert('Please enter a wine name.');btn.disabled=false;return;}
-  var rackId=document.getElementById('e-rack').value;
-  var row=document.getElementById('e-slot-row').value.trim();
-  var colFrom=document.getElementById('e-slot-col-from').value.trim();
-  var colTo=document.getElementById('e-slot-col-to').value.trim();
-  var slots=parseSlots(rackId,row,colFrom,colTo);
-  var fields={name:name,varietal:document.getElementById('e-varietal').value,vintage:document.getElementById('e-vintage').value,country:document.getElementById('e-country').value,region:document.getElementById('e-region').value,purchase:parseFloat(document.getElementById('e-purchase').value)||null,retail:parseFloat(document.getElementById('e-retail').value)||null,qty:parseInt(document.getElementById('e-qty').value)||1,slots:slots,rack:rackId||null,slotText:'',drinkFrom:document.getElementById('e-drink-from').value,drinkTo:document.getElementById('e-drink-to').value,notes:document.getElementById('e-notes').value,photo:editPhotoData};
-  setSyncing(true);
-  if(editingId){
-    fbPatch('/wines/'+editingId,fields).then(function(){
-      Object.assign(wines[editingId],fields);setSyncing(false);closeModal('edit-modal');refreshAll();
-      var eid=editingId;editingId=null;editPhotoData=null;
-      setTimeout(function(){openDetail(eid);btn.disabled=false;},300);
-    }).catch(function(){btn.disabled=false;setSyncing(false);});
-  } else {
-    fields.added=new Date().toISOString();
-    fbPost('/wines',fields).then(function(result){
-      if(result&&result.name)wines[result.name]=fields;
-      setSyncing(false);closeModal('edit-modal');refreshAll();
-      editingId=null;editPhotoData=null;btn.disabled=false;
-    }).catch(function(){btn.disabled=false;setSyncing(false);});
-  }
-}
+function parseSlots(rackId,row,colFrom,colTo){if(!rackId||!row||!colFrom)return[];colFrom=colFrom.toUpperCase();colTo=colTo?colTo.toUpperCase():colFrom;var fromCode=colFrom.charCodeAt(0),toCode=colTo.charCodeAt(0);if(toCode<fromCode)toCode=fromCode;var slots=[];for(var c=fromCode;c<=toCode;c++){var letter=String.fromCharCode(c);slots.push({rackId:rackId,sid:rackId+'-'+row+'-'+letter});}return slots;}
+function saveEdit(){var btn=document.getElementById('edit-save-btn');if(btn.disabled)return;btn.disabled=true;var name=document.getElementById('e-name').value.trim();if(!name){alert('Please enter a wine name.');btn.disabled=false;return;}var rackId=document.getElementById('e-rack').value,row=document.getElementById('e-slot-row').value.trim(),colFrom=document.getElementById('e-slot-col-from').value.trim(),colTo=document.getElementById('e-slot-col-to').value.trim();var slots=parseSlots(rackId,row,colFrom,colTo);var fields={name:name,varietal:document.getElementById('e-varietal').value,vintage:document.getElementById('e-vintage').value,country:document.getElementById('e-country').value,region:document.getElementById('e-region').value,purchase:parseFloat(document.getElementById('e-purchase').value)||null,retail:parseFloat(document.getElementById('e-retail').value)||null,qty:parseInt(document.getElementById('e-qty').value)||1,slots:slots,rack:rackId||null,slotText:'',drinkFrom:document.getElementById('e-drink-from').value,drinkTo:document.getElementById('e-drink-to').value,notes:document.getElementById('e-notes').value,photo:editPhotoData};setSyncing(true);if(editingId){fbPatch('/wines/'+editingId,fields).then(function(){Object.assign(wines[editingId],fields);setSyncing(false);closeModal('edit-modal');refreshAll();var eid=editingId;editingId=null;editPhotoData=null;setTimeout(function(){openDetail(eid);btn.disabled=false;},300);}).catch(function(){btn.disabled=false;setSyncing(false);});}else{fields.added=new Date().toISOString();fbPost('/wines',fields).then(function(result){if(result&&result.name)wines[result.name]=fields;setSyncing(false);closeModal('edit-modal');refreshAll();editingId=null;editPhotoData=null;btn.disabled=false;}).catch(function(){btn.disabled=false;setSyncing(false);});}}
 function resetEditForm(){['e-name','e-vintage','e-region','e-purchase','e-retail','e-slot-row','e-slot-col-from','e-slot-col-to','e-drink-from','e-drink-to','e-notes'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('e-varietal').value='';document.getElementById('e-country').value='';document.getElementById('e-rack').value='';document.getElementById('e-qty').value='1';editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';var h=document.getElementById('rack-suggest-hint');if(h)h.textContent='';}
-
-// Trigger rack suggestion when wine name is entered
-document.getElementById('e-name').addEventListener('blur',function(){
-  if(!editingId)suggestRackLocation(this.value.trim());
-});
-function removeWine(id){
-  var w=wines[id],qty=parseInt(w?w.qty:1)||1;
-  if(qty>1){if(!confirm('Remove 1 bottle? ('+(qty-1)+' remaining)'))return;setSyncing(true);fbPatch('/wines/'+id,{qty:qty-1}).then(function(){wines[id].qty=qty-1;setSyncing(false);closeModal('detail-modal');refreshAll();});}
-  else{if(!confirm('Remove this wine entirely?'))return;setSyncing(true);fbDelete('/wines/'+id).then(function(){delete wines[id];setSyncing(false);closeModal('detail-modal');refreshAll();});}
-}
+document.getElementById('e-name').addEventListener('blur',function(){if(!editingId)suggestRackLocation(this.value.trim());});
+function removeWine(id){var w=wines[id],qty=parseInt(w?w.qty:1)||1;if(qty>1){if(!confirm('Remove 1 bottle? ('+(qty-1)+' remaining)'))return;setSyncing(true);fbPatch('/wines/'+id,{qty:qty-1}).then(function(){wines[id].qty=qty-1;setSyncing(false);closeModal('detail-modal');refreshAll();});}else{if(!confirm('Remove this wine entirely?'))return;setSyncing(true);fbDelete('/wines/'+id).then(function(){delete wines[id];setSyncing(false);closeModal('detail-modal');refreshAll();});}}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-
-// ── Haptic feedback ──
-function haptic(style){
-  // style: 'light' | 'medium' | 'heavy' | 'selection'
-  if(!window.navigator||!window.navigator.vibrate) return;
-  // iOS Safari uses a different API — try both
-  try {
-    if(window.webkit&&window.webkit.messageHandlers) return; // avoid double-firing in WKWebView
-  } catch(e){}
-  var patterns={light:[10],medium:[20],heavy:[40],selection:[5]};
-  navigator.vibrate(patterns[style]||patterns.light);
-}
-
-// Wire haptics to all interactive taps via delegation on document
-document.addEventListener('click', function(e) {
-  var el = e.target;
-  // Nav buttons
-  if(el.closest('.nav-btn')) return haptic('selection');
-  // Wine cards
-  if(el.closest('.wine-card')) return haptic('light');
-  // Filter chips
-  if(el.closest('.filter-chip')) return haptic('selection');
-  // A-Z sidebar
-  if(el.closest('.az-letter')) return haptic('selection');
-  // Rack tabs and slots
-  if(el.closest('.rack-tab')) return haptic('selection');
-  if(el.closest('.slot')) return haptic('light');
-  // Buttons inside modals
-  if(el.closest('.btn-primary')) return haptic('medium');
-  if(el.closest('.btn-secondary')) return haptic('light');
-  if(el.closest('.btn-danger')) return haptic('medium');
-  if(el.closest('.btn-edit')) return haptic('light');
-  // FAB
-  if(el.closest('.nav-add')) return haptic('medium');
-  if(el.closest('.scroll-top-btn')) return haptic('selection');
-  // Search clear
-  if(el.closest('.search-clear')) return haptic('selection');
-  // Rec type buttons
-  if(el.closest('.rec-type-btn')) return haptic('selection');
-}, true); // capture phase so it fires before onclick handlers
 document.querySelectorAll('.modal-overlay').forEach(function(el){el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('open');});});
 
-// ── API Key — stored in Firebase so it never gets wiped by iOS ──
-var cachedApiKey = '';
-
 function getApiKey(){return cachedApiKey;}
-
-function loadApiKey(){
-  return fbGet('/config/apiKey').then(function(val){
-    if(val && typeof val === 'string' && val.startsWith('sk-')){
-      cachedApiKey = val;
-    }
-  }).catch(function(){});
-}
-
-function saveApiKey(){
-  var key=document.getElementById('api-key-input').value.trim();
-  if(!key.startsWith('sk-')){alert('Please paste a valid API key starting with sk-');return;}
-  fbPut('/config/apiKey', key).then(function(){
-    cachedApiKey=key;
-    document.getElementById('api-key-input').value='';
-    document.getElementById('api-setup').classList.remove('show');
-    updateApiKeyStatus();
-    alert('✓ API key saved!');
-  });
-}
-
-function saveApiKeySettings(){
-  var key=document.getElementById('settings-api-key-input').value.trim();
-  if(!key.startsWith('sk-')){alert('Please paste a valid API key');return;}
-  fbPut('/config/apiKey', key).then(function(){
-    cachedApiKey=key;
-    document.getElementById('settings-api-key-input').value='';
-    updateApiKeyStatus();
-    alert('✓ Updated!');
-  });
-}
-
+function saveApiKey(){var key=document.getElementById('api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key starting with sk-');return;}fbPut('/config/apiKey',key).then(function(){cachedApiKey=key;document.getElementById('api-key-input').value='';document.getElementById('api-setup').classList.remove('show');updateApiKeyStatus();alert('✓ API key saved!');});}
+function saveApiKeySettings(){var key=document.getElementById('settings-api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key');return;}fbPut('/config/apiKey',key).then(function(){cachedApiKey=key;document.getElementById('settings-api-key-input').value='';updateApiKeyStatus();alert('✓ Updated!');});}
 function updateApiKeyStatus(){var el=document.getElementById('api-key-status');if(el)el.textContent=cachedApiKey?'✓ Saved — Sommelier is active':'Not set';}
 function checkApiKey(){document.getElementById('api-setup').classList.toggle('show',!cachedApiKey);}
 
-// ── Sommelier ──
-function clearRecPrompt(){
-  document.getElementById('rec-prompt').value='';
-  document.getElementById('rec-clear').style.display='none';
-}
-// Show/hide sommelier clear button
-document.getElementById('rec-prompt').addEventListener('input',function(){
-  document.getElementById('rec-clear').style.display=this.value.length>0?'block':'none';
-});
-
+document.getElementById('rec-prompt').addEventListener('input',function(){document.getElementById('rec-clear').classList.toggle('show',this.value.length>0);});
+function clearRecPrompt(){document.getElementById('rec-prompt').value='';document.getElementById('rec-clear').classList.remove('show');}
 function selectRecType(btn,type){document.querySelectorAll('.rec-type-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');selectedRecType=type;var ph={meal:"e.g. Grilled ribeye, roasted lamb...",occasion:"e.g. Anniversary dinner, birthday...",window:"Show me wines at peak drinking now...",explore:"e.g. Something bold, or a hidden gem..."};document.getElementById('rec-prompt').placeholder=ph[type];}
-function getRecommendations(){
-  var apiKey=getApiKey();if(!apiKey){checkApiKey();return;}
-  var prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}
-  document.getElementById('rec-loading').classList.add('show');document.getElementById('rec-result').classList.remove('show');
-  var cl=Object.values(wines).map(function(w){return'- '+w.name+' ('+(w.varietal||'?')+', '+(w.vintage||'N/V')+', qty:'+(w.qty||1)+(w.drinkFrom&&w.drinkTo?', drink '+w.drinkFrom+'-'+w.drinkTo:'')+')';}).join('\n');
-  var up=selectedRecType==='window'?'Year:'+new Date().getFullYear()+'. Top 5 at peak drinking from:\n'+cl+'\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}'
-    :'Cellar:\n'+cl+'\n\n'+selectedRecType+': "'+prompt+'"\nTop 5. Return JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}';
-  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})})
-  .then(function(r){return r.json();})
-  .then(function(data){var text=(data.content||[]).map(function(c){return c.text||'';}).join('');var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML=(parsed.recommendations||[]).map(function(r,i){return'<div class="rec-wine-item"><div class="rec-rank">'+(i+1)+'</div><div><div class="rec-wine-name">'+r.name+'</div><div class="rec-wine-reason">'+r.reason+'</div></div></div>';}).join('');})
-  .catch(function(e){document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});
-}
+function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();return;}var prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}document.getElementById('rec-loading').classList.add('show');document.getElementById('rec-result').classList.remove('show');var cl=Object.values(wines).map(function(w){return'- '+w.name+' ('+(w.varietal||'?')+', '+(w.vintage||'N/V')+', qty:'+(w.qty||1)+(w.drinkFrom&&w.drinkTo?', drink '+w.drinkFrom+'-'+w.drinkTo:'')+')';}).join('\n');var up=selectedRecType==='window'?'Year:'+new Date().getFullYear()+'. Top 5 at peak drinking from:\n'+cl+'\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}'  :'Cellar:\n'+cl+'\n\n'+selectedRecType+': "'+prompt+'"\nTop 5. Return JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences"}]}';fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})}).then(function(r){return r.json();}).then(function(data){var text=(data.content||[]).map(function(c){return c.text||'';}).join('');var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML=(parsed.recommendations||[]).map(function(r,i){return'<div class="rec-wine-item"><div class="rec-rank">'+(i+1)+'</div><div><div class="rec-wine-name">'+r.name+'</div><div class="rec-wine-reason">'+r.reason+'</div></div></div>';}).join('');}).catch(function(e){document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});}
 
-// ── Settings ──
-function renderSettings(){
-  var arr=Object.values(wines);
-  var tp=arr.reduce(function(s,w){return s+parseFloat(w.purchase||0)*(parseInt(w.qty)||0);},0);
-  var tr=arr.reduce(function(s,w){return s+parseFloat(w.retail||w.purchase||0)*(parseInt(w.qty)||0);},0);
-  var tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(function(w){return w.photo;}).length;
-  document.getElementById('value-insight').innerHTML='<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$'+Math.round(tp).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$'+Math.round(tr).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:'+(tg>=0?'var(--green-light)':'#e34a49')+'">'+(tg>=0?'+':'')+'$'+Math.round(tg).toLocaleString()+' ('+(tg>=0?'+':'')+gp+'%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">'+wp+' / '+arr.length+' wines</span></div>';
-  document.getElementById('rack-summary').innerHTML=RACKS.map(function(r){var total=r.specialRows?r.specialRows.reduce(function(s,row){return s+row.cols;},0):r.rows*r.cols;var used=arr.filter(function(w){return(w.slots||[]).some(function(s){return s.rackId===r.id;});}).length;return'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">'+r.name+'</span><span style="color:var(--gold-dim)">'+used+' wines / '+total+' slots</span></div>';}).join('');
-  var gainers=arr.filter(function(w){return w.retail&&w.purchase&&w.retail>w.purchase;}).map(function(w){return Object.assign({},w,{gain:w.retail-w.purchase});}).sort(function(a,b){return b.gain-a.gain;}).slice(0,5);
-  document.getElementById('top-gainers').innerHTML=gainers.map(function(w){return'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+w.name+' '+(w.vintage||'')+'</span><span style="color:var(--green-light)">+$'+Math.round(w.gain)+'/btl</span></div>';}).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';
-  updateApiKeyStatus();
-}
+function renderSettings(){var arr=Object.values(wines);var tp=arr.reduce(function(s,w){return s+parseFloat(w.purchase||0)*(parseInt(w.qty)||0);},0);var tr=arr.reduce(function(s,w){return s+parseFloat(w.retail||w.purchase||0)*(parseInt(w.qty)||0);},0);var tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(function(w){return w.photo;}).length;document.getElementById('value-insight').innerHTML='<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$'+Math.round(tp).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$'+Math.round(tr).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:'+(tg>=0?'var(--green-light)':'#e34a49')+'">'+(tg>=0?'+':'')+'$'+Math.round(tg).toLocaleString()+' ('+(tg>=0?'+':'')+gp+'%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">'+wp+' / '+arr.length+' wines</span></div>';document.getElementById('rack-summary').innerHTML=RACKS.map(function(r){var total=r.specialRows?r.specialRows.reduce(function(s,row){return s+row.cols;},0):r.rows*r.cols;var used=arr.filter(function(w){return(w.slots||[]).some(function(s){return s.rackId===r.id;});}).length;return'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">'+r.name+'</span><span style="color:var(--gold-dim)">'+used+' wines / '+total+' slots</span></div>';}).join('');var gainers=arr.filter(function(w){return w.retail&&w.purchase&&w.retail>w.purchase;}).map(function(w){return Object.assign({},w,{gain:w.retail-w.purchase});}).sort(function(a,b){return b.gain-a.gain;}).slice(0,5);document.getElementById('top-gainers').innerHTML=gainers.map(function(w){return'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+w.name+' '+(w.vintage||'')+'</span><span style="color:var(--green-light)">+$'+Math.round(w.gain)+'/btl</span></div>';}).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';updateApiKeyStatus();}
 function clearAllData(){if(!confirm('Clear ALL wines? This affects both phones and cannot be undone.'))return;setSyncing(true);fbPut('/wines',null).then(function(){wines={};setSyncing(false);refreshAll();});}
+
+// Haptics
+document.addEventListener('click',function(e){var el=e.target;if(el.closest('.nav-btn'))return haptic('selection');if(el.closest('.wine-card')||el.closest('.wine-list-item'))return haptic('light');if(el.closest('.filter-chip'))return haptic('selection');if(el.closest('.az-letter'))return haptic('selection');if(el.closest('.rack-tab'))return haptic('selection');if(el.closest('.slot'))return haptic('light');if(el.closest('.btn-primary'))return haptic('medium');if(el.closest('.btn-secondary'))return haptic('light');if(el.closest('.btn-danger'))return haptic('medium');if(el.closest('.btn-edit'))return haptic('light');if(el.closest('.nav-add'))return haptic('medium');if(el.closest('.scroll-top-btn'))return haptic('selection');if(el.closest('.view-btn'))return haptic('selection');if(el.closest('.rec-type-btn'))return haptic('selection');},true);
+function haptic(style){if(!window.navigator||!window.navigator.vibrate)return;var patterns={light:[10],medium:[20],heavy:[40],selection:[5]};navigator.vibrate(patterns[style]||patterns.light);}
 </script>
 </body>
 </html>
