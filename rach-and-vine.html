@@ -571,8 +571,21 @@ function renderWineList(){
   var el=document.getElementById('wine-list');
   if(!list.length){el.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--text-muted)"><div style="font-size:40px;margin-bottom:12px">🔍</div><div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;color:var(--text-secondary)">No wines found</div></div>';buildAZSidebar([]);return;}
   if(currentView==='list'){
-    el.innerHTML=list.map(function(w){var price=w.retail?'$'+parseFloat(w.retail).toFixed(0):(w.purchase?'$'+parseFloat(w.purchase).toFixed(0):'—');return'<div class="wine-list-item" onclick="openDetail(\''+w.id+'\')"><div class="wine-list-item-main"><div class="wine-list-name">'+w.name+'</div><div class="wine-list-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+'</div></div><div class="wine-list-price">'+price+'</div><div class="wine-list-qty">'+(w.qty||1)+'</div></div>';}).join('');
-    buildAZSidebar([]);return;
+    var lettersL=[];
+    if(sort==='name'){
+      var grpsL={};
+      list.forEach(function(w){var l=w.name[0].toUpperCase();if(!grpsL[l])grpsL[l]=[];grpsL[l].push(w);});
+      var hL='';
+      Object.keys(grpsL).sort().forEach(function(l){
+        lettersL.push(l);
+        hL+='<div class="letter-group-header" id="letter-'+l+'">'+l+'</div>';
+        grpsL[l].forEach(function(w){var price=w.retail?'$'+parseFloat(w.retail).toFixed(0):(w.purchase?'$'+parseFloat(w.purchase).toFixed(0):'—');hL+='<div class="wine-list-item" onclick="openDetail(\''+w.id+'\')"><div class="wine-list-item-main"><div class="wine-list-name">'+w.name+'</div><div class="wine-list-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+'</div></div><div class="wine-list-price">'+price+'</div><div class="wine-list-qty">'+(w.qty||1)+'</div></div>';});
+      });
+      el.innerHTML=hL;
+    } else {
+      el.innerHTML=list.map(function(w){var price=w.retail?'$'+parseFloat(w.retail).toFixed(0):(w.purchase?'$'+parseFloat(w.purchase).toFixed(0):'—');return'<div class="wine-list-item" onclick="openDetail(\''+w.id+'\')"><div class="wine-list-item-main"><div class="wine-list-name">'+w.name+'</div><div class="wine-list-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+'</div></div><div class="wine-list-price">'+price+'</div><div class="wine-list-qty">'+(w.qty||1)+'</div></div>';}).join('');
+    }
+    buildAZSidebar(lettersL);return;
   }
   var html='',lettersWithWines=[];
   if(sort==='name'){var groups={};list.forEach(function(w){var l=w.name[0].toUpperCase();if(!groups[l])groups[l]=[];groups[l].push(w);});Object.keys(groups).sort().forEach(function(l){lettersWithWines.push(l);html+='<div class="letter-group-header" id="letter-'+l+'">'+l+'</div>';groups[l].forEach(function(w){html+=wineCardHTML(w);});});}
