@@ -764,7 +764,7 @@ function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();r
   });
   var clickable=matchId?'cursor:pointer;':'';
   var hint=matchId?'<div style="font-size:10px;color:var(--green);margin-top:3px;">Tap to view in cellar →</div>':'';
-  return'<div class="rec-wine-item" style="'+clickable+'" onclick="'+(matchId?'recOpenWine(''+matchId+'')':'')+'">'+'<div class="rec-rank">'+(i+1)+'</div><div><div class="rec-wine-name">'+r.name+'</div><div class="rec-wine-reason">'+r.reason+'</div>'+hint+'</div></div>';
+  return'<div class="rec-wine-item" style="'+clickable+'" onclick="'+(matchId?'recOpenWine(\''+matchId+'\')':'')+'">'+'<div class="rec-rank">'+(i+1)+'</div><div><div class="rec-wine-name">'+r.name+'</div><div class="rec-wine-reason">'+r.reason+'</div>'+hint+'</div></div>';
 }).join('');
 document.getElementById('rec-list').innerHTML=recHtml;}).catch(function(e){document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});}
 
