@@ -224,6 +224,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .va-italian{border-left-color:#c84b32!important}
 .va-malbec{border-left-color:#5c3070!important}
 .va-other{border-left-color:#888!important}
+
+@keyframes swirl{0%{transform:rotate(-10deg) scale(1);}50%{transform:rotate(10deg) scale(1.15);}100%{transform:rotate(-10deg) scale(1);}}
 </style>
 </head>
 <body>
@@ -382,9 +384,11 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
       <button onclick="getRecommendations()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1f2a,#3d1020);border:none;border-radius:10px;color:#f5f0e8;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;margin-bottom:20px;">Ask the Sommelier</button>
       <!-- Loading -->
-      <div class="rec-loading" id="rec-loading" style="display:none;text-align:center;padding:24px 0;">
-        <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Consulting the cellar...</div>
-        <div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <div id="rec-loading" style="display:none;background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px 16px;text-align:center;margin-bottom:16px;">
+        <div style="font-size:32px;margin-bottom:10px;animation:swirl 1.5s ease-in-out infinite;">🍷</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--burgundy-rich);margin-bottom:4px;">Consulting the cellar</div>
+        <div style="font-size:11px;letter-spacing:1px;color:var(--text-muted);">Analysing your collection...</div>
+        <div class="loading-dots" style="margin-top:12px;"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
       </div>
       <!-- Results -->
       <div class="rec-result" id="rec-result">
@@ -706,6 +710,10 @@ document.getElementById('filter-country').addEventListener('click',function(e){
   renderWineList();
 });
 
+document.getElementById('rec-prompt').addEventListener('input',function(){
+  var btn=document.getElementById('rec-clear');
+  if(btn)btn.style.display=this.value.length>0?'block':'none';
+});
 document.getElementById('search-input').addEventListener('input',function(){document.getElementById('search-clear').classList.toggle('show',this.value.length>0);renderWineList();});
 function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-clear').classList.remove('show');renderWineList();}
 document.getElementById('sort-select').addEventListener('change',renderWineList);
@@ -1117,7 +1125,13 @@ function recOpenWine(id){
   setTimeout(function(){openDetail(id);},400);
 }
 function selectRecType(btn,type){document.querySelectorAll('.rec-type-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');selectedRecType=type;var ph={meal:"e.g. Grilled ribeye, roasted lamb...",occasion:"e.g. Anniversary dinner, birthday...",window:"Show me wines at peak drinking now...",explore:"e.g. Something bold, or a hidden gem..."};document.getElementById('rec-prompt').placeholder=ph[type];}
-function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();return;}var prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}document.getElementById('rec-loading').classList.add('show');document.getElementById('rec-result').classList.remove('show');var cl=Object.values(wines).map(function(w){return'- '+w.name+' ('+(w.varietal||'?')+', '+(w.vintage||'N/V')+', qty:'+(w.qty||1)+(w.drinkFrom&&w.drinkTo?', drink '+w.drinkFrom+'-'+w.drinkTo:'')+')';}).join('\n');var up=selectedRecType==='window'?'Year:'+new Date().getFullYear()+'. Top 5 at peak drinking from:\n'+cl+'\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences why it is at peak now"}]}'  :'Cellar:\n'+cl+'\n\n'+selectedRecType+': "'+prompt+'"\nTop 5. For each wine mention any critic scores (Parker, Spectator, etc.) if known, and vintage quality. Return JSON only: {"recommendations":[{"name":"wine name","reason":"2-3 sentences including critic scores and vintage notes if known"}]}';fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})}).then(function(r){return r.json();}).then(function(data){var text=(data.content||[]).map(function(c){return c.text||'';}).join('');var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');var recHtml=(parsed.recommendations||[]).map(function(r,i){
+function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();return;}var prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}var askBtn=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
+  if(askBtn){askBtn.disabled=true;askBtn.textContent='Consulting the cellar...';}
+  document.getElementById('rec-loading').style.display='block';
+  document.getElementById('rec-result').classList.remove('show');var cl=Object.values(wines).map(function(w){return'- '+w.name+' ('+(w.varietal||'?')+', '+(w.vintage||'N/V')+', qty:'+(w.qty||1)+(w.drinkFrom&&w.drinkTo?', drink '+w.drinkFrom+'-'+w.drinkTo:'')+')';}).join('\n');var up=selectedRecType==='window'?'Year:'+new Date().getFullYear()+'. Top 5 at peak drinking from:\n'+cl+'\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences why it is at peak now"}]}'  :'Cellar:\n'+cl+'\n\n'+selectedRecType+': "'+prompt+'"\nTop 5. For each wine mention any critic scores (Parker, Spectator, etc.) if known, and vintage quality. Return JSON only: {"recommendations":[{"name":"wine name","reason":"2-3 sentences including critic scores and vintage notes if known"}]}';fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})}).then(function(r){return r.json();}).then(function(data){var text=(data.content||[]).map(function(c){return c.text||'';}).join('');var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());var askBtn2=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
+    if(askBtn2){askBtn2.disabled=false;askBtn2.textContent='Ask the Sommelier';}
+    document.getElementById('rec-loading').style.display='none';
+    document.getElementById('rec-result').classList.add('show');var recHtml=(parsed.recommendations||[]).map(function(r,i){
   // Try to find matching wine in cellar
   var matchId=null;
   var rNorm=r.name.toLowerCase().replace(/[.\'-,]/g,' ').replace(/\s+/g,' ').trim();
@@ -1129,7 +1143,10 @@ function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();r
   var hint=matchId?'<div style="font-size:10px;color:var(--green);margin-top:3px;">Tap to view in cellar →</div>':'';
   return'<div class="rec-wine-item" style="'+clickable+'" onclick="'+(matchId?'recOpenWine(\''+matchId+'\')':'')+'">'+'<div class="rec-rank">'+(i+1)+'</div><div><div class="rec-wine-name">'+r.name+'</div><div class="rec-wine-reason">'+r.reason+'</div>'+hint+'</div></div>';
 }).join('');
-document.getElementById('rec-list').innerHTML=recHtml;}).catch(function(e){document.getElementById('rec-loading').classList.remove('show');document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});}
+document.getElementById('rec-list').innerHTML=recHtml;}).catch(function(e){var askBtn2=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
+    if(askBtn2){askBtn2.disabled=false;askBtn2.textContent='Ask the Sommelier';}
+    document.getElementById('rec-loading').style.display='none';
+    document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});}
 
 function renderSettings(){var arr=Object.values(wines);var tp=arr.reduce(function(s,w){return s+parseFloat(w.purchase||0)*(parseInt(w.qty)||0);},0);var tr=arr.reduce(function(s,w){return s+parseFloat(w.retail||w.purchase||0)*(parseInt(w.qty)||0);},0);var tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(function(w){return w.photo;}).length;document.getElementById('value-insight').innerHTML='<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$'+Math.round(tp).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$'+Math.round(tr).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:'+(tg>=0?'var(--green-light)':'#e34a49')+'">'+(tg>=0?'+':'')+'$'+Math.round(tg).toLocaleString()+' ('+(tg>=0?'+':'')+gp+'%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">'+wp+' / '+arr.length+' wines</span></div>';document.getElementById('rack-summary').innerHTML=RACKS.map(function(r){var total=r.specialRows?r.specialRows.reduce(function(s,row){return s+row.cols;},0):r.rows*r.cols;var used=arr.filter(function(w){return(w.slots||[]).some(function(s){return s.rackId===r.id;});}).length;return'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">'+r.name+'</span><span style="color:rgba(107,31,42,0.4)">'+used+' wines / '+total+' slots</span></div>';}).join('');var gainers=arr.filter(function(w){return w.retail&&w.purchase&&w.retail>w.purchase;}).map(function(w){return Object.assign({},w,{gain:w.retail-w.purchase});}).sort(function(a,b){return b.gain-a.gain;}).slice(0,5);document.getElementById('top-gainers').innerHTML=gainers.map(function(w){return'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+w.name+' '+(w.vintage||'')+'</span><span style="color:var(--green)">+$'+Math.round(w.gain)+'/btl</span></div>';}).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';updateApiKeyStatus();}
 function clearAllData(){if(!confirm('Clear ALL wines? This affects both phones and cannot be undone.'))return;setSyncing(true);fbPut('/wines',null).then(function(){wines={};setSyncing(false);refreshAll();});}
