@@ -882,12 +882,43 @@ function saveNewWine(){
     setSyncing(false);
     closeModal('add-wine-modal');
     refreshAll();
+    // Auto-generate notes in background if API key available
+    if(cachedApiKey){generateAutoNotes(wid,wine);}
   }).catch(function(e){
     console.error(e);
     setSyncing(false);
     if(btn)btn.disabled=false;
     alert('Error saving wine. Please try again.');
   });
+}
+
+function generateAutoNotes(wid, wine){
+  var prompt='Wine: '+wine.name+(wine.vintage?' '+wine.vintage:'')+(wine.varietal?', '+wine.varietal:'')+(wine.country?', '+wine.country:'')+'\n\nProvide a response with exactly three sections separated by double newlines:\n1. A 2-3 sentence tasting note describing aromas, palate, and finish.\n2. Critic Scores: List any known scores from Robert Parker Wine Advocate, Wine Spectator, Jeb Dunnuck, James Suckling. If unknown write "Scores not available".\n3. Vintage Notes: 1-2 sentences on the vintage quality for this varietal and region. If unknown write "Vintage notes not available".\n\nFormat exactly as:\n[tasting note]\n\nCritic Scores: [scores]\n\nVintage Notes: [vintage context]';
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':cachedApiKey,'anthropic-version':'2023-06-01'},
+    body:JSON.stringify({model:'claude-opus-4-5',max_tokens:400,messages:[{role:'user',content:prompt}]})
+  }).then(function(r){return r.json();}).then(function(data){
+    var notes=data.content&&data.content[0]&&data.content[0].text?data.content[0].text.trim():'';
+    if(!notes)return;
+    // Also generate drinking window
+    var yr=parseInt(wine.vintage)||new Date().getFullYear();
+    var df=yr+5,dt=yr+20;
+    if(wine.varietal){
+      var v=wine.varietal;
+      if(v.indexOf('Cabernet Sauvignon')>-1){df=yr+5;dt=yr+20;}
+      else if(v.indexOf('Merlot')>-1){df=yr+3;dt=yr+15;}
+      else if(v.indexOf('Pinot Noir')>-1){df=yr+2;dt=yr+10;}
+      else if(v.indexOf('Syrah')>-1||v.indexOf('Shiraz')>-1){df=yr+4;dt=yr+16;}
+      else if(v.indexOf('Cabernet Franc')>-1){df=yr+3;dt=yr+12;}
+      else if(v.indexOf('Red Blend')>-1||v.indexOf('Bordeaux')>-1){df=yr+4;dt=yr+15;}
+      else if(v.indexOf('Chardonnay')>-1){df=yr+1;dt=yr+8;}
+    }
+    fbPatch('/wines/'+wid,{notes:notes,drinkFrom:String(df),drinkTo:String(dt)}).then(function(){
+      wines[wid].notes=notes;wines[wid].drinkFrom=String(df);wines[wid].drinkTo=String(dt);
+      refreshAll();
+    });
+  }).catch(function(e){console.log('Auto-notes failed silently:',e);});
 }
 
 function openEditWine(id){
@@ -956,6 +987,8 @@ function saveEditWine(){
     setSyncing(false);
     closeModal('edit-modal');
     refreshAll();
+    // Auto-generate notes if field was left blank and API key available
+    if(!notes&&cachedApiKey){generateAutoNotes(id,updated);}
   }).catch(function(e){
     console.error(e);setSyncing(false);if(btn)btn.disabled=false;
     alert('Error saving. Please try again.');
