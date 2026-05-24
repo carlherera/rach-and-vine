@@ -1070,42 +1070,12 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.querySelectorAll('.modal-overlay').forEach(function(el){el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('open');});});
 
 function getApiKey(){return cachedApiKey;}
-function saveApiKey(){var key=document.getElementById('api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key starting with sk-');return;}fbPut('/config/apiKey',key).then(function(){cachedApiKey=key;document.getElementById('api-key-input').value='';document.getElementById('api-setup').classList.remove('show');updateApiKeyStatus();alert('✓ API key saved!');});}
+function saveApiKey(){var key=document.getElementById('api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key starting with sk-');return;}fbPut('/config/apiKey',key).then(function(){cachedApiKey=key;document.getElementById('api-key-input').value='';document.getElementById('api-setup').classList.remove('show');document.getElementById('sommelier-main').style.display='block';updateApiKeyStatus();alert('✓ API key saved!');});}
 function saveApiKeySettings(){var key=document.getElementById('settings-api-key-input').value.trim();if(!key.startsWith('sk-')){alert('Please paste a valid API key');return;}fbPut('/config/apiKey',key).then(function(){cachedApiKey=key;document.getElementById('settings-api-key-input').value='';updateApiKeyStatus();alert('✓ Updated!');});}
 function updateApiKeyStatus(){var el=document.getElementById('api-key-status');if(el)el.textContent=cachedApiKey?'✓ Saved — Sommelier is active':'Not set';}
-function checkApiKey(){document.getElementById('api-setup').classList.toggle('show',!cachedApiKey);}
-
-document.getElementById('rec-prompt').addEventListener('input',function(){document.getElementById('rec-clear').classList.toggle('show',this.value.length>0);});
-function clearRecPrompt(){document.getElementById('rec-prompt').value='';document.getElementById('rec-clear').classList.remove('show');}
-function drinkIt(id){
-  var w=wines[id];if(!w)return;
-  var today=new Date();
-  var dateStr=today.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  var entry={date:dateStr,name:w.name,vintage:w.vintage||'N/V',varietal:w.varietal||''};
-  // Save to Firebase drink log
-  var logKey='l'+Math.random().toString(36).substr(2,8);
-  fbPut('/drinkLog/'+logKey,entry).then(function(){
-    // Remove a bottle
-    var qty=parseInt(w.qty)||1;
-    var newQty=qty-1;
-    var newSlots=w.slots&&w.slots.length>0?w.slots.slice(0,newQty):[];
-    if(newQty<=0){
-      fbDelete('/wines/'+id).then(function(){
-        delete wines[id];
-        closeModal('detail-modal');
-        refreshAll();
-        showDrinkToast(w.name,dateStr,true);
-      });
-    } else {
-      fbPatch('/wines/'+id,{qty:newQty,slots:newSlots}).then(function(){
-        wines[id].qty=newQty;wines[id].slots=newSlots;
-        refreshAll();
-        showDrinkToast(w.name,dateStr,false);
-        // Reload log in modal
-        loadDrinkLog(id);
-      });
-    }
-  }).catch(function(e){console.error('Drink log error:',e);});
+function checkApiKey(){
+  document.getElementById('api-setup').classList.toggle('show',!cachedApiKey);
+  document.getElementById('sommelier-main').style.display='block';
 }
 
 function showDrinkToast(name,dateStr,removed){
