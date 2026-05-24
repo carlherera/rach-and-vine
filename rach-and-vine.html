@@ -1108,9 +1108,10 @@ function drawSpinWheel(pool){
   ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
   ctx.strokeStyle='rgba(107,31,42,0.3)';ctx.lineWidth=2;ctx.stroke();
   ctx.fillStyle='#6b1f2a';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
-  // Pointer
-  ctx.beginPath();ctx.moveTo(cx,10);ctx.lineTo(cx-10,28);ctx.lineTo(cx+10,28);ctx.closePath();
-  ctx.fillStyle='#6b1f2a';ctx.fill();
+  // Pointer — right side
+  ctx.beginPath();ctx.moveTo(W-6,cy);ctx.lineTo(W-28,cy-11);ctx.lineTo(W-28,cy+11);ctx.closePath();
+  ctx.fillStyle='#2e2e2e';ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
 }
 
 function spinWheel(){
@@ -1136,7 +1137,7 @@ function spinWheel(){
   // Spin animation
   var totalRotation=Math.PI*2*(4+Math.random()*4); // 4-8 full spins
   // Adjust so winner ends up at top (pointer position)
-  var targetAngle = -(winnerIdx*arc + arc/2) - Math.PI/2;
+  var targetAngle = -(winnerIdx*arc + arc/2);
   totalRotation = Math.ceil(totalRotation/(Math.PI*2))*Math.PI*2 + targetAngle;
   var startTime=null;
   var duration=3500;
@@ -1166,15 +1167,12 @@ function spinWheel(){
     ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
     ctx.strokeStyle='rgba(107,31,42,0.3)';ctx.lineWidth=2;ctx.stroke();
     ctx.fillStyle='#6b1f2a';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
-    // Pointer — triangle + line for clarity
+    // Pointer — right side
     ctx.save();
-    ctx.beginPath();ctx.moveTo(cx,6);ctx.lineTo(cx-11,30);ctx.lineTo(cx+11,30);ctx.closePath();
+    ctx.beginPath();ctx.moveTo(W-6,cy);ctx.lineTo(W-28,cy-11);ctx.lineTo(W-28,cy+11);ctx.closePath();
     ctx.fillStyle='#2e2e2e';ctx.fill();
     ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
     ctx.restore();
-    // Pointer line down center
-    ctx.beginPath();ctx.moveTo(cx,30);ctx.lineTo(cx,cy-22);
-    ctx.strokeStyle='rgba(255,255,255,0.35)';ctx.lineWidth=1;ctx.stroke();
     if(progress<1){requestAnimationFrame(animate);}
     else{
       // Draw final state with winner segment highlighted
@@ -1196,7 +1194,7 @@ function spinWheel(){
       ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
       ctx.strokeStyle='rgba(107,31,42,0.3)';ctx.lineWidth=2;ctx.stroke();
       ctx.fillStyle='#6b1f2a';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
-      ctx.save();ctx.beginPath();ctx.moveTo(cx,6);ctx.lineTo(cx-11,30);ctx.lineTo(cx+11,30);ctx.closePath();
+      ctx.save();ctx.beginPath();ctx.moveTo(W-6,cy);ctx.lineTo(W-28,cy-11);ctx.lineTo(W-28,cy+11);ctx.closePath();
       ctx.fillStyle='#2e2e2e';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();ctx.restore();
       spinAnimating=false;
       document.getElementById('spin-btn').disabled=false;
