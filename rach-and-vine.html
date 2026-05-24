@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+
+.va-cab{border-left-color:#6b1f2a!important}
+.va-merlot{border-left-color:#8b2d42!important}
+.va-pinot{border-left-color:#c47a8a!important}
+.va-syrah{border-left-color:#2c1654!important}
+.va-zin{border-left-color:#a0522d!important}
+.va-blend{border-left-color:#4a5568!important}
+.va-white{border-left-color:#c9a84c!important}
+.va-sparkling{border-left-color:#7fb3d3!important}
+.va-rhone{border-left-color:#7b3f6e!important}
+.va-italian{border-left-color:#c84b32!important}
+.va-malbec{border-left-color:#5c3070!important}
+.va-other{border-left-color:#888!important}<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -72,7 +84,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .az-letter{font-size:10px;color:var(--text-muted);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:600;touch-action:manipulation;line-height:1.4;border-radius:3px}
 .az-letter:active,.az-letter.has-wines{color:rgba(107,31,42,0.4)}
 .letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--burgundy-rich);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px;opacity:0.6}
-.wine-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation}
+.wine-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;border-left:3px solid var(--border);position:relative;overflow:hidden;touch-action:manipulation}
 .wine-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--burgundy-rich);border-radius:3px 0 0 3px}
 .wine-card.gain::before{background:var(--green)}
 .wine-card:active{border-color:rgba(107,31,42,0.3);background:#f5f0e8}
@@ -327,32 +339,57 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
   </div>
 
   <div class="screen" id="screen-recs">
-    <div class="section-title">Sommelier</div>
-    <div class="section-sub">AI-powered recommendations</div>
-    <div class="ai-badge">✦ Powered by Claude AI</div>
+    <!-- Sommelier header -->
+    <div style="background:linear-gradient(160deg,#3d1020 0%,#6b1f2a 60%,#8b2d42 100%);margin:-16px -16px 20px;padding:36px 24px 28px;border-radius:0 0 24px 24px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.05;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:12px 12px;"></div>
+      <div style="font-size:28px;margin-bottom:8px;">✦</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#f5f0e8;letter-spacing:2px;margin-bottom:4px;">Sommelier</div>
+      <div style="font-size:11px;letter-spacing:2px;color:rgba(245,240,232,0.6);text-transform:uppercase;">AI-powered wine recommendations</div>
+    </div>
     <div class="api-setup" id="api-setup">
       <div class="api-setup-title">One-time setup required</div>
-      <div class="api-setup-text">To power the Sommelier, you need an Anthropic API key.<br><br>1. Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a><br>2. Sign up and create an API key<br>3. Paste it below — only needed once per device.</div>
+      <div class="api-setup-text">To power the Sommelier, you need an Anthropic API key.<br><br>1. Go to <a href="https://console.anthropic.com" style="color:var(--burgundy-rich);">console.anthropic.com</a><br>2. Create an account and get your API key<br>3. Paste it below — it saves permanently</div>
       <div class="api-key-row">
         <input class="api-key-input" id="api-key-input" placeholder="sk-ant-..." type="password">
-        <button class="api-key-btn" onclick="saveApiKey()">Save Key</button>
+        <button class="api-key-btn" onclick="saveApiKey()">Save</button>
       </div>
     </div>
-    <div class="rec-type-grid">
-      <div class="rec-type-btn active" onclick="selectRecType(this,'meal')"><span class="rec-type-icon">🍽️</span>By Meal</div>
-      <div class="rec-type-btn" onclick="selectRecType(this,'occasion')"><span class="rec-type-icon">🥂</span>By Occasion</div>
-      <div class="rec-type-btn" onclick="selectRecType(this,'window')"><span class="rec-type-icon">📅</span>Drinking Window</div>
-      <div class="rec-type-btn" onclick="selectRecType(this,'explore')"><span class="rec-type-icon">🔍</span>Explore</div>
-    </div>
-    <div class="rec-input-area">
-      <textarea class="rec-textarea" id="rec-prompt" placeholder="Describe your meal, occasion, or what you're looking for..."></textarea>
-      <button class="rec-clear" id="rec-clear" onclick="clearRecPrompt()">✕</button>
-    </div>
-    <button class="btn-primary" onclick="getRecommendations()">Get Top 5 Recommendations →</button>
-    <div class="loading-dots" id="rec-loading"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="rec-result" id="rec-result">
-      <div class="rec-result-title">Top Recommendations</div>
-      <div id="rec-list"></div>
+    <div id="sommelier-main" style="display:none;">
+      <!-- Rec type selector -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <button class="rec-type-btn active" onclick="selectRecType(this,'meal')" style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;text-align:center;touch-action:manipulation;">
+          <div style="font-size:20px;margin-bottom:4px;">🍽️</div>
+          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);">By Meal</div>
+        </button>
+        <button class="rec-type-btn" onclick="selectRecType(this,'occasion')" style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;text-align:center;touch-action:manipulation;">
+          <div style="font-size:20px;margin-bottom:4px;">🎉</div>
+          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);">By Occasion</div>
+        </button>
+        <button class="rec-type-btn" onclick="selectRecType(this,'window')" style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;text-align:center;touch-action:manipulation;">
+          <div style="font-size:20px;margin-bottom:4px;">📅</div>
+          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);">Drink Now</div>
+        </button>
+        <button class="rec-type-btn" onclick="selectRecType(this,'explore')" style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 8px;cursor:pointer;text-align:center;touch-action:manipulation;">
+          <div style="font-size:20px;margin-bottom:4px;">🔍</div>
+          <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-secondary);">Explore</div>
+        </button>
+      </div>
+      <!-- Prompt input -->
+      <div style="position:relative;margin-bottom:12px;">
+        <textarea id="rec-prompt" rows="2" placeholder="e.g. grilled ribeye with truffle butter..." style="width:100%;box-sizing:border-box;background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 40px 12px 14px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text-primary);resize:none;outline:none;line-height:1.5;"></textarea>
+        <button id="rec-clear" onclick="clearRecPrompt()" style="position:absolute;right:10px;top:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;padding:2px;">✕</button>
+      </div>
+      <button onclick="getRecommendations()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1f2a,#3d1020);border:none;border-radius:10px;color:#f5f0e8;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;margin-bottom:20px;">Ask the Sommelier</button>
+      <!-- Loading -->
+      <div class="rec-loading" id="rec-loading" style="display:none;text-align:center;padding:24px 0;">
+        <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Consulting the cellar...</div>
+        <div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      </div>
+      <!-- Results -->
+      <div class="rec-result" id="rec-result">
+        <div style="font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Top Recommendations</div>
+        <div id="rec-list"></div>
+      </div>
     </div>
   </div>
 
@@ -360,8 +397,12 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
   <div class="screen" id="screen-spin">
     <div class="section-title">Spin the Wheel!</div>
     <div class="section-sub">Let fate choose your wine tonight</div>
-    <div style="background:#fff;border:0.5px solid var(--border);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px;">
-      <div style="font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Filters</div>
+    <div style="background:#fff;border:0.5px solid var(--border);border-radius:var(--border-radius-lg);margin-bottom:14px;overflow:hidden;">
+      <button onclick="toggleSpinFilters()" style="width:100%;background:none;border:none;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;touch-action:manipulation;">
+        <span style="font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Filters</span>
+        <span id="spin-filter-arrow" style="font-size:14px;color:var(--text-muted);transition:transform 0.2s;">▾</span>
+      </button>
+      <div id="spin-filters-body" style="display:none;padding:0 16px 16px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
         <div>
           <label style="font-size:10px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:5px;">Min Price</label>
@@ -390,6 +431,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
           <span style="font-size:13px;color:var(--text-secondary)">Only wines in drinking window now</span>
         </label>
       </div>
+      </div><!-- end spin-filters-body -->
     </div>
     <div style="text-align:center;margin:10px 0 16px;">
       <canvas id="spin-wheel-canvas" width="280" height="280" style="max-width:100%;touch-action:none;cursor:default;" onclick="spinWheelTap()"></canvas>
@@ -448,11 +490,17 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
           <div style="font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Tasting Notes</div>
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;white-space:pre-wrap;" id="d-notes">—</div>
         </div>
+        <!-- Drink log -->
+        <div id="d-drink-log" style="display:none;background:#fdf5f0;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+          <div style="font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Drink Log</div>
+          <div id="d-drink-log-entries" style="font-size:12px;color:var(--text-secondary);line-height:1.8;"></div>
+        </div>
         <!-- Action buttons -->
-        <div style="display:flex;gap:8px;">
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
           <button class="btn-edit" onclick="openEditWine(currentDetailId)" style="flex:1;">Edit</button>
           <button class="btn-secondary" id="d-remove-btn" style="flex:1;">Remove Bottle</button>
         </div>
+        <button onclick="drinkIt(currentDetailId)" style="width:100%;padding:12px;background:linear-gradient(135deg,#6b1f2a,#3d1020);border:none;border-radius:10px;color:#f5f0e8;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;">🍷 Drink It!</button>
       </div>
     </div>
   </div>
@@ -708,6 +756,24 @@ function renderWineList(){
   el.innerHTML=html;buildAZSidebar(lettersWithWines);
 }
 
+function getVarietalClass(v){
+  v=v.toLowerCase();
+  if(v.indexOf('cabernet sauvignon')>-1)return'va-cab';
+  if(v.indexOf('cabernet franc')>-1)return'va-cab';
+  if(v.indexOf('merlot')>-1)return'va-merlot';
+  if(v.indexOf('pinot noir')>-1)return'va-pinot';
+  if(v.indexOf('syrah')>-1||v.indexOf('shiraz')>-1)return'va-syrah';
+  if(v.indexOf('petite sirah')>-1)return'va-syrah';
+  if(v.indexOf('zinfandel')>-1)return'va-zin';
+  if(v.indexOf('malbec')>-1)return'va-malbec';
+  if(v.indexOf('blend')>-1||v.indexOf('bordeaux')>-1||v.indexOf('meritage')>-1)return'va-blend';
+  if(v.indexOf('chateauneuf')>-1||v.indexOf('gsm')>-1||v.indexOf('grenache')>-1||v.indexOf('rhone')>-1)return'va-rhone';
+  if(v.indexOf('toscana')>-1||v.indexOf('chianti')>-1||v.indexOf('sangiovese')>-1||v.indexOf('rosso')>-1||v.indexOf('barolo')>-1)return'va-italian';
+  if(v.indexOf('rioja')>-1||v.indexOf('tempranillo')>-1)return'va-italian';
+  if(v.indexOf('chardonnay')>-1||v.indexOf('sauvignon')>-1||v.indexOf('riesling')>-1||v.indexOf('pinot grigio')>-1)return'va-white';
+  if(v.indexOf('champagne')>-1||v.indexOf('sparkling')>-1||v.indexOf('prosecco')>-1)return'va-sparkling';
+  return'va-other';
+}
 function wineCardHTML(w){
   if(!w.name)return'';
   var hg=w.retail&&w.retail>w.purchase;
@@ -724,7 +790,7 @@ function wineCardHTML(w){
     else if(now<df){var yrs=df-now;wineBadge='<span class="tag drink-wait">● Cellar '+yrs+' yr'+(yrs>1?'s':'')+' · ready '+w.drinkFrom+'</span>';}
     else wineBadge='<span class="tag drink-past">● Past peak · drank best '+w.drinkFrom+'–'+w.drinkTo+'</span>';
   }
-  return'<div class="wine-card'+(hg?' gain':'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">'+retailStr+'</span></div><div class="wine-tags">'+(rn?'<span class="tag">'+rn+'</span>':'')+wineBadge+' '+(w.photo?'<span class="tag other-v">📷 Photo</span>':'')+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
+  var vc=getVarietalClass(w.varietal||'');return'<div class="wine-card'+(hg?' gain':'')+(vc?' '+vc:'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">'+retailStr+'</span></div><div class="wine-tags">'+(rn?'<span class="tag">'+rn+'</span>':'')+wineBadge+' '+(w.photo?'<span class="tag other-v">📷 Photo</span>':'')+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
 }
 
 var ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -815,7 +881,7 @@ if(w.drinkFrom&&w.drinkTo){
   if(now<df){var yrs=df-now;dwStatus.textContent='Cellar '+yrs+' more yr'+(yrs>1?'s':'');dwStatus.className='detail-card-sub';dwStatus.style.color='#f57f17';}
   else if(now>dt){dwStatus.textContent='Past peak';dwStatus.className='detail-card-sub neg';dwStatus.style.color='#c62828';}
   else{var left=dt-now;dwStatus.textContent='Drinking now · '+left+' yr'+(left>1?'s':'')+' left';dwStatus.className='detail-card-sub';dwStatus.style.color='#2e7d32';}
-}else{dwCard.textContent='—';dwStatus.textContent='';}var slots=w.slots&&w.slots.length>0?w.slots:[];var locText='Not assigned';var hasLocation=false;if(slots.length>0){var byRack={};slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});var rn=r?r.name:'Unknown';if(!byRack[rn])byRack[rn]=[];var parts=s.sid.split('-');byRack[rn].push('Row '+parts[1]+' Col '+parts[2]);});locText=Object.keys(byRack).map(function(rn){return rn+': '+byRack[rn].join(', ');}).join('\n');hasLocation=true;}else if(w.rack){locText=(RACKS.find(function(r){return r.id===w.rack;})||{name:w.rack}).name+(w.slotText?' · '+w.slotText:'');hasLocation=true;}document.getElementById('d-location').textContent=locText;document.getElementById('location-tap-hint').textContent=hasLocation?' · Tap to view on rack':'';document.getElementById('location-arrow').style.display=hasLocation?'block':'none';document.getElementById('location-badge').style.cursor=hasLocation?'pointer':'default';var nr=document.getElementById('d-notes-row');if(w.notes){nr.style.display='block';document.getElementById('d-notes').textContent=w.notes;}else nr.style.display='none';document.getElementById('d-remove-btn').onclick=function(){removeWine(id);};document.getElementById('detail-modal').classList.add('open');}
+}else{dwCard.textContent='—';dwStatus.textContent='';}var slots=w.slots&&w.slots.length>0?w.slots:[];var locText='Not assigned';var hasLocation=false;if(slots.length>0){var byRack={};slots.forEach(function(s){var r=RACKS.find(function(r){return r.id===s.rackId;});var rn=r?r.name:'Unknown';if(!byRack[rn])byRack[rn]=[];var parts=s.sid.split('-');byRack[rn].push('Row '+parts[1]+' Col '+parts[2]);});locText=Object.keys(byRack).map(function(rn){return rn+': '+byRack[rn].join(', ');}).join('\n');hasLocation=true;}else if(w.rack){locText=(RACKS.find(function(r){return r.id===w.rack;})||{name:w.rack}).name+(w.slotText?' · '+w.slotText:'');hasLocation=true;}document.getElementById('d-location').textContent=locText;document.getElementById('location-tap-hint').textContent=hasLocation?' · Tap to view on rack':'';document.getElementById('location-arrow').style.display=hasLocation?'block':'none';document.getElementById('location-badge').style.cursor=hasLocation?'pointer':'default';var nr=document.getElementById('d-notes-row');if(w.notes){nr.style.display='block';document.getElementById('d-notes').textContent=w.notes;}else nr.style.display='none';document.getElementById('d-remove-btn').onclick=function(){removeWine(id);};document.getElementById('detail-modal').classList.add('open');loadDrinkLog(id);}
 function triggerDetailPhoto(){document.getElementById('detail-photo-input').click();}
 function handleDetailPhoto(input){var file=input.files[0];if(!file||!currentDetailId)return;var reader=new FileReader();reader.onload=function(e){setSyncing(true);fbPatch('/wines/'+currentDetailId,{photo:e.target.result}).then(function(){wines[currentDetailId].photo=e.target.result;document.getElementById('detail-img-inner').innerHTML='<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">';document.getElementById('detail-img').querySelector('.camera-hint').style.display='none';setSyncing(false);renderWineList();});};reader.readAsDataURL(file);input.value='';}
 function openEditFromDetail(){closeModal('detail-modal');openEditModal(currentDetailId);}
@@ -1010,6 +1076,60 @@ function checkApiKey(){document.getElementById('api-setup').classList.toggle('sh
 
 document.getElementById('rec-prompt').addEventListener('input',function(){document.getElementById('rec-clear').classList.toggle('show',this.value.length>0);});
 function clearRecPrompt(){document.getElementById('rec-prompt').value='';document.getElementById('rec-clear').classList.remove('show');}
+function drinkIt(id){
+  var w=wines[id];if(!w)return;
+  var today=new Date();
+  var dateStr=today.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  var entry={date:dateStr,name:w.name,vintage:w.vintage||'N/V',varietal:w.varietal||''};
+  // Save to Firebase drink log
+  var logKey='l'+Math.random().toString(36).substr(2,8);
+  fbPut('/drinkLog/'+logKey,entry).then(function(){
+    // Remove a bottle
+    var qty=parseInt(w.qty)||1;
+    var newQty=qty-1;
+    var newSlots=w.slots&&w.slots.length>0?w.slots.slice(0,newQty):[];
+    if(newQty<=0){
+      fbDelete('/wines/'+id).then(function(){
+        delete wines[id];
+        closeModal('detail-modal');
+        refreshAll();
+        showDrinkToast(w.name,dateStr,true);
+      });
+    } else {
+      fbPatch('/wines/'+id,{qty:newQty,slots:newSlots}).then(function(){
+        wines[id].qty=newQty;wines[id].slots=newSlots;
+        refreshAll();
+        showDrinkToast(w.name,dateStr,false);
+        // Reload log in modal
+        loadDrinkLog(id);
+      });
+    }
+  }).catch(function(e){console.error('Drink log error:',e);});
+}
+
+function showDrinkToast(name,dateStr,removed){
+  var toast=document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#3d1020;color:#f5f0e8;padding:12px 20px;border-radius:12px;font-size:12px;font-family:Montserrat,sans-serif;z-index:9999;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+  toast.innerHTML='🍷 Logged! '+name+(removed?' (last bottle)':'')+'<br><span style="opacity:0.7;font-size:10px;">'+dateStr+'</span>';
+  document.body.appendChild(toast);
+  setTimeout(function(){toast.style.transition='opacity 0.5s';toast.style.opacity='0';setTimeout(function(){document.body.removeChild(toast);},500);},2500);
+}
+
+function loadDrinkLog(wineId){
+  var w=wines[wineId];if(!w)return;
+  // Fetch all log entries and filter by wine name
+  fbGet('/drinkLog').then(function(log){
+    if(!log){document.getElementById('d-drink-log').style.display='none';return;}
+    var entries=Object.values(log).filter(function(e){return e.name===w.name;})
+      .sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+    if(entries.length===0){document.getElementById('d-drink-log').style.display='none';return;}
+    document.getElementById('d-drink-log').style.display='block';
+    document.getElementById('d-drink-log-entries').innerHTML=entries.map(function(e){
+      return '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(107,31,42,0.1);padding:3px 0;"><span>'+e.date+'</span><span style="color:var(--text-muted);">'+e.vintage+'</span></div>';
+    }).join('');
+  }).catch(function(){});
+}
+
 function spinWheelTap(){
   if(spinAnimating)return;
   if(spinResultId){recOpenWine(spinResultId);}
@@ -1083,6 +1203,14 @@ function renderSettingsMenu(){
 // ── Spin Wheel ──
 var spinResultId = null;
 var spinAnimating = false;
+
+function toggleSpinFilters(){
+  var body=document.getElementById('spin-filters-body');
+  var arrow=document.getElementById('spin-filter-arrow');
+  var open=body.style.display==='block';
+  body.style.display=open?'none':'block';
+  arrow.style.transform=open?'':'rotate(180deg)';
+}
 
 function initSpinWheel(){
   // Populate varietal filter
