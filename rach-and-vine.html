@@ -392,7 +392,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
     </div>
     <div style="text-align:center;margin:10px 0 16px;">
-      <canvas id="spin-wheel-canvas" width="280" height="280" style="max-width:100%;touch-action:none;"></canvas>
+      <canvas id="spin-wheel-canvas" width="280" height="280" style="max-width:100%;touch-action:none;cursor:default;" onclick="spinWheelTap()"></canvas>
     </div>
     <button class="btn-primary" id="spin-btn" onclick="spinWheel()" style="margin-bottom:12px;">🎲 Spin!</button>
     <div id="spin-result" style="display:none;background:#fff;border:1px solid var(--border-bright);border-radius:12px;padding:16px;text-align:center;cursor:pointer;" onclick="openDetail(spinResultId)">
@@ -977,6 +977,11 @@ function checkApiKey(){document.getElementById('api-setup').classList.toggle('sh
 
 document.getElementById('rec-prompt').addEventListener('input',function(){document.getElementById('rec-clear').classList.toggle('show',this.value.length>0);});
 function clearRecPrompt(){document.getElementById('rec-prompt').value='';document.getElementById('rec-clear').classList.remove('show');}
+function spinWheelTap(){
+  if(spinAnimating)return;
+  if(spinResultId){recOpenWine(spinResultId);}
+}
+
 function recOpenWine(id){
   var cellarBtn=document.getElementById('nav-cellar');
   // Manually switch to cellar (same as showScreen but with longer delay for render)
@@ -1123,6 +1128,7 @@ function spinWheel(){
   spinAnimating=true;
   document.getElementById('spin-btn').disabled=true;
   document.getElementById('spin-result').style.display='none';
+  document.getElementById('spin-wheel-canvas').style.cursor='default';
   var canvas=document.getElementById('spin-wheel-canvas');
   var ctx=canvas.getContext('2d');
   var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,r=cx-10;
@@ -1196,6 +1202,7 @@ function spinWheel(){
       var meta=(w.varietal||'')+(w.vintage?' · '+w.vintage:'')+(w.retail?' · $'+parseFloat(w.retail).toFixed(0):'');
       document.getElementById('spin-result-meta').textContent=meta;
       document.getElementById('spin-result').style.display='block';
+      document.getElementById('spin-wheel-canvas').style.cursor='pointer';
     }
   }
   requestAnimationFrame(animate);
