@@ -3,54 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExNSIgZmlsbD0iIzJjMTgxMCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NiwyNTYpIj4KICAgIDwhLS0gV2luZSBnbGFzcyBib3dsIC0tPgogICAgPHBhdGggZD0iTS04NSwtMTQwIFEtMTAwLC00MCAtNTAsMzAgUS0yMCw2MCAwLDY1IFEyMCw2MCA1MCwzMCBRMTAwLC00MCA4NSwtMTQwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZDVhMyIgc3Ryb2tlLXdpZHRoPSIxNiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogICAgPCEtLSBXaW5lIGZpbGwgaW4gYm93bCAtLT4KICAgIDxwYXRoIGQ9Ik0tNzIsLTIwIFEtNjAsMzAgLTIwLDU1IFEwLDYzIDIwLDU1IFE2MCwzMCA3MiwtMjAgWiIgZmlsbD0iIzZiMWYyYSIgb3BhY2l0eT0iMC45Ii8+CiAgICA8IS0tIFdpbmUgaGlnaGxpZ2h0IC0tPgogICAgPGVsbGlwc2UgY3g9Ii0zMCIgY3k9IjUiIHJ4PSIxMiIgcnk9IjciIGZpbGw9InJnYmEoMjMyLDIxMywxNjMsMC4yNSkiIHRyYW5zZm9ybT0icm90YXRlKC0yMCwtMzAsNSkiLz4KICAgIDwhLS0gU3RlbSAtLT4KICAgIDxsaW5lIHgxPSIwIiB5MT0iNjUiIHgyPSIwIiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBCYXNlIC0tPgogICAgPGxpbmUgeDE9Ii01NSIgeTE9IjE1NSIgeDI9IjU1IiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBEZWNvcmF0aXZlIGRvdHMgb24gYm93bCByaW0gLS0+CiAgICA8Y2lyY2xlIGN4PSItODUiIGN5PSItMTQwIiByPSI1IiBmaWxsPSIjZThkNWEzIi8+CiAgICA8Y2lyY2xlIGN4PSI4NSIgY3k9Ii0xNDAiIHI9IjUiIGZpbGw9IiNlOGQ1YTMiLz4KICA8L2c+Cjwvc3ZnPg==">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExNSIgZmlsbD0iIzJjMTgxMCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NiwyNTYpIj4KICAgIDwhLS0gV2luZSBnbGFzcyBib3dsIC0tPgogICAgPHBhdGggZD0iTS04NSwtMTQwIFEtMTAwLC00MCAtNTAsMzAgUS0yMCw2MCAwLDY1IFEyMCw2MCA1MCwzMCBRMTAwLC00MCA4NSwtMTQwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZDVhMyIgc3Ryb2tlLXdpZHRoPSIxNiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogICAgPCEtLSBXaW5lIGZpbGwgaW4gYm93bCAtLT4KICAgIDxwYXRoIGQ9Ik0tNzIsLTIwIFEtNjAsMzAgLTIwLDU1IFEwLDYzIDIwLDU1IFE2MCwzMCA3MiwtMjAgWiIgZmlsbD0iIzZiMWYyYSIgb3BhY2l0eT0iMC45Ii8+CiAgICA8IS0tIFdpbmUgaGlnaGxpZ2h0IC0tPgogICAgPGVsbGlwc2UgY3g9Ii0zMCIgY3k9IjUiIHJ4PSIxMiIgcnk9IjciIGZpbGw9InJnYmEoMjMyLDIxMywxNjMsMC4yNSkiIHRyYW5zZm9ybT0icm90YXRlKC0yMCwtMzAsNSkiLz4KICAgIDwhLS0gU3RlbSAtLT4KICAgIDxsaW5lIHgxPSIwIiB5MT0iNjUiIHgyPSIwIiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBCYXNlIC0tPgogICAgPGxpbmUgeDE9Ii01NSIgeTE9IjE1NSIgeDI9IjU1IiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBEZWNvcmF0aXZlIGRvdHMgb24gYm93bCByaW0gLS0+CiAgICA8Y2lyY2xlIGN4PSItODUiIGN5PSItMTQwIiByPSI1IiBmaWxsPSIjZThkNWEzIi8+CiAgICA8Y2lyY2xlIGN4PSI4NSIgY3k9Ii0xNDAiIHI9IjUiIGZpbGw9IiNlOGQ1YTMiLz4KICA8L2c+Cjwvc3ZnPg==">
 <meta name="apple-mobile-web-app-title" content="Rach &amp; Vine">
-<meta name="theme-color" content="#2c1810">
+<meta name="theme-color" content="#4a2030">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rach & Vine">
 <title>Rach & Vine</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--burgundy-deep:#f9f5ec;--burgundy-mid:#f0e8d5;--burgundy-rich:#2c1810;--burgundy-accent:#3d2215;--burgundy-light:#5c3d2e;--gold:#e8d5a3;--gold-light:#c9a84c;--gold-dim:#a08060;--text-primary:#2c1810;--text-secondary:#5c3d2e;--text-muted:#8a7060;--surface-2:#ffffff;--surface-3:#f9f5ec;--border:rgba(44,24,16,0.12);--border-bright:rgba(44,24,16,0.35);--glass-bg:rgba(249,245,236,0.95);--green:#2d6b45;--green-light:#1f5a35;--red-neg:#c0392b}
+:root{--burgundy-deep:#fdf7f5;--burgundy-mid:#f5ece8;--burgundy-rich:#4a2030;--burgundy-accent:#6a3045;--burgundy-light:#9a5070;--gold:#e6b4be;--gold-light:#c9849a;--gold-dim:#a07880;--text-primary:#4a2030;--text-secondary:#7a4050;--text-muted:#a07880;--surface-2:#ffffff;--surface-3:#fdf7f5;--border:rgba(74,32,48,0.10);--border-bright:rgba(74,32,48,0.30);--glass-bg:rgba(253,247,245,0.95);--green:#2d6b45;--green-light:#1f5a35;--red-neg:#c0392b}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Montserrat',sans-serif;background:#f9f5ec;color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
-body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(107,31,42,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(107,31,42,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+body{font-family:'Montserrat',sans-serif;background:#fdf7f5;color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(74,32,48,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(74,32,48,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 .app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
-.loading-overlay{position:fixed;inset:0;background:#f9f5ec;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s}
+.loading-overlay{position:fixed;inset:0;background:#fdf7f5;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
 .loading-logo{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--burgundy-rich);font-style:italic;letter-spacing:3px}
 .loading-sub{font-size:10px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:0 20px}
-.loading-spinner{width:32px;height:32px;border:2px solid rgba(107,31,42,0.15);border-top-color:var(--burgundy-rich);border-radius:50%;animation:spin 0.8s linear infinite}
+.loading-spinner{width:32px;height:32px;border:2px solid rgba(74,32,48,0.15);border-top-color:var(--burgundy-rich);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sync-bar{height:3px;background:transparent;position:relative;overflow:hidden}
 .sync-bar.syncing::after{content:'';position:absolute;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--burgundy-rich),transparent);animation:syncSlide 1s infinite}
 @keyframes syncSlide{to{left:200%}}
 .sync-status{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:2px 0;min-height:16px}
-.header{padding:28px 20px 8px;text-align:center;border-bottom:1px solid rgba(232,213,163,0.15);background:#2c1810;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);overflow:visible}
+.header{padding:28px 20px 8px;text-align:center;border-bottom:1px solid rgba(230,180,190,0.12);background:#4a2030;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);overflow:visible}
 .header-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2px}
 .header-vine{font-size:20px;opacity:0.7}
-.header-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#e8d5a3;font-style:italic}
+.header-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#e6b4be;font-style:italic}
 .header-ampersand{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--burgundy-rich);font-style:normal;margin:0 2px;opacity:0.5}
-.header-subtitle{font-size:9px;letter-spacing:2px;color:rgba(232,213,163,0.5);text-transform:uppercase;margin-top:1px}
+.header-subtitle{font-size:9px;letter-spacing:2px;color:rgba(230,180,190,0.4);text-transform:uppercase;margin-top:1px}
 .header-stats{display:flex;justify-content:center;gap:16px;margin-top:4px}
 .stat{text-align:center}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:#e8d5a3;font-weight:500}
-.stat-label{font-size:8px;letter-spacing:2px;color:rgba(232,213,163,0.5);text-transform:uppercase}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:#e6b4be;font-weight:500}
+.stat-label{font-size:8px;letter-spacing:2px;color:rgba(230,180,190,0.4);text-transform:uppercase}
 .view-toggle{display:flex;justify-content:center;gap:6px;margin-top:8px}
 .view-btn{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);padding:5px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
-.view-btn.active{background:var(--burgundy-rich);border-color:rgba(107,31,42,0.3);color:#fff}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#2c1810;border-top:1px solid rgba(232,213,163,0.15);backdrop-filter:blur(16px);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;padding:12px 4px 16px;border:none;background:transparent;color:rgba(232,213,163,0.5);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
-.nav-btn.active{color:#e8d5a3}
+.view-btn.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.3);color:#fff}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#4a2030;border-top:1px solid rgba(232,213,163,0.15);backdrop-filter:blur(16px);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:12px 4px 16px;border:none;background:transparent;color:rgba(230,180,190,0.4);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
+.nav-btn.active{color:#e6b4be}
 .nav-icon{font-size:22px;line-height:1}
 .nav-label{font-size:11px;letter-spacing:1px;text-transform:uppercase}
 .nav-add{flex:1.2}
-.nav-add-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#e8d5a3,#c9a84c);border:1px solid rgba(232,213,163,0.4);color:#2c1810;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:1px;box-shadow:0 2px 12px rgba(201,168,76,0.3)}
+.nav-add-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#e6b4be,#c9849a);border:1px solid rgba(230,180,190,0.4);color:#4a2030;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:1px;box-shadow:0 2px 12px rgba(201,132,154,0.35)}
 .nav-add .nav-label{color:var(--burgundy-rich);opacity:0.6}
 .nav-add:active .nav-add-circle{transform:scale(0.9)}
-.scroll-top-btn{position:fixed;bottom:82px;right:16px;width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid rgba(107,31,42,0.3);color:var(--burgundy-rich);font-size:18px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:150;touch-action:manipulation;box-shadow:0 2px 12px rgba(107,31,42,0.15)}
+.scroll-top-btn{position:fixed;bottom:82px;right:16px;width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid rgba(74,32,48,0.3);color:var(--burgundy-rich);font-size:18px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:150;touch-action:manipulation;box-shadow:0 2px 12px rgba(74,32,48,0.15)}
 .scroll-top-btn.show{display:flex}
 .screen{display:none;flex:1;padding:16px 16px 90px;animation:fadeIn 0.3s ease}
 .screen.active{display:block}
@@ -69,18 +67,18 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .filter-row{display:flex;gap:6px;margin-bottom:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .filter-row::-webkit-scrollbar{display:none}
 .filter-chip{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:#faf7f2;color:var(--text-muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;user-select:none;-webkit-user-select:none;touch-action:manipulation;min-height:32px;display:flex;align-items:center}
-.filter-chip.active{background:var(--burgundy-rich);border-color:rgba(107,31,42,0.4);color:#fff}
+.filter-chip.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.4);color:#fff}
 .cellar-wrap{display:flex;gap:0;position:relative}
 .wine-list-wrap{flex:1;min-width:0;padding-right:24px}
 .az-sidebar{position:fixed;right:4px;top:55%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;z-index:50;max-height:60vh;overflow:hidden;padding-top:4px}
 .az-letter{font-size:10px;color:var(--text-muted);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:600;touch-action:manipulation;line-height:1.4;border-radius:3px}
-.az-letter:active,.az-letter.has-wines{color:rgba(107,31,42,0.4)}
+.az-letter:active,.az-letter.has-wines{color:rgba(74,32,48,0.4)}
 .letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--burgundy-rich);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px;opacity:0.6}
 .wine-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;border-left:3px solid var(--border);position:relative;overflow:hidden;touch-action:manipulation}
 .wine-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--burgundy-rich);border-radius:3px 0 0 3px}
 .wine-card.gain::before{background:var(--green)}
-.wine-card:active{border-color:rgba(107,31,42,0.3);background:#f9f5ec}
-.wine-thumb{width:48px;height:64px;border-radius:6px;background:#f9f5ec;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.wine-card:active{border-color:rgba(74,32,48,0.3);background:#fdf7f5}
+.wine-thumb{width:48px;height:64px;border-radius:6px;background:#fdf7f5;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
 .wine-thumb img{width:100%;height:100%;object-fit:cover;border-radius:5px}
 .wine-info{flex:1;min-width:0}
 .wine-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -91,8 +89,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .tag{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted)}
 .tag.other-v{border-color:rgba(45,107,69,0.3);color:var(--green)}
 .tag.drink-now{border-color:rgba(46,125,50,0.4);color:#2e7d32;background:rgba(232,245,233,0.8);font-weight:500}
-.tag.drink-wait{border-color:rgba(245,127,23,0.4);color:#f57f17;background:rgba(255,248,225,0.8)}
-.tag.drink-past{border-color:rgba(198,40,40,0.3);color:#c62828;background:rgba(252,228,236,0.8)}
+.tag.drink-wait{border-color:rgba(245,127,23,0.4);color:#f57f17;background:rgba(255,248,225,0.9)}
+.tag.drink-past{border-color:rgba(198,40,40,0.3);color:#c62828;background:rgba(252,228,236,0.9)}
 .wine-qty{position:absolute;top:10px;right:12px;font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--burgundy-rich);font-weight:500;opacity:0.7}
 .wine-list-item{display:flex;align-items:center;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer;touch-action:manipulation;gap:10px}
 .wine-list-item:active{background:#f0e8de}
@@ -104,40 +102,40 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rack-selector{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .rack-selector::-webkit-scrollbar{display:none}
 .rack-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:#faf7f2;color:var(--text-muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;touch-action:manipulation}
-.rack-tab.active{background:var(--burgundy-rich);border-color:rgba(107,31,42,0.4);color:#fff}
+.rack-tab.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.4);color:#fff}
 .rack-container{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.rack-container.rearrange-active{border-color:rgba(107,31,42,0.4);box-shadow:0 0 0 2px rgba(201,168,76,0.15)}
+.rack-container.rearrange-active{border-color:rgba(74,32,48,0.4);box-shadow:0 0 0 2px rgba(201,168,76,0.15)}
 .rack-inner{display:inline-block;min-width:100%}
 .rack-col-label-row{display:flex;gap:4px;align-items:center;padding:3px 0}
 .rack-col-label{font-size:9px;color:var(--text-muted);text-align:center;font-family:'Cormorant Garamond',serif;letter-spacing:1px;flex-shrink:0;font-weight:600}
 .rack-row{display:flex;gap:4px;align-items:center;margin-bottom:4px}
 .row-lbl{font-size:10px;color:var(--text-muted);width:22px;text-align:center;flex-shrink:0;font-family:'Cormorant Garamond',serif;font-weight:600}
-.slot{border-radius:50%;border:1.5px solid rgba(107,31,42,0.15);background:#f0ebe3;cursor:pointer;flex-shrink:0;position:relative;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
-.slot.filled{background:#fff;border-color:rgba(107,31,42,0.5)}
+.slot{border-radius:50%;border:1.5px solid rgba(74,32,48,0.15);background:#f0ebe3;cursor:pointer;flex-shrink:0;position:relative;touch-action:manipulation;display:flex;align-items:center;justify-content:center}
+.slot.filled{background:#fff;border-color:rgba(74,32,48,0.5)}
 .slot.filled::after{content:'';width:38%;height:38%;border-radius:50%;background:var(--burgundy-rich);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 .slot.selected{border-color:#3d7a5c!important;background:#1a3d2e!important;box-shadow:0 0 0 3px rgba(61,122,92,0.25)!important}
 .slot.selected::after{background:#7abf9e!important}
 .slot:active{transform:scale(0.88)}
-.slot-popup{background:#fff;border:1px solid rgba(107,31,42,0.25);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:none}
+.slot-popup{background:#fff;border:1px solid rgba(74,32,48,0.25);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:none}
 .slot-popup.show{display:block}
 .slot-popup-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary)}
 .slot-popup-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
 .rack-legend{display:flex;gap:16px;margin-top:10px}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-muted)}
 .legend-dot{width:10px;height:10px;border-radius:50%}
-.rack-rearrange-bar{display:none;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(107,31,42,0.05);border:1px solid rgba(107,31,42,0.2);border-radius:10px;margin-bottom:12px}
+.rack-rearrange-bar{display:none;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(74,32,48,0.05);border:1px solid rgba(74,32,48,0.2);border-radius:10px;margin-bottom:12px}
 .rack-rearrange-bar.show{display:flex}
 .rack-rearrange-label{font-size:11px;letter-spacing:1px;color:var(--burgundy-rich);text-transform:uppercase;opacity:0.7}
 .rack-rearrange-hint{font-size:10px;color:var(--text-muted)}
 .btn-rearrange{padding:7px 16px;background:#ffffff;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
-.btn-rearrange.active{background:#f0e8de;border-color:rgba(107,31,42,0.4);color:#ffffff}
-.btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,#3d2215,var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
-.slot.rearrange-selected{border-color:var(--burgundy-rich)!important;background:rgba(107,31,42,0.4)!important;animation:slotPulse 1s ease-in-out infinite}
+.btn-rearrange.active{background:#f0e8de;border-color:rgba(74,32,48,0.4);color:#ffffff}
+.btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,#6a3045,var(--burgundy-accent));border:1px solid rgba(74,32,48,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
+.slot.rearrange-selected{border-color:var(--burgundy-rich)!important;background:rgba(74,32,48,0.4)!important;animation:slotPulse 1s ease-in-out infinite}
 .slot.rearrange-selected::after{background:var(--burgundy-deep)!important}
 @keyframes slotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.4)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0.1)}}
 .modal-overlay{position:fixed;inset:0;background:rgba(50,20,20,0.55);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border:1px solid rgba(107,31,42,0.2);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:20px 20px 40px;animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1)}
+.modal{background:#fff;border:1px solid rgba(74,32,48,0.2);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:88vh;overflow-y:auto;padding:20px 20px 40px;animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-handle{width:40px;height:4px;border-radius:2px;background:var(--border-bright);margin:0 auto 20px}
 .modal-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--burgundy-rich);margin-bottom:4px}
@@ -149,55 +147,55 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .field-input:focus,.field-select:focus{border-color:var(--border-bright)}
 .field-select option{background:#ffffff}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.photo-upload{border:2px dashed rgba(107,31,42,0.2);border-radius:10px;padding:20px;text-align:center;cursor:pointer;color:var(--text-muted);font-size:12px}
+.photo-upload{border:2px dashed rgba(74,32,48,0.2);border-radius:10px;padding:20px;text-align:center;cursor:pointer;color:var(--text-muted);font-size:12px}
 .photo-upload-icon{font-size:26px;margin-bottom:6px;display:block}
 .current-photo-wrap{position:relative;display:inline-block;margin-bottom:10px}
 .current-photo-wrap img{height:100px;border-radius:8px;border:1px solid var(--border);display:block}
 .photo-remove-btn{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--red-neg);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#3d2215,var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:8px}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#6a3045,var(--burgundy-accent));border:1px solid rgba(74,32,48,0.2);border-radius:10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:8px}
 .btn-secondary{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
 .btn-danger{width:100%;padding:12px;background:transparent;border:1px solid rgba(227,74,73,0.4);border-radius:10px;color:#e34a49;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
-.btn-edit{padding:8px 18px;background:rgba(107,31,42,0.06);border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:var(--burgundy-rich);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+.btn-edit{padding:8px 18px;background:rgba(74,32,48,0.06);border:1px solid rgba(74,32,48,0.2);border-radius:8px;color:var(--burgundy-rich);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
 .detail-header{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
-.detail-label-img{width:80px;height:110px;border-radius:8px;background:#f9f5ec;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
+.detail-label-img{width:80px;height:110px;border-radius:8px;background:#fdf7f5;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
 .detail-label-img img{width:100%;height:100%;object-fit:cover;border-radius:7px}
 .camera-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);font-size:9px;text-align:center;padding:4px;letter-spacing:1px;color:#ccc;text-transform:uppercase}
 .detail-title-block{flex:1;min-width:0}
 .detail-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-primary);margin-bottom:2px;line-height:1.2}
 .detail-vintage{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--burgundy-rich);margin-bottom:8px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
-.detail-card{background:#f9f5ec;border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.detail-card{background:#fdf7f5;border:1px solid var(--border);border-radius:8px;padding:10px 12px}
 .detail-card-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
 .detail-card-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary);margin-top:2px}
 .detail-card-sub{font-size:10px;color:var(--green);margin-top:2px}
 .detail-card-sub.neg{color:#e34a49}
-.location-badge{background:#fdf5f0;border:1px solid rgba(107,31,42,0.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin:0 0 12px;color:var(--text-primary)}
+.location-badge{background:#fdf7f5;border:1px solid rgba(74,32,48,0.2);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin:0 0 12px;color:var(--text-primary)}
 .location-icon{font-size:20px}
 .location-text-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
 .location-text-value{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--text-primary);line-height:1.4}
 .drink-window{display:flex;align-items:center;gap:6px;margin-top:6px}
-.drink-bar{flex:1;height:4px;border-radius:2px;background:#f9f5ec;overflow:hidden}
+.drink-bar{flex:1;height:4px;border-radius:2px;background:#fdf7f5;overflow:hidden}
 .drink-fill{height:100%;border-radius:2px}
 .drink-fill.peak{background:var(--burgundy-rich)}.drink-fill.past{background:var(--burgundy-accent)}.drink-fill.early{background:#4a7c5c}
 .drink-label{font-size:9px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
 .rec-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
 .rec-type-btn{padding:14px 10px;background:#ffffff;border:1px solid var(--border);border-radius:10px;color:var(--text-secondary);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;text-align:center;cursor:pointer;touch-action:manipulation}
-.rec-type-btn.active{background:var(--burgundy-rich);border-color:rgba(107,31,42,0.3);color:#fff}
+.rec-type-btn.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.3);color:#fff}
 .rec-type-icon{font-size:22px;display:block;margin-bottom:4px}
 .rec-input-area{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px;position:relative}
 .rec-textarea{width:100%;background:transparent;border:none;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;resize:none;outline:none;min-height:60px;padding-right:28px}
 .rec-textarea::placeholder{color:var(--text-muted)}
 .rec-clear{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;touch-action:manipulation}
 .rec-clear.show{display:block}
-.ai-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(107,31,42,0.06);border:1px solid rgba(107,31,42,0.2);border-radius:20px;padding:3px 10px;font-size:9px;letter-spacing:2px;color:var(--burgundy-rich);text-transform:uppercase;margin-bottom:12px}
-.api-setup{background:#fff;border:1px solid rgba(107,31,42,0.25);border-radius:12px;padding:16px;margin-bottom:16px;display:none}
+.ai-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(74,32,48,0.06);border:1px solid rgba(74,32,48,0.2);border-radius:20px;padding:3px 10px;font-size:9px;letter-spacing:2px;color:var(--burgundy-rich);text-transform:uppercase;margin-bottom:12px}
+.api-setup{background:#fff;border:1px solid rgba(74,32,48,0.25);border-radius:12px;padding:16px;margin-bottom:16px;display:none}
 .api-setup.show{display:block}
 .api-setup-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--burgundy-rich);margin-bottom:8px}
 .api-setup-text{font-size:11px;color:var(--text-muted);line-height:1.8;margin-bottom:12px}
 .api-setup-text a{color:#ffffff;text-decoration:none}
 .api-key-row{display:flex;gap:8px}
-.api-key-input{flex:1;background:#f9f5ec;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none}
-.api-key-btn{padding:10px 16px;background:linear-gradient(135deg,#3d2215,var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px}
+.api-key-input{flex:1;background:#fdf7f5;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none}
+.api-key-btn{padding:10px 16px;background:linear-gradient(135deg,#6a3045,var(--burgundy-accent));border:1px solid rgba(74,32,48,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px}
 .rec-result{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;display:none}
 .rec-result.show{display:block}
 .rec-result-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--burgundy-rich);margin-bottom:12px}
@@ -208,7 +206,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rec-wine-reason{font-size:11px;color:var(--text-muted);margin-top:2px;line-height:1.5}
 .loading-dots{display:none;gap:4px;align-items:center;justify-content:center;padding:20px}
 .loading-dots.show{display:flex}
-.dot{width:6px;height:6px;border-radius:50%;background:rgba(107,31,42,0.4);animation:pulse 1.2s ease-in-out infinite}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(74,32,48,0.4);animation:pulse 1.2s ease-in-out infinite}
 .dot:nth-child(2){animation-delay:0.2s}.dot:nth-child(3){animation-delay:0.4s}
 @keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
 .value-insight{background:linear-gradient(135deg,rgba(45,107,69,0.08),rgba(45,107,69,0.03));border:1px solid rgba(45,107,69,0.2);border-radius:10px;padding:14px;margin-bottom:16px}
@@ -218,7 +216,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .wine-card{transition:transform 0.15s ease,box-shadow 0.15s ease}
 .wine-card:active{transform:scale(0.97);box-shadow:0 4px 20px rgba(44,24,16,0.12)}
 .wine-list-item{transition:transform 0.15s ease,background 0.15s ease}
-.wine-list-item:active{transform:scale(0.98);background:#f9f5ec}
+.wine-list-item:active{transform:scale(0.98);background:#fdf7f5}
 .nav-btn{transition:color 0.15s ease,transform 0.1s ease}
 .nav-btn:active{transform:scale(0.88)}
 .nav-add:active .nav-add-circle{transform:scale(0.88)}
@@ -228,7 +226,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rec-type-btn{transition:border 0.15s ease,background 0.15s ease,transform 0.1s ease}
 .rec-type-btn:active{transform:scale(0.95)}
 .rec-wine-item{transition:transform 0.15s ease,background 0.15s ease}
-.rec-wine-item:active{transform:scale(0.98);background:#f0e8d5}
+.rec-wine-item:active{transform:scale(0.98);background:#f5eaed}
 .slot{transition:background 0.12s ease,transform 0.12s ease,box-shadow 0.12s ease}
 .slot:active{transform:scale(0.92)}
 .slot.selected{animation:slotPop 0.25s ease forwards}
@@ -238,9 +236,11 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 @keyframes modalSlideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
 .filter-chip{transition:background 0.15s ease,color 0.15s ease,transform 0.1s ease}
 .filter-chip:active{transform:scale(0.95)}
+@keyframes explode{0%{transform:translate(-50%,-50%) scale(0.3) rotate(-15deg);opacity:1}60%{transform:translate(-50%,-50%) scale(1.2) rotate(5deg);opacity:1}80%{transform:translate(-50%,-50%) scale(1.05) rotate(-2deg);opacity:1}100%{transform:translate(-50%,-50%) scale(1) rotate(0deg);opacity:0}}
+.spin-exclaim{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:#e6b4be;text-shadow:0 0 30px rgba(232,213,163,0.6),0 2px 0 rgba(44,24,16,0.5);pointer-events:none;white-space:nowrap;letter-spacing:2px;animation:explode 1.4s cubic-bezier(0.36,0.07,0.19,0.97) forwards;z-index:10;}
 
-.va-cab{border-left-color:#6b1f2a!important}
-.va-merlot{border-left-color:#8b2d42!important}
+.va-cab{border-left-color:#4a2030!important}
+.va-merlot{border-left-color:#6a3045!important}
 .va-pinot{border-left-color:#c47a8a!important}
 .va-syrah{border-left-color:#2c1654!important}
 .va-zin{border-left-color:#a0522d!important}
@@ -272,10 +272,10 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
     <div style="display:flex;align-items:center;justify-content:center;position:relative;">
       <div class="header-subtitle" style="flex:1;">Your Personal Wine Cellar</div>
-      <button id="settings-gear-btn" onclick="toggleSettingsMenu()" style="position:absolute;right:0;background:none;border:none;color:rgba(232,213,163,0.6);font-size:20px;cursor:pointer;padding:4px 8px;touch-action:manipulation;">⚙️</button>
+      <button id="settings-gear-btn" onclick="toggleSettingsMenu()" style="position:absolute;right:0;background:none;border:none;color:rgba(230,180,190,0.5);font-size:20px;cursor:pointer;padding:4px 8px;touch-action:manipulation;">⚙️</button>
     </div>
     <!-- Settings pull-down menu -->
-    <div id="settings-menu" style="display:none;position:absolute;top:100%;right:0;left:0;background:#2c1810;border-bottom:1px solid var(--border);border-top:1px solid rgba(232,213,163,0.15);z-index:200;backdrop-filter:blur(12px);padding:16px;max-height:70vh;overflow-y:auto;">
+    <div id="settings-menu" style="display:none;position:absolute;top:100%;right:0;left:0;background:#4a2030;border-bottom:1px solid var(--border);border-top:1px solid rgba(232,213,163,0.15);z-index:200;backdrop-filter:blur(12px);padding:16px;max-height:70vh;overflow-y:auto;">
       <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Cellar Settings</div>
       <div class="value-insight" id="value-insight-menu"></div>
       <div style="background:#fff;border:0.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
@@ -290,7 +290,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Sommelier API Key</div>
         <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;" id="api-key-status-menu">Not set</div>
         <div class="api-key-row">
-          <input class="api-key-input" id="settings-api-key-input-menu" placeholder="sk-ant-..." type="password" style="flex:1;background:#f9f5ec;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none;">
+          <input class="api-key-input" id="settings-api-key-input-menu" placeholder="sk-ant-..." type="password" style="flex:1;background:#fdf7f5;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none;">
           <button class="api-key-btn" onclick="saveApiKeySettingsMenu()">Update</button>
         </div>
       </div>
@@ -361,8 +361,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
     <div class="rack-container" id="rack-container">
       <div class="rack-inner" id="rack-inner"></div>
       <div class="rack-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(107,31,42,0.4)"></div>Filled</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f9f5ec;border:1px solid var(--border)"></div>Empty</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(74,32,48,0.4)"></div>Filled</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fdf7f5;border:1px solid var(--border)"></div>Empty</div>
         <div class="legend-item"><div class="legend-dot" style="background:#3d7a5c"></div>Selected</div>
       </div>
     </div>
@@ -370,10 +370,10 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 
   <div class="screen" id="screen-recs">
     <!-- Sommelier header -->
-    <div style="background:linear-gradient(160deg,#3d1020 0%,#6b1f2a 60%,#8b2d42 100%);margin:-16px -16px 20px;padding:36px 24px 28px;border-radius:0 0 24px 24px;position:relative;overflow:hidden;">
+    <div style="background:linear-gradient(160deg,#3a1828 0%,#4a2030 60%,#6a3045 100%);margin:-16px -16px 20px;padding:36px 24px 28px;border-radius:0 0 24px 24px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.05;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:12px 12px;"></div>
       <div style="font-size:28px;margin-bottom:8px;">✦</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#f5f0e8;letter-spacing:2px;margin-bottom:4px;">Sommelier</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#fdf7f5;letter-spacing:2px;margin-bottom:4px;">Sommelier</div>
       <div style="font-size:11px;letter-spacing:2px;color:rgba(249,245,236,0.6);text-transform:uppercase;">AI-powered wine recommendations</div>
     </div>
     <div class="api-setup" id="api-setup">
@@ -409,7 +409,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <textarea id="rec-prompt" rows="2" placeholder="e.g. grilled ribeye with truffle butter..." style="width:100%;box-sizing:border-box;background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 40px 12px 14px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text-primary);resize:none;outline:none;line-height:1.5;"></textarea>
         <button id="rec-clear" onclick="clearRecPrompt()" style="position:absolute;right:10px;top:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;padding:2px;">✕</button>
       </div>
-      <button onclick="getRecommendations()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1f2a,#3d1020);border:none;border-radius:10px;color:#f5f0e8;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;margin-bottom:20px;">Ask the Sommelier</button>
+      <button onclick="getRecommendations()" style="width:100%;padding:14px;background:linear-gradient(135deg,#4a2030,#3a1828);border:none;border-radius:10px;color:#fdf7f5;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;margin-bottom:20px;">Ask the Sommelier</button>
       <!-- Loading -->
       <div id="rec-loading" style="display:none;background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px 16px;text-align:center;margin-bottom:16px;">
         <div style="font-size:32px;margin-bottom:10px;animation:swirl 1.5s ease-in-out infinite;">🍷</div>
@@ -465,7 +465,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
       </div><!-- end spin-filters-body -->
     </div>
-    <div style="text-align:center;margin:10px 0 16px;">
+    <div style="text-align:center;margin:10px 0 16px;position:relative;" id="spin-wheel-wrap">
       <canvas id="spin-wheel-canvas" width="280" height="280" style="max-width:100%;touch-action:none;cursor:default;" onclick="spinWheelTap()"></canvas>
     </div>
     <button class="btn-primary" id="spin-btn" onclick="spinWheel()" style="margin-bottom:12px;">🎲 Spin!</button>
@@ -480,7 +480,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
   <!-- Detail Modal -->
   <div class="modal-overlay" id="detail-modal">
     <div class="modal" style="max-width:420px;width:92%;max-height:88vh;overflow-y:auto;padding:0;border-radius:16px;">
-      <div id="detail-img" style="height:160px;background:linear-gradient(135deg,#6b1f2a 0%,#3d1020 100%);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;" onclick="triggerDetailPhoto()">
+      <div id="detail-img" style="height:160px;background:linear-gradient(135deg,#4a2030 0%,#3a1828 100%);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;" onclick="triggerDetailPhoto()">
         <div id="detail-img-inner" style="font-size:56px;">🍷</div>
         <div class="camera-hint" style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.5);font-size:9px;text-align:center;padding:5px;letter-spacing:1px;color:#ccc;text-transform:uppercase;">Tap to add photo</div>
         <input type="file" id="detail-photo-input" accept="image/*" style="display:none;" onchange="handleDetailPhoto(this)">
@@ -494,16 +494,16 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px;" id="d-varietal">—</div>
         <!-- Stats row -->
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
-          <div style="background:#fdf5f0;border-radius:10px;padding:10px;text-align:center;">
+          <div style="background:#fdf7f5;border-radius:10px;padding:10px;text-align:center;">
             <div style="font-size:9px;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;">Retail</div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--burgundy-rich);margin-top:2px;" id="d-retail">—</div>
           </div>
-          <div style="background:#fdf5f0;border-radius:10px;padding:10px;text-align:center;">
+          <div style="background:#fdf7f5;border-radius:10px;padding:10px;text-align:center;">
             <div style="font-size:9px;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;">Window</div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--burgundy-rich);margin-top:2px;" id="d-window-card">—</div>
             <div style="font-size:10px;margin-top:2px;" id="d-window-status"></div>
           </div>
-          <div style="background:#fdf5f0;border-radius:10px;padding:10px;text-align:center;">
+          <div style="background:#fdf7f5;border-radius:10px;padding:10px;text-align:center;">
             <div style="font-size:9px;letter-spacing:1.5px;color:var(--text-muted);text-transform:uppercase;">Bottles</div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--burgundy-rich);margin-top:2px;" id="d-qty">—</div>
           </div>
@@ -519,12 +519,12 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
           <span id="location-arrow" style="color:var(--text-muted);font-size:20px;display:none;">›</span>
         </div>
         <!-- Notes -->
-        <div style="background:#fdf5f0;border-radius:10px;padding:14px;margin-bottom:14px;" id="d-notes-row">
+        <div style="background:#fdf7f5;border-radius:10px;padding:14px;margin-bottom:14px;" id="d-notes-row">
           <div style="font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Tasting Notes</div>
           <div style="font-size:13px;color:var(--text-secondary);line-height:1.6;white-space:pre-wrap;" id="d-notes">—</div>
         </div>
         <!-- Drink log -->
-        <div id="d-drink-log" style="display:none;background:#fdf5f0;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
+        <div id="d-drink-log" style="display:none;background:#fdf7f5;border-radius:10px;padding:12px 14px;margin-bottom:12px;">
           <div style="font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Drink Log</div>
           <div id="d-drink-log-entries" style="font-size:12px;color:var(--text-secondary);line-height:1.8;"></div>
         </div>
@@ -533,7 +533,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
           <button class="btn-edit" onclick="openEditWine(currentDetailId)" style="flex:1;">Edit</button>
           <button class="btn-secondary" id="d-remove-btn" style="flex:1;">Remove Bottle</button>
         </div>
-        <button onclick="drinkIt(currentDetailId)" style="width:100%;padding:12px;background:linear-gradient(135deg,#6b1f2a,#3d1020);border:none;border-radius:10px;color:#f5f0e8;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;">🍷 Drink It!</button>
+        <button onclick="drinkIt(currentDetailId)" style="width:100%;padding:12px;background:linear-gradient(135deg,#4a2030,#3a1828);border:none;border-radius:10px;color:#fdf7f5;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;">🍷 Drink It!</button>
       </div>
     </div>
   </div>
@@ -758,6 +758,47 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 </body>
 </html>
 <script>
+
+function generateAppIcon(){
+  var c=document.createElement('canvas');c.width=512;c.height=512;
+  var ctx=c.getContext('2d');
+  // Background rounded rect
+  var r=115;ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(512-r,0);
+  ctx.quadraticCurveTo(512,0,512,r);ctx.lineTo(512,512-r);
+  ctx.quadraticCurveTo(512,512,512-r,512);ctx.lineTo(r,512);
+  ctx.quadraticCurveTo(0,512,0,512-r);ctx.lineTo(0,r);
+  ctx.quadraticCurveTo(0,0,r,0);ctx.closePath();
+  ctx.fillStyle='#4a2030';ctx.fill();
+  // Wine glass
+  var cx=256,cy=256;
+  ctx.strokeStyle='#e6b4be';ctx.lineWidth=18;ctx.lineCap='round';ctx.lineJoin='round';
+  // Bowl
+  ctx.beginPath();ctx.moveTo(cx-100,cy-155);
+  ctx.bezierCurveTo(cx-115,cy-40,cx-70,cy+35,cx,cy+70);
+  ctx.bezierCurveTo(cx+70,cy+35,cx+115,cy-40,cx+100,cy-155);
+  ctx.closePath();ctx.stroke();
+  // Wine fill
+  ctx.save();ctx.beginPath();ctx.moveTo(cx-100,cy-155);
+  ctx.bezierCurveTo(cx-115,cy-40,cx-70,cy+35,cx,cy+70);
+  ctx.bezierCurveTo(cx+70,cy+35,cx+115,cy-40,cx+100,cy-155);
+  ctx.closePath();ctx.clip();
+  ctx.fillStyle='#4a2030';
+  ctx.fillRect(cx-120,cy-10,240,90);ctx.restore();
+  // Stem
+  ctx.beginPath();ctx.moveTo(cx,cy+70);ctx.lineTo(cx,cy+170);ctx.stroke();
+  // Base
+  ctx.beginPath();ctx.moveTo(cx-75,cy+170);ctx.lineTo(cx+75,cy+170);ctx.stroke();
+  // Set as icon
+  var url=c.toDataURL('image/png');
+  var link=document.querySelector("link[rel~='apple-touch-icon']")||document.createElement('link');
+  link.rel='apple-touch-icon';link.href=url;
+  if(!link.parentNode)document.head.appendChild(link);
+  var link2=document.querySelector("link[rel='shortcut icon']")||document.createElement('link');
+  link2.rel='shortcut icon';link2.href=url;
+  if(!link2.parentNode)document.head.appendChild(link2);
+}
+generateAppIcon();
+
 var FB='https://rach-and-vine-default-rtdb.firebaseio.com';
 function fbGet(p){return fetch(FB+p+'.json').then(function(r){return r.json();});}
 function fbPut(p,d){return fetch(FB+p+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json();});}
@@ -985,7 +1026,7 @@ function exitRearrangeMode(){rearrangeMode=false;rearrangePickedSlot=null;docume
 function handleRearrangeSlotTap(sid,slotMap){var tappedWine=slotMap[sid];if(!rearrangePickedSlot){if(!tappedWine){document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';return;}rearrangePickedSlot={sid:sid,wineId:tappedWine.id,wine:tappedWine};document.getElementById('rearrange-hint').textContent='Now tap a slot to move it there';document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});var el=document.querySelector('.slot[data-sid="'+sid+'"]');if(el)el.classList.add('rearrange-selected');}else{if(sid===rearrangePickedSlot.sid){rearrangePickedSlot=null;document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});return;}if(!tappedWine){moveSlot(rearrangePickedSlot.sid,sid,rearrangePickedSlot.wineId);}else{var fromWine=wines[rearrangePickedSlot.wineId],toWine=tappedWine,fromSid=rearrangePickedSlot.sid,fromWineId=rearrangePickedSlot.wineId,toWineId=toWine.id;showSwapConfirm(fromWine?fromWine.name:'?',toWine.name,function(){swapSlots(fromSid,sid,fromWineId,toWineId);});}}}
 function moveSlot(fromSid,toSid,wineId){var w=wines[wineId];if(!w)return;var newSlots=(w.slots||[]).map(function(s){return s.sid===fromSid?{rackId:toSid.split('-')[0],sid:toSid}:s;});setSyncing(true);fbPatch('/wines/'+wineId,{slots:newSlots}).then(function(){wines[wineId].slots=newSlots;setSyncing(false);rearrangePickedSlot=null;document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';renderRackGrid();});}
 function swapSlots(fromSid,toSid,fromWineId,toWineId){var fw=wines[fromWineId],tw=wines[toWineId];if(!fw||!tw)return;var newFromSlots=(fw.slots||[]).map(function(s){return s.sid===fromSid?{rackId:toSid.split('-')[0],sid:toSid}:s;});var newToSlots=(tw.slots||[]).map(function(s){return s.sid===toSid?{rackId:fromSid.split('-')[0],sid:fromSid}:s;});setSyncing(true);var updates={};updates[fromWineId]=Object.assign({},fw,{slots:newFromSlots,photo:undefined});updates[toWineId]=Object.assign({},tw,{slots:newToSlots,photo:undefined});fbPatch('/wines',updates).then(function(){wines[fromWineId].slots=newFromSlots;wines[toWineId].slots=newToSlots;setSyncing(false);rearrangePickedSlot=null;document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';renderRackGrid();});}
-function showSwapConfirm(nameA,nameB,onConfirm){var popup=document.getElementById('slot-popup');popup.classList.add('show');document.getElementById('slot-wine-name').textContent='Swap bottles?';document.getElementById('slot-wine-meta').innerHTML='<span style="color:var(--text-secondary)">'+nameA+'</span><span style="color:var(--text-muted)"> ⇄ </span><span style="color:var(--text-secondary)">'+nameB+'</span><br><span style="color:rgba(107,31,42,0.4);font-size:11px;margin-top:6px;display:inline-block;"><button onclick="confirmSwap()" style="background:#f0e8de;border:1px solid rgba(107,31,42,0.4);color:#ffffff;padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;margin-right:8px;touch-action:manipulation;">Swap</button><button onclick="cancelSwap()" style="background:#ffffff;border:1px solid var(--border);color:var(--text-muted);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;">Cancel</button></span>';window._pendingSwapCallback=onConfirm;}
+function showSwapConfirm(nameA,nameB,onConfirm){var popup=document.getElementById('slot-popup');popup.classList.add('show');document.getElementById('slot-wine-name').textContent='Swap bottles?';document.getElementById('slot-wine-meta').innerHTML='<span style="color:var(--text-secondary)">'+nameA+'</span><span style="color:var(--text-muted)"> ⇄ </span><span style="color:var(--text-secondary)">'+nameB+'</span><br><span style="color:rgba(74,32,48,0.4);font-size:11px;margin-top:6px;display:inline-block;"><button onclick="confirmSwap()" style="background:#f0e8de;border:1px solid rgba(74,32,48,0.4);color:#ffffff;padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;margin-right:8px;touch-action:manipulation;">Swap</button><button onclick="cancelSwap()" style="background:#ffffff;border:1px solid var(--border);color:var(--text-muted);padding:6px 16px;border-radius:6px;font-family:Montserrat,sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;">Cancel</button></span>';window._pendingSwapCallback=onConfirm;}
 function confirmSwap(){if(window._pendingSwapCallback)window._pendingSwapCallback();window._pendingSwapCallback=null;document.getElementById('slot-popup').classList.remove('show');}
 function cancelSwap(){window._pendingSwapCallback=null;rearrangePickedSlot=null;document.querySelectorAll('.slot.rearrange-selected').forEach(function(s){s.classList.remove('rearrange-selected');});document.getElementById('rearrange-hint').textContent='Tap a filled slot to pick it up';document.getElementById('slot-popup').classList.remove('show');}
 
@@ -1265,7 +1306,7 @@ function checkApiKey(){
 
 function showDrinkToast(name,dateStr,removed){
   var toast=document.createElement('div');
-  toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#3d1020;color:#f5f0e8;padding:12px 20px;border-radius:12px;font-size:12px;font-family:Montserrat,sans-serif;z-index:9999;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+  toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#3a1828;color:#fdf7f5;padding:12px 20px;border-radius:12px;font-size:12px;font-family:Montserrat,sans-serif;z-index:9999;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
   toast.innerHTML='🍷 Logged! '+name+(removed?' (last bottle)':'')+'<br><span style="opacity:0.7;font-size:10px;">'+dateStr+'</span>';
   document.body.appendChild(toast);
   setTimeout(function(){toast.style.transition='opacity 0.5s';toast.style.opacity='0';setTimeout(function(){document.body.removeChild(toast);},500);},2500);
@@ -1281,7 +1322,7 @@ function loadDrinkLog(wineId){
     if(entries.length===0){document.getElementById('d-drink-log').style.display='none';return;}
     document.getElementById('d-drink-log').style.display='block';
     document.getElementById('d-drink-log-entries').innerHTML=entries.map(function(e){
-      return '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(107,31,42,0.1);padding:3px 0;"><span>'+e.date+'</span><span style="color:var(--text-muted);">'+e.vintage+'</span></div>';
+      return '<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(74,32,48,0.1);padding:3px 0;"><span>'+e.date+'</span><span style="color:var(--text-muted);">'+e.vintage+'</span></div>';
     }).join('');
   }).catch(function(){});
 }
@@ -1325,7 +1366,7 @@ document.getElementById('rec-list').innerHTML=recHtml;}).catch(function(e){var a
     document.getElementById('rec-loading').style.display='none';
     document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});}
 
-function renderSettings(){var arr=Object.values(wines);var tp=arr.reduce(function(s,w){return s+parseFloat(w.purchase||0)*(parseInt(w.qty)||0);},0);var tr=arr.reduce(function(s,w){return s+parseFloat(w.retail||w.purchase||0)*(parseInt(w.qty)||0);},0);var tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(function(w){return w.photo;}).length;document.getElementById('value-insight').innerHTML='<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$'+Math.round(tp).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$'+Math.round(tr).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:'+(tg>=0?'var(--green-light)':'#e34a49')+'">'+(tg>=0?'+':'')+'$'+Math.round(tg).toLocaleString()+' ('+(tg>=0?'+':'')+gp+'%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">'+wp+' / '+arr.length+' wines</span></div>';document.getElementById('rack-summary').innerHTML=RACKS.map(function(r){var total=r.specialRows?r.specialRows.reduce(function(s,row){return s+row.cols;},0):r.rows*r.cols;var used=arr.filter(function(w){return(w.slots||[]).some(function(s){return s.rackId===r.id;});}).length;return'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">'+r.name+'</span><span style="color:rgba(107,31,42,0.4)">'+used+' wines / '+total+' slots</span></div>';}).join('');var gainers=arr.filter(function(w){return w.retail&&w.purchase&&w.retail>w.purchase;}).map(function(w){return Object.assign({},w,{gain:w.retail-w.purchase});}).sort(function(a,b){return b.gain-a.gain;}).slice(0,5);document.getElementById('top-gainers').innerHTML=gainers.map(function(w){return'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+w.name+' '+(w.vintage||'')+'</span><span style="color:var(--green)">+$'+Math.round(w.gain)+'/btl</span></div>';}).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';updateApiKeyStatus();}
+function renderSettings(){var arr=Object.values(wines);var tp=arr.reduce(function(s,w){return s+parseFloat(w.purchase||0)*(parseInt(w.qty)||0);},0);var tr=arr.reduce(function(s,w){return s+parseFloat(w.retail||w.purchase||0)*(parseInt(w.qty)||0);},0);var tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(function(w){return w.photo;}).length;document.getElementById('value-insight').innerHTML='<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$'+Math.round(tp).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$'+Math.round(tr).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:'+(tg>=0?'var(--green-light)':'#e34a49')+'">'+(tg>=0?'+':'')+'$'+Math.round(tg).toLocaleString()+' ('+(tg>=0?'+':'')+gp+'%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">'+wp+' / '+arr.length+' wines</span></div>';document.getElementById('rack-summary').innerHTML=RACKS.map(function(r){var total=r.specialRows?r.specialRows.reduce(function(s,row){return s+row.cols;},0):r.rows*r.cols;var used=arr.filter(function(w){return(w.slots||[]).some(function(s){return s.rackId===r.id;});}).length;return'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">'+r.name+'</span><span style="color:rgba(74,32,48,0.4)">'+used+' wines / '+total+' slots</span></div>';}).join('');var gainers=arr.filter(function(w){return w.retail&&w.purchase&&w.retail>w.purchase;}).map(function(w){return Object.assign({},w,{gain:w.retail-w.purchase});}).sort(function(a,b){return b.gain-a.gain;}).slice(0,5);document.getElementById('top-gainers').innerHTML=gainers.map(function(w){return'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+w.name+' '+(w.vintage||'')+'</span><span style="color:var(--green)">+$'+Math.round(w.gain)+'/btl</span></div>';}).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';updateApiKeyStatus();}
 function clearAllData(){if(!confirm('Clear ALL wines? This affects both phones and cannot be undone.'))return;setSyncing(true);fbPut('/wines',null).then(function(){wines={};setSyncing(false);refreshAll();});}
 
 function toggleSettingsMenu(){
@@ -1412,8 +1453,8 @@ function drawSpinWheel(pool){
   var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2,r=cx-10;
   ctx.clearRect(0,0,W,H);
   if(!pool||pool.length===0){
-    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
-    ctx.strokeStyle='rgba(107,31,42,0.2)';ctx.lineWidth=2;ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='#fdf7f5';ctx.fill();
+    ctx.strokeStyle='rgba(74,32,48,0.2)';ctx.lineWidth=2;ctx.stroke();
     ctx.fillStyle='#8a7060';ctx.font='14px Montserrat,sans-serif';ctx.textAlign='center';
     ctx.fillText('No wines match',cx,cy-8);ctx.fillText('your filters',cx,cy+12);
     return;
@@ -1422,7 +1463,7 @@ function drawSpinWheel(pool){
   var items=pool.slice(0,12);
   var n=items.length;
   var arc=Math.PI*2/n;
-  var colors=['#8b2d42','#5c1f2e','#a03050','#6b1f2a','#c87070','#7a2535','#b54060','#4a1520','#d49090','#3d1020','#9a3050','#702030'];
+  var colors=['#6a3045','#4a2030','#7a3050','#4a2030','#d4949a','#5a2535','#9a4060','#3a1828','#e6b4be','#3a1828','#7a3050','#4a2030'];
   for(var i=0;i<n;i++){
     var start=i*arc - Math.PI/2;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+arc);ctx.closePath();
@@ -1436,9 +1477,9 @@ function drawSpinWheel(pool){
     ctx.fillText(label,r-8,4);ctx.restore();
   }
   // Center circle
-  ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
-  ctx.strokeStyle='rgba(107,31,42,0.3)';ctx.lineWidth=2;ctx.stroke();
-  ctx.fillStyle='#6b1f2a';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
+  ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#fdf7f5';ctx.fill();
+  ctx.strokeStyle='rgba(74,32,48,0.3)';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#4a2030';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
 
 }
 
@@ -1470,7 +1511,7 @@ function spinWheel(){
   totalRotation = Math.ceil(totalRotation/(Math.PI*2))*Math.PI*2 + targetAngle;
   var startTime=null;
   var duration=3500;
-  var colors=['#8b2d42','#5c1f2e','#a03050','#6b1f2a','#c87070','#7a2535','#b54060','#4a1520','#d49090','#3d1020','#9a3050','#702030'];
+  var colors=['#6a3045','#4a2030','#7a3050','#4a2030','#d4949a','#5a2535','#9a4060','#3a1828','#e6b4be','#3a1828','#7a3050','#4a2030'];
 
   function animate(ts){
     if(!startTime)startTime=ts;
@@ -1493,9 +1534,9 @@ function spinWheel(){
     }
     ctx.restore();
     // Center
-    ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
-    ctx.strokeStyle='rgba(107,31,42,0.3)';ctx.lineWidth=2;ctx.stroke();
-    ctx.fillStyle='#6b1f2a';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
+    ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#fdf7f5';ctx.fill();
+    ctx.strokeStyle='rgba(74,32,48,0.3)';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#4a2030';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
 
     if(progress<1){requestAnimationFrame(animate);}
     else{
@@ -1509,15 +1550,15 @@ function spinWheel(){
         ctx.fillStyle=isWinner?'#c9a84c':colors[i%colors.length];ctx.fill();
         ctx.strokeStyle=isWinner?'#fff':'rgba(255,255,255,0.3)';ctx.lineWidth=isWinner?2.5:1;ctx.stroke();
         ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);
-        ctx.textAlign='right';ctx.fillStyle=isWinner?'#2e1a00':'rgba(255,255,255,0.9)';
+        ctx.textAlign='right';ctx.fillStyle=isWinner?'#2e1020':'rgba(255,255,255,0.9)';
         var label=items[i].wine.name;if(label.length>16)label=label.substring(0,15)+'…';
         ctx.font=isWinner?'bold 11px Montserrat,sans-serif':'bold 10px Montserrat,sans-serif';
         ctx.fillText(label,r-8,4);ctx.restore();
       }
       ctx.restore();
-      ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#f5f0e8';ctx.fill();
-      ctx.strokeStyle='rgba(107,31,42,0.3)';ctx.lineWidth=2;ctx.stroke();
-      ctx.fillStyle='#6b1f2a';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
+      ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.fillStyle='#fdf7f5';ctx.fill();
+      ctx.strokeStyle='rgba(74,32,48,0.3)';ctx.lineWidth=2;ctx.stroke();
+      ctx.fillStyle='#4a2030';ctx.font='18px serif';ctx.textAlign='center';ctx.fillText('🍷',cx,cy+6);
 
       spinAnimating=false;
       document.getElementById('spin-btn').disabled=false;
@@ -1529,6 +1570,14 @@ function spinWheel(){
       document.getElementById('spin-result-meta').textContent=meta;
       document.getElementById('spin-result').style.display='block';
       document.getElementById('spin-wheel-canvas').style.cursor='pointer';
+      // Show excitement exclamation
+      var exclaims=["Boom!", "Pour it!", "Tonight"s pick!", "Uncork it!", "Yes!", "Perfect!", "Fate has spoken!", "This one!"];
+      var ex=exclaims[Math.floor(Math.random()*exclaims.length)];
+      var wrap=document.getElementById('spin-wheel-wrap');
+      var old=wrap.querySelector('.spin-exclaim');if(old)old.remove();
+      var el=document.createElement('div');el.className='spin-exclaim';el.textContent=ex;
+      wrap.appendChild(el);
+      setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1400);
     }
   }
   requestAnimationFrame(animate);
