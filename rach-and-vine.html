@@ -3,18 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExNSIgZmlsbD0iIzJjMTgxMCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NiwyNTYpIj4KICAgIDwhLS0gV2luZSBnbGFzcyBib3dsIC0tPgogICAgPHBhdGggZD0iTS04NSwtMTQwIFEtMTAwLC00MCAtNTAsMzAgUS0yMCw2MCAwLDY1IFEyMCw2MCA1MCwzMCBRMTAwLC00MCA4NSwtMTQwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZDVhMyIgc3Ryb2tlLXdpZHRoPSIxNiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogICAgPCEtLSBXaW5lIGZpbGwgaW4gYm93bCAtLT4KICAgIDxwYXRoIGQ9Ik0tNzIsLTIwIFEtNjAsMzAgLTIwLDU1IFEwLDYzIDIwLDU1IFE2MCwzMCA3MiwtMjAgWiIgZmlsbD0iIzZiMWYyYSIgb3BhY2l0eT0iMC45Ii8+CiAgICA8IS0tIFdpbmUgaGlnaGxpZ2h0IC0tPgogICAgPGVsbGlwc2UgY3g9Ii0zMCIgY3k9IjUiIHJ4PSIxMiIgcnk9IjciIGZpbGw9InJnYmEoMjMyLDIxMywxNjMsMC4yNSkiIHRyYW5zZm9ybT0icm90YXRlKC0yMCwtMzAsNSkiLz4KICAgIDwhLS0gU3RlbSAtLT4KICAgIDxsaW5lIHgxPSIwIiB5MT0iNjUiIHgyPSIwIiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBCYXNlIC0tPgogICAgPGxpbmUgeDE9Ii01NSIgeTE9IjE1NSIgeDI9IjU1IiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBEZWNvcmF0aXZlIGRvdHMgb24gYm93bCByaW0gLS0+CiAgICA8Y2lyY2xlIGN4PSItODUiIGN5PSItMTQwIiByPSI1IiBmaWxsPSIjZThkNWEzIi8+CiAgICA8Y2lyY2xlIGN4PSI4NSIgY3k9Ii0xNDAiIHI9IjUiIGZpbGw9IiNlOGQ1YTMiLz4KICA8L2c+Cjwvc3ZnPg==">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExNSIgZmlsbD0iIzJjMTgxMCIvPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDI1NiwyNTYpIj4KICAgIDwhLS0gV2luZSBnbGFzcyBib3dsIC0tPgogICAgPHBhdGggZD0iTS04NSwtMTQwIFEtMTAwLC00MCAtNTAsMzAgUS0yMCw2MCAwLDY1IFEyMCw2MCA1MCwzMCBRMTAwLC00MCA4NSwtMTQwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZDVhMyIgc3Ryb2tlLXdpZHRoPSIxNiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgogICAgPCEtLSBXaW5lIGZpbGwgaW4gYm93bCAtLT4KICAgIDxwYXRoIGQ9Ik0tNzIsLTIwIFEtNjAsMzAgLTIwLDU1IFEwLDYzIDIwLDU1IFE2MCwzMCA3MiwtMjAgWiIgZmlsbD0iIzZiMWYyYSIgb3BhY2l0eT0iMC45Ii8+CiAgICA8IS0tIFdpbmUgaGlnaGxpZ2h0IC0tPgogICAgPGVsbGlwc2UgY3g9Ii0zMCIgY3k9IjUiIHJ4PSIxMiIgcnk9IjciIGZpbGw9InJnYmEoMjMyLDIxMywxNjMsMC4yNSkiIHRyYW5zZm9ybT0icm90YXRlKC0yMCwtMzAsNSkiLz4KICAgIDwhLS0gU3RlbSAtLT4KICAgIDxsaW5lIHgxPSIwIiB5MT0iNjUiIHgyPSIwIiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBCYXNlIC0tPgogICAgPGxpbmUgeDE9Ii01NSIgeTE9IjE1NSIgeDI9IjU1IiB5Mj0iMTU1IiBzdHJva2U9IiNlOGQ1YTMiIHN0cm9rZS13aWR0aD0iMTYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogICAgPCEtLSBEZWNvcmF0aXZlIGRvdHMgb24gYm93bCByaW0gLS0+CiAgICA8Y2lyY2xlIGN4PSItODUiIGN5PSItMTQwIiByPSI1IiBmaWxsPSIjZThkNWEzIi8+CiAgICA8Y2lyY2xlIGN4PSI4NSIgY3k9Ii0xNDAiIHI9IjUiIGZpbGw9IiNlOGQ1YTMiLz4KICA8L2c+Cjwvc3ZnPg==">
+<meta name="apple-mobile-web-app-title" content="Rach &amp; Vine">
+<meta name="theme-color" content="#2c1810">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rach & Vine">
 <title>Rach & Vine</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--burgundy-deep:#f5f0e8;--burgundy-mid:#ede5d8;--burgundy-rich:#6b1f2a;--burgundy-accent:#8b2d3c;--burgundy-light:#b5435a;--gold:#6b1f2a;--gold-light:#4a1020;--gold-dim:#8a5060;--text-primary:#2a1a10;--text-secondary:#4a3428;--text-muted:#8a7060;--surface-2:#ffffff;--surface-3:#f5f0e8;--border:rgba(107,31,42,0.12);--border-bright:rgba(107,31,42,0.35);--glass-bg:rgba(245,240,232,0.95);--green:#2d6b45;--green-light:#1f5a35;--red-neg:#c0392b}
+:root{--burgundy-deep:#f9f5ec;--burgundy-mid:#f0e8d5;--burgundy-rich:#2c1810;--burgundy-accent:#3d2215;--burgundy-light:#5c3d2e;--gold:#e8d5a3;--gold-light:#c9a84c;--gold-dim:#a08060;--text-primary:#2c1810;--text-secondary:#5c3d2e;--text-muted:#8a7060;--surface-2:#ffffff;--surface-3:#f9f5ec;--border:rgba(44,24,16,0.12);--border-bright:rgba(44,24,16,0.35);--glass-bg:rgba(249,245,236,0.95);--green:#2d6b45;--green-light:#1f5a35;--red-neg:#c0392b}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:'Montserrat',sans-serif;background:#f5f0e8;color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+body{font-family:'Montserrat',sans-serif;background:#f9f5ec;color:var(--text-primary);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
 body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(107,31,42,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(107,31,42,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 .app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
-.loading-overlay{position:fixed;inset:0;background:#f5f0e8;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s}
+.loading-overlay{position:fixed;inset:0;background:#f9f5ec;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
 .loading-logo{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--burgundy-rich);font-style:italic;letter-spacing:3px}
 .loading-sub{font-size:10px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:0 20px}
@@ -24,26 +28,26 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .sync-bar.syncing::after{content:'';position:absolute;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--burgundy-rich),transparent);animation:syncSlide 1s infinite}
 @keyframes syncSlide{to{left:200%}}
 .sync-status{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;text-align:center;padding:2px 0;min-height:16px}
-.header{padding:28px 20px 8px;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(245,240,232,0.98) 0%,rgba(237,229,216,0.95) 100%);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);overflow:visible}
+.header{padding:28px 20px 8px;text-align:center;border-bottom:1px solid rgba(232,213,163,0.15);background:#2c1810;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);overflow:visible}
 .header-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:2px}
 .header-vine{font-size:20px;opacity:0.7}
-.header-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:var(--burgundy-rich);font-style:italic}
+.header-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:3px;color:#e8d5a3;font-style:italic}
 .header-ampersand{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--burgundy-rich);font-style:normal;margin:0 2px;opacity:0.5}
-.header-subtitle{font-size:9px;letter-spacing:3px;color:var(--text-muted);text-transform:uppercase;margin-top:2px}
+.header-subtitle{font-size:9px;letter-spacing:2px;color:rgba(232,213,163,0.5);text-transform:uppercase;margin-top:1px}
 .header-stats{display:flex;justify-content:center;gap:16px;margin-top:4px}
 .stat{text-align:center}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--burgundy-rich);font-weight:500}
-.stat-label{font-size:8px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:22px;color:#e8d5a3;font-weight:500}
+.stat-label{font-size:8px;letter-spacing:2px;color:rgba(232,213,163,0.5);text-transform:uppercase}
 .view-toggle{display:flex;justify-content:center;gap:6px;margin-top:8px}
 .view-btn{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);padding:5px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
 .view-btn.active{background:var(--burgundy-rich);border-color:rgba(107,31,42,0.3);color:#fff}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(245,240,232,0.97);border-top:1px solid var(--border);backdrop-filter:blur(16px);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;padding:12px 4px 16px;border:none;background:transparent;color:var(--text-muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
-.nav-btn.active{color:var(--burgundy-rich)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#2c1810;border-top:1px solid rgba(232,213,163,0.15);backdrop-filter:blur(16px);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;padding:12px 4px 16px;border:none;background:transparent;color:rgba(232,213,163,0.5);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
+.nav-btn.active{color:#e8d5a3}
 .nav-icon{font-size:22px;line-height:1}
 .nav-label{font-size:11px;letter-spacing:1px;text-transform:uppercase}
 .nav-add{flex:1.2}
-.nav-add-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid rgba(107,31,42,0.3);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;margin-bottom:1px;box-shadow:0 2px 10px rgba(107,31,42,0.25)}
+.nav-add-circle{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#e8d5a3,#c9a84c);border:1px solid rgba(232,213,163,0.4);color:#2c1810;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:1px;box-shadow:0 2px 12px rgba(201,168,76,0.3)}
 .nav-add .nav-label{color:var(--burgundy-rich);opacity:0.6}
 .nav-add:active .nav-add-circle{transform:scale(0.9)}
 .scroll-top-btn{position:fixed;bottom:82px;right:16px;width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid rgba(107,31,42,0.3);color:var(--burgundy-rich);font-size:18px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:150;touch-action:manipulation;box-shadow:0 2px 12px rgba(107,31,42,0.15)}
@@ -75,8 +79,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .wine-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;border-left:3px solid var(--border);position:relative;overflow:hidden;touch-action:manipulation}
 .wine-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--burgundy-rich);border-radius:3px 0 0 3px}
 .wine-card.gain::before{background:var(--green)}
-.wine-card:active{border-color:rgba(107,31,42,0.3);background:#f5f0e8}
-.wine-thumb{width:48px;height:64px;border-radius:6px;background:#f5f0e8;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.wine-card:active{border-color:rgba(107,31,42,0.3);background:#f9f5ec}
+.wine-thumb{width:48px;height:64px;border-radius:6px;background:#f9f5ec;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
 .wine-thumb img{width:100%;height:100%;object-fit:cover;border-radius:5px}
 .wine-info{flex:1;min-width:0}
 .wine-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -127,7 +131,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .rack-rearrange-hint{font-size:10px;color:var(--text-muted)}
 .btn-rearrange{padding:7px 16px;background:#ffffff;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
 .btn-rearrange.active{background:#f0e8de;border-color:rgba(107,31,42,0.4);color:#ffffff}
-.btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
+.btn-done-rearrange{padding:7px 16px;background:linear-gradient(135deg,#3d2215,var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;touch-action:manipulation;letter-spacing:1px}
 .slot.rearrange-selected{border-color:var(--burgundy-rich)!important;background:rgba(107,31,42,0.4)!important;animation:slotPulse 1s ease-in-out infinite}
 .slot.rearrange-selected::after{background:var(--burgundy-deep)!important}
 @keyframes slotPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.4)}50%{box-shadow:0 0 0 4px rgba(201,168,76,0.1)}}
@@ -150,19 +154,19 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .current-photo-wrap{position:relative;display:inline-block;margin-bottom:10px}
 .current-photo-wrap img{height:100px;border-radius:8px;border:1px solid var(--border);display:block}
 .photo-remove-btn{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--red-neg);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:8px}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#3d2215,var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:10px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:8px}
 .btn-secondary{width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
 .btn-danger{width:100%;padding:12px;background:transparent;border:1px solid rgba(227,74,73,0.4);border-radius:10px;color:#e34a49;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px}
 .btn-edit{padding:8px 18px;background:rgba(107,31,42,0.06);border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:var(--burgundy-rich);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
 .detail-header{display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
-.detail-label-img{width:80px;height:110px;border-radius:8px;background:#f5f0e8;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
+.detail-label-img{width:80px;height:110px;border-radius:8px;background:#f9f5ec;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;cursor:pointer;position:relative}
 .detail-label-img img{width:100%;height:100%;object-fit:cover;border-radius:7px}
 .camera-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.55);font-size:9px;text-align:center;padding:4px;letter-spacing:1px;color:#ccc;text-transform:uppercase}
 .detail-title-block{flex:1;min-width:0}
 .detail-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--text-primary);margin-bottom:2px;line-height:1.2}
 .detail-vintage{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--burgundy-rich);margin-bottom:8px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
-.detail-card{background:#f5f0e8;border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.detail-card{background:#f9f5ec;border:1px solid var(--border);border-radius:8px;padding:10px 12px}
 .detail-card-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
 .detail-card-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text-primary);margin-top:2px}
 .detail-card-sub{font-size:10px;color:var(--green);margin-top:2px}
@@ -172,7 +176,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .location-text-label{font-size:9px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
 .location-text-value{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--text-primary);line-height:1.4}
 .drink-window{display:flex;align-items:center;gap:6px;margin-top:6px}
-.drink-bar{flex:1;height:4px;border-radius:2px;background:#f5f0e8;overflow:hidden}
+.drink-bar{flex:1;height:4px;border-radius:2px;background:#f9f5ec;overflow:hidden}
 .drink-fill{height:100%;border-radius:2px}
 .drink-fill.peak{background:var(--burgundy-rich)}.drink-fill.past{background:var(--burgundy-accent)}.drink-fill.early{background:#4a7c5c}
 .drink-label{font-size:9px;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase}
@@ -192,8 +196,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .api-setup-text{font-size:11px;color:var(--text-muted);line-height:1.8;margin-bottom:12px}
 .api-setup-text a{color:#ffffff;text-decoration:none}
 .api-key-row{display:flex;gap:8px}
-.api-key-input{flex:1;background:#f5f0e8;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none}
-.api-key-btn{padding:10px 16px;background:linear-gradient(135deg,var(--burgundy-rich),var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px}
+.api-key-input{flex:1;background:#f9f5ec;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none}
+.api-key-btn{padding:10px 16px;background:linear-gradient(135deg,#3d2215,var(--burgundy-accent));border:1px solid rgba(107,31,42,0.2);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px}
 .rec-result{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:16px;display:none}
 .rec-result.show{display:block}
 .rec-result-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--burgundy-rich);margin-bottom:12px}
@@ -211,6 +215,29 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .value-insight-title{font-size:10px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px}
 .value-insight-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.wine-card{transition:transform 0.15s ease,box-shadow 0.15s ease}
+.wine-card:active{transform:scale(0.97);box-shadow:0 4px 20px rgba(44,24,16,0.12)}
+.wine-list-item{transition:transform 0.15s ease,background 0.15s ease}
+.wine-list-item:active{transform:scale(0.98);background:#f9f5ec}
+.nav-btn{transition:color 0.15s ease,transform 0.1s ease}
+.nav-btn:active{transform:scale(0.88)}
+.nav-add:active .nav-add-circle{transform:scale(0.88)}
+.nav-add-circle{transition:transform 0.1s ease,box-shadow 0.15s ease}
+.btn-primary{transition:transform 0.12s ease,box-shadow 0.12s ease}
+.btn-primary:active{transform:scale(0.97)}
+.rec-type-btn{transition:border 0.15s ease,background 0.15s ease,transform 0.1s ease}
+.rec-type-btn:active{transform:scale(0.95)}
+.rec-wine-item{transition:transform 0.15s ease,background 0.15s ease}
+.rec-wine-item:active{transform:scale(0.98);background:#f0e8d5}
+.slot{transition:background 0.12s ease,transform 0.12s ease,box-shadow 0.12s ease}
+.slot:active{transform:scale(0.92)}
+.slot.selected{animation:slotPop 0.25s ease forwards}
+@keyframes slotPop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1.05)}}
+.modal-overlay{transition:opacity 0.2s ease}
+.modal{animation:modalSlideUp 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards}
+@keyframes modalSlideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.filter-chip{transition:background 0.15s ease,color 0.15s ease,transform 0.1s ease}
+.filter-chip:active{transform:scale(0.95)}
 
 .va-cab{border-left-color:#6b1f2a!important}
 .va-merlot{border-left-color:#8b2d42!important}
@@ -245,10 +272,10 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
     </div>
     <div style="display:flex;align-items:center;justify-content:center;position:relative;">
       <div class="header-subtitle" style="flex:1;">Your Personal Wine Cellar</div>
-      <button id="settings-gear-btn" onclick="toggleSettingsMenu()" style="position:absolute;right:0;background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;padding:4px 8px;touch-action:manipulation;">⚙️</button>
+      <button id="settings-gear-btn" onclick="toggleSettingsMenu()" style="position:absolute;right:0;background:none;border:none;color:rgba(232,213,163,0.6);font-size:20px;cursor:pointer;padding:4px 8px;touch-action:manipulation;">⚙️</button>
     </div>
     <!-- Settings pull-down menu -->
-    <div id="settings-menu" style="display:none;position:absolute;top:100%;right:0;left:0;background:rgba(245,240,232,0.98);border-bottom:1px solid var(--border);border-top:1px solid var(--border);z-index:200;backdrop-filter:blur(12px);padding:16px;max-height:70vh;overflow-y:auto;">
+    <div id="settings-menu" style="display:none;position:absolute;top:100%;right:0;left:0;background:#2c1810;border-bottom:1px solid var(--border);border-top:1px solid rgba(232,213,163,0.15);z-index:200;backdrop-filter:blur(12px);padding:16px;max-height:70vh;overflow-y:auto;">
       <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Cellar Settings</div>
       <div class="value-insight" id="value-insight-menu"></div>
       <div style="background:#fff;border:0.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
@@ -263,7 +290,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Sommelier API Key</div>
         <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;" id="api-key-status-menu">Not set</div>
         <div class="api-key-row">
-          <input class="api-key-input" id="settings-api-key-input-menu" placeholder="sk-ant-..." type="password" style="flex:1;background:#f5f0e8;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none;">
+          <input class="api-key-input" id="settings-api-key-input-menu" placeholder="sk-ant-..." type="password" style="flex:1;background:#f9f5ec;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:12px;outline:none;">
           <button class="api-key-btn" onclick="saveApiKeySettingsMenu()">Update</button>
         </div>
       </div>
@@ -335,7 +362,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div class="rack-inner" id="rack-inner"></div>
       <div class="rack-legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(107,31,42,0.4)"></div>Filled</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#f5f0e8;border:1px solid var(--border)"></div>Empty</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f9f5ec;border:1px solid var(--border)"></div>Empty</div>
         <div class="legend-item"><div class="legend-dot" style="background:#3d7a5c"></div>Selected</div>
       </div>
     </div>
@@ -347,7 +374,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.05;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:12px 12px;"></div>
       <div style="font-size:28px;margin-bottom:8px;">✦</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#f5f0e8;letter-spacing:2px;margin-bottom:4px;">Sommelier</div>
-      <div style="font-size:11px;letter-spacing:2px;color:rgba(245,240,232,0.6);text-transform:uppercase;">AI-powered wine recommendations</div>
+      <div style="font-size:11px;letter-spacing:2px;color:rgba(249,245,236,0.6);text-transform:uppercase;">AI-powered wine recommendations</div>
     </div>
     <div class="api-setup" id="api-setup">
       <div class="api-setup-title">One-time setup required</div>
@@ -453,9 +480,10 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
   <!-- Detail Modal -->
   <div class="modal-overlay" id="detail-modal">
     <div class="modal" style="max-width:420px;width:92%;max-height:88vh;overflow-y:auto;padding:0;border-radius:16px;">
-      <div id="detail-img" style="height:160px;background:linear-gradient(135deg,#6b1f2a 0%,#3d1020 100%);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+      <div id="detail-img" style="height:160px;background:linear-gradient(135deg,#6b1f2a 0%,#3d1020 100%);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;" onclick="triggerDetailPhoto()">
         <div id="detail-img-inner" style="font-size:56px;">🍷</div>
-        <div class="camera-hint" style="position:absolute;bottom:8px;right:10px;font-size:10px;color:rgba(255,255,255,0.5);display:none;">tap to add photo</div>
+        <div class="camera-hint" style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.5);font-size:9px;text-align:center;padding:5px;letter-spacing:1px;color:#ccc;text-transform:uppercase;">Tap to add photo</div>
+        <input type="file" id="detail-photo-input" accept="image/*" style="display:none;" onchange="handleDetailPhoto(this)">
       </div>
       <div style="padding:20px 20px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;">
@@ -530,11 +558,64 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
             <optgroup label="Sparkling"><option>Champagne</option><option>Sparkling</option><option>Prosecco</option></optgroup>
           </select>
         </div>
-        <div class="form-group"><label class="field-label">Vintage</label><input class="field-input" id="a-vintage" type="number" placeholder="2020" min="1900" max="2030"></div>
+        <div class="form-group"><label class="field-label">Vintage</label>
+          <select class="field-input" id="a-vintage">
+            <option value="">Select vintage</option>
+            <option value="2024">2024</option>
+<option value="2023">2023</option>
+<option value="2022">2022</option>
+<option value="2021">2021</option>
+<option value="2020">2020</option>
+<option value="2019">2019</option>
+<option value="2018">2018</option>
+<option value="2017">2017</option>
+<option value="2016">2016</option>
+<option value="2015">2015</option>
+<option value="2014">2014</option>
+<option value="2013">2013</option>
+<option value="2012">2012</option>
+<option value="2011">2011</option>
+<option value="2010">2010</option>
+<option value="2009">2009</option>
+<option value="2008">2008</option>
+<option value="2007">2007</option>
+<option value="2006">2006</option>
+<option value="2005">2005</option>
+<option value="2004">2004</option>
+<option value="2003">2003</option>
+<option value="2002">2002</option>
+<option value="2001">2001</option>
+<option value="2000">2000</option>
+<option value="1999">1999</option>
+<option value="1998">1998</option>
+<option value="1997">1997</option>
+<option value="1996">1996</option>
+<option value="1995">1995</option>
+          </select></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="form-group"><label class="field-label">Retail Price</label><input class="field-input" id="a-retail" type="number" placeholder="$0" min="0"></div>
-        <div class="form-group"><label class="field-label">Country</label><input class="field-input" id="a-country" placeholder="USA"></div>
+        <div class="form-group"><label class="field-label">Country</label>
+          <select class="field-input" id="a-country" onchange="handleCountryChange('a-country','a-country-other')">
+            <option value="">Select country</option>
+            <option value="USA">USA</option>
+<option value="France">France</option>
+<option value="Italy">Italy</option>
+<option value="Spain">Spain</option>
+<option value="Portugal">Portugal</option>
+<option value="Argentina">Argentina</option>
+<option value="Australia">Australia</option>
+<option value="Chile">Chile</option>
+<option value="Germany">Germany</option>
+<option value="Austria">Austria</option>
+<option value="New Zealand">New Zealand</option>
+<option value="South Africa">South Africa</option>
+<option value="Brazil">Brazil</option>
+<option value="Georgia">Georgia</option>
+<option value="Japan">Japan</option>
+<option value="Other">Other...</option>
+          </select>
+          <input class="field-input" id="a-country-other" placeholder="Enter country..." style="display:none;margin-top:6px;"></div>
       </div>
       <div class="form-group"><label class="field-label">Rack Location</label>
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:6px;">
@@ -549,6 +630,13 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
           <input class="field-input" id="a-col-to" placeholder="to C" maxlength="2" style="text-transform:uppercase;">
         </div>
         <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Rack · Row · Col From · Col To (for multiple bottles)</div>
+      </div>
+      <div class="form-group"><label class="field-label">Quantity</label>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <input class="field-input" id="a-qty" type="number" min="1" max="99" value="1" style="width:80px;text-align:center;">
+          <span style="font-size:12px;color:var(--text-muted);">bottles (if no rack location set above)</span>
+        </div>
+      <div style="display:none;"><!-- qty placeholder --></div>
       </div>
       <div class="form-group"><label class="field-label">Notes</label><textarea class="field-input" id="a-notes" rows="3" placeholder="Tasting notes, occasion..."></textarea></div>
       <button class="btn-primary" id="add-save-btn" onclick="saveNewWine()">Add to Cellar</button>
@@ -574,11 +662,64 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
             <optgroup label="Sparkling"><option>Champagne</option><option>Sparkling</option><option>Prosecco</option></optgroup>
           </select>
         </div>
-        <div class="form-group"><label class="field-label">Vintage</label><input class="field-input" id="e-vintage" type="number" placeholder="2020" min="1900" max="2030"></div>
+        <div class="form-group"><label class="field-label">Vintage</label>
+          <select class="field-input" id="e-vintage">
+            <option value="">Select vintage</option>
+            <option value="2024">2024</option>
+<option value="2023">2023</option>
+<option value="2022">2022</option>
+<option value="2021">2021</option>
+<option value="2020">2020</option>
+<option value="2019">2019</option>
+<option value="2018">2018</option>
+<option value="2017">2017</option>
+<option value="2016">2016</option>
+<option value="2015">2015</option>
+<option value="2014">2014</option>
+<option value="2013">2013</option>
+<option value="2012">2012</option>
+<option value="2011">2011</option>
+<option value="2010">2010</option>
+<option value="2009">2009</option>
+<option value="2008">2008</option>
+<option value="2007">2007</option>
+<option value="2006">2006</option>
+<option value="2005">2005</option>
+<option value="2004">2004</option>
+<option value="2003">2003</option>
+<option value="2002">2002</option>
+<option value="2001">2001</option>
+<option value="2000">2000</option>
+<option value="1999">1999</option>
+<option value="1998">1998</option>
+<option value="1997">1997</option>
+<option value="1996">1996</option>
+<option value="1995">1995</option>
+          </select></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="form-group"><label class="field-label">Retail Price</label><input class="field-input" id="e-retail" type="number" placeholder="$0" min="0"></div>
-        <div class="form-group"><label class="field-label">Country</label><input class="field-input" id="e-country" placeholder="USA"></div>
+        <div class="form-group"><label class="field-label">Country</label>
+          <select class="field-input" id="e-country" onchange="handleCountryChange('e-country','e-country-other')">
+            <option value="">Select country</option>
+            <option value="USA">USA</option>
+<option value="France">France</option>
+<option value="Italy">Italy</option>
+<option value="Spain">Spain</option>
+<option value="Portugal">Portugal</option>
+<option value="Argentina">Argentina</option>
+<option value="Australia">Australia</option>
+<option value="Chile">Chile</option>
+<option value="Germany">Germany</option>
+<option value="Austria">Austria</option>
+<option value="New Zealand">New Zealand</option>
+<option value="South Africa">South Africa</option>
+<option value="Brazil">Brazil</option>
+<option value="Georgia">Georgia</option>
+<option value="Japan">Japan</option>
+<option value="Other">Other...</option>
+          </select>
+          <input class="field-input" id="e-country-other" placeholder="Enter country..." style="display:none;margin-top:6px;"></div>
       </div>
       <div class="form-group"><label class="field-label">Rack Location</label>
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:6px;">
@@ -897,13 +1038,34 @@ function openEditFromDetail(){closeModal('detail-modal');openEditModal(currentDe
 
 function suggestRackLocation(wineName){if(!wineName)return;var rackEl=document.getElementById('e-rack');var rowEl=document.getElementById('e-slot-row');if(rackEl.value||rowEl.value)return;var vineyard=extractVineyard(wineName);var sameVineyard=Object.values(wines).filter(function(w){return extractVineyard(w.name)===vineyard&&w.slots&&w.slots.length>0;});if(sameVineyard.length===0)return;var allSlots=[];sameVineyard.forEach(function(w){w.slots.forEach(function(s){allSlots.push(s);});});if(allSlots.length===0)return;var rackCounts={};allSlots.forEach(function(s){rackCounts[s.rackId]=(rackCounts[s.rackId]||0)+1;});var bestRack=Object.keys(rackCounts).sort(function(a,b){return rackCounts[b]-rackCounts[a];})[0];var occupiedInRack=allSlots.filter(function(s){return s.rackId===bestRack;});if(occupiedInRack.length===0)return;var positions=occupiedInRack.map(function(s){var parts=s.sid.split('-');return{row:parseInt(parts[1]),col:parts[2].charCodeAt(0)-65};}).sort(function(a,b){return a.row-b.row||a.col-b.col;});var last=positions[positions.length-1];var rack=RACKS.find(function(r){return r.id===bestRack;});var maxCols=rack?rack.cols:12;var sugRow=last.row,sugCol=last.col+1;if(sugCol>=maxCols){sugCol=0;sugRow=last.row+1;}var sugColLetter=String.fromCharCode(65+sugCol);var hint='Suggested: '+rack.name+', Row '+sugRow+', Col '+sugColLetter+' (near other '+vineyard+' wines)';var hintEl=document.getElementById('rack-suggest-hint');hintEl.textContent='💡 '+hint+' — tap to use';hintEl.onclick=function(){rackEl.value=bestRack;rowEl.value=sugRow;document.getElementById('e-slot-col-from').value=sugColLetter;document.getElementById('e-slot-col-to').value='';hintEl.textContent='✓ Location applied!';hintEl.onclick=null;};}
 function openAddModal(){editingId=null;editPhotoData=null;document.getElementById('edit-modal-title').textContent='Add Wine';document.getElementById('edit-modal-sub').textContent='Fill in the details below';document.getElementById('edit-save-btn').textContent='Add to Cellar';resetEditForm();document.getElementById('edit-modal').classList.add('open');}
-function openEditModal(id){var w=wines[id];if(!w)return;editingId=id;editPhotoData=w.photo||null;document.getElementById('edit-modal-title').textContent='Edit Wine';document.getElementById('edit-modal-sub').textContent=w.name;document.getElementById('edit-save-btn').textContent='Save Changes';document.getElementById('e-name').value=w.name||'';document.getElementById('e-varietal').value=w.varietal||'';document.getElementById('e-vintage').value=w.vintage||'';document.getElementById('e-country').value=w.country||'';document.getElementById('e-region').value=w.region||'';document.getElementById('e-purchase').value=w.purchase||'';document.getElementById('e-retail').value=w.retail||'';document.getElementById('e-qty').value=w.qty||1;document.getElementById('e-drink-from').value=w.drinkFrom||'';document.getElementById('e-drink-to').value=w.drinkTo||'';document.getElementById('e-notes').value=w.notes||'';var slots=w.slots&&w.slots.length>0?w.slots:[];if(slots.length>0){document.getElementById('e-rack').value=slots[0].rackId;var parts=slots[0].sid.split('-');document.getElementById('e-slot-row').value=parts[1];document.getElementById('e-slot-col-from').value=parts[2];if(slots.length>1){var lp=slots[slots.length-1].sid.split('-');document.getElementById('e-slot-col-to').value=lp[2];}else document.getElementById('e-slot-col-to').value='';}else{document.getElementById('e-rack').value=w.rack||'';document.getElementById('e-slot-row').value='';document.getElementById('e-slot-col-from').value='';document.getElementById('e-slot-col-to').value='';}if(w.photo){document.getElementById('edit-preview-img').src=w.photo;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';}else{document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}document.getElementById('edit-modal').classList.add('open');}
+function openEditModal(id){var w=wines[id];if(!w)return;editingId=id;editPhotoData=w.photo||null;document.getElementById('edit-modal-title').textContent='Edit Wine';document.getElementById('edit-modal-sub').textContent=w.name;document.getElementById('edit-save-btn').textContent='Save Changes';document.getElementById('e-name').value=w.name||'';document.getElementById('e-varietal').value=w.varietal||'';var evint=document.getElementById('e-vintage');
+  if(evint){Array.from(evint.options).forEach(function(o){o.selected=o.value===(w.vintage||'');});}document.getElementById('e-country').value=w.country||'';document.getElementById('e-region').value=w.region||'';document.getElementById('e-purchase').value=w.purchase||'';document.getElementById('e-retail').value=w.retail||'';document.getElementById('e-qty').value=w.qty||1;document.getElementById('e-drink-from').value=w.drinkFrom||'';document.getElementById('e-drink-to').value=w.drinkTo||'';document.getElementById('e-notes').value=w.notes||'';var slots=w.slots&&w.slots.length>0?w.slots:[];if(slots.length>0){document.getElementById('e-rack').value=slots[0].rackId;var parts=slots[0].sid.split('-');document.getElementById('e-slot-row').value=parts[1];document.getElementById('e-slot-col-from').value=parts[2];if(slots.length>1){var lp=slots[slots.length-1].sid.split('-');document.getElementById('e-slot-col-to').value=lp[2];}else document.getElementById('e-slot-col-to').value='';}else{document.getElementById('e-rack').value=w.rack||'';document.getElementById('e-slot-row').value='';document.getElementById('e-slot-col-from').value='';document.getElementById('e-slot-col-to').value='';}if(w.photo){document.getElementById('edit-preview-img').src=w.photo;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';}else{document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}document.getElementById('edit-modal').classList.add('open');}
 function handleEditPhoto(input){var file=input.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){editPhotoData=e.target.result;document.getElementById('edit-preview-img').src=editPhotoData;document.getElementById('edit-photo-preview-wrap').style.display='block';document.getElementById('edit-photo-upload').style.display='none';};reader.readAsDataURL(file);input.value='';}
 function removeEditPhoto(){editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';}
 function parseSlots(rackId,row,colFrom,colTo){if(!rackId||!row||!colFrom)return[];colFrom=colFrom.toUpperCase();colTo=colTo?colTo.toUpperCase():colFrom;var fromCode=colFrom.charCodeAt(0),toCode=colTo.charCodeAt(0);if(toCode<fromCode)toCode=fromCode;var slots=[];for(var c=fromCode;c<=toCode;c++){var letter=String.fromCharCode(c);slots.push({rackId:rackId,sid:rackId+'-'+row+'-'+letter});}return slots;}
 function saveEdit(){var btn=document.getElementById('edit-save-btn');if(btn.disabled)return;btn.disabled=true;var name=document.getElementById('e-name').value.trim();if(!name){alert('Please enter a wine name.');btn.disabled=false;return;}var rackId=document.getElementById('e-rack').value,row=document.getElementById('e-slot-row').value.trim(),colFrom=document.getElementById('e-slot-col-from').value.trim(),colTo=document.getElementById('e-slot-col-to').value.trim();var slots=parseSlots(rackId,row,colFrom,colTo);var fields={name:name,varietal:document.getElementById('e-varietal').value,vintage:document.getElementById('e-vintage').value,country:document.getElementById('e-country').value,region:document.getElementById('e-region').value,purchase:parseFloat(document.getElementById('e-purchase').value)||null,retail:parseFloat(document.getElementById('e-retail').value)||null,qty:parseInt(document.getElementById('e-qty').value)||1,slots:slots,rack:rackId||null,slotText:'',drinkFrom:document.getElementById('e-drink-from').value,drinkTo:document.getElementById('e-drink-to').value,notes:document.getElementById('e-notes').value,photo:editPhotoData};setSyncing(true);if(editingId){fbPatch('/wines/'+editingId,fields).then(function(){Object.assign(wines[editingId],fields);setSyncing(false);closeModal('edit-modal');refreshAll();var eid=editingId;editingId=null;editPhotoData=null;setTimeout(function(){openDetail(eid);btn.disabled=false;},300);}).catch(function(){btn.disabled=false;setSyncing(false);});}else{fields.added=new Date().toISOString();fbPost('/wines',fields).then(function(result){if(result&&result.name)wines[result.name]=fields;setSyncing(false);closeModal('edit-modal');refreshAll();editingId=null;editPhotoData=null;btn.disabled=false;}).catch(function(){btn.disabled=false;setSyncing(false);});}}
 function resetEditForm(){['e-name','e-vintage','e-region','e-purchase','e-retail','e-slot-row','e-slot-col-from','e-slot-col-to','e-drink-from','e-drink-to','e-notes'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('e-varietal').value='';document.getElementById('e-country').value='';document.getElementById('e-rack').value='';document.getElementById('e-qty').value='1';editPhotoData=null;document.getElementById('edit-photo-preview-wrap').style.display='none';document.getElementById('edit-photo-upload').style.display='block';var h=document.getElementById('rack-suggest-hint');if(h)h.textContent='';}
 document.getElementById('e-name').addEventListener('blur',function(){if(!editingId)suggestRackLocation(this.value.trim());});
+
+function handleCountryChange(selectId, otherId){
+  var sel = document.getElementById(selectId);
+  var other = document.getElementById(otherId);
+  if(sel.value === 'Other'){
+    other.style.display = 'block';
+    other.focus();
+  } else {
+    other.style.display = 'none';
+    other.value = '';
+  }
+}
+
+function getCountryValue(selectId, otherId){
+  var sel = document.getElementById(selectId);
+  if(sel.value === 'Other'){
+    return document.getElementById(otherId).value.trim() || 'Other';
+  }
+  return sel.value;
+}
 
 function updateAddColOptions(){}
 
@@ -918,6 +1080,10 @@ function openAddWine(){
   var acf=document.getElementById('a-col-from');if(acf)acf.value='';
   var act=document.getElementById('a-col-to');if(act)act.value='';
   var sug=document.getElementById('a-rack-suggestion');if(sug)sug.style.display='none';
+  var aqty=document.getElementById('a-qty');if(aqty)aqty.value='1';
+  var acOther=document.getElementById('a-country-other');if(acOther){acOther.style.display='none';acOther.value='';}
+  var acSel=document.getElementById('a-country');if(acSel)acSel.value='';
+  var avint=document.getElementById('a-vintage');if(avint)avint.value='';
   var btn=document.getElementById('add-save-btn');if(btn)btn.disabled=false;
   document.getElementById('add-wine-modal').classList.add('open');
 }
@@ -927,10 +1093,11 @@ function saveNewWine(){
   if(btn)btn.disabled=true;
   var name=document.getElementById('a-name').value.trim();
   var varietal=document.getElementById('a-varietal').value;
-  var vintage=document.getElementById('a-vintage').value.trim();
+  var vintage=document.getElementById('a-vintage').value;
   var retail=parseFloat(document.getElementById('a-retail').value)||null;
-  var country=document.getElementById('a-country').value.trim();
+  var country=getCountryValue('a-country','a-country-other');
   var notes=document.getElementById('a-notes').value.trim();
+  var manualQty=parseInt(document.getElementById('a-qty').value)||1;
   var rack=document.getElementById('a-rack').value;
   var row=document.getElementById('a-row').value.trim();
   var colFrom=document.getElementById('a-col-from').value.trim().toUpperCase();
@@ -947,7 +1114,7 @@ function saveNewWine(){
   }
   var wid='w'+Math.random().toString(36).substr(2,8);
   var wine={name:name,varietal:varietal,vintage:vintage,purchase:null,retail:retail,
-    qty:slots.length||1,country:country,region:'',slots:slots,
+    qty:slots.length||manualQty,country:country,region:'',slots:slots,
     rack:slots.length>0?slots[0].rackId:null,slotText:'',
     drinkFrom:'',drinkTo:'',notes:notes,photo:null,
     added:new Date().toISOString()};
@@ -1001,9 +1168,19 @@ function openEditWine(id){
   document.getElementById('e-name').value=w.name||'';
   var ev=document.getElementById('e-varietal');
   if(ev){Array.from(ev.options).forEach(function(o){o.selected=o.value===w.varietal;});}
-  document.getElementById('e-vintage').value=w.vintage||'';
+  var evint=document.getElementById('e-vintage');
+  if(evint){Array.from(evint.options).forEach(function(o){o.selected=o.value===(w.vintage||'');});}
   document.getElementById('e-retail').value=w.retail||'';
-  document.getElementById('e-country').value=w.country||'';
+  var ecSel=document.getElementById('e-country');
+  var ecOther=document.getElementById('e-country-other');
+  var knownCountries=['USA','France','Italy','Spain','Portugal','Argentina','Australia','Chile','Germany','Austria','New Zealand','South Africa','Brazil','Georgia','Japan'];
+  if(w.country&&knownCountries.indexOf(w.country)>-1){
+    ecSel.value=w.country;ecOther.style.display='none';
+  } else if(w.country){
+    ecSel.value='Other';ecOther.style.display='block';ecOther.value=w.country;
+  } else {
+    ecSel.value='';ecOther.style.display='none';
+  }
   document.getElementById('e-notes').value=w.notes||'';
   document.getElementById('e-drink-from').value=w.drinkFrom||'';
   document.getElementById('e-drink-to').value=w.drinkTo||'';
@@ -1033,9 +1210,9 @@ function saveEditWine(){
   var name=document.getElementById('e-name').value.trim();
   if(!name){alert('Please enter a wine name.');if(btn)btn.disabled=false;return;}
   var varietal=document.getElementById('e-varietal').value;
-  var vintage=document.getElementById('e-vintage').value.trim();
+  var vintage=document.getElementById('e-vintage').value;
   var retail=parseFloat(document.getElementById('e-retail').value)||null;
-  var country=document.getElementById('e-country').value.trim();
+  var country=getCountryValue('e-country','e-country-other');
   var notes=document.getElementById('e-notes').value.trim();
   var drinkFrom=document.getElementById('e-drink-from').value.trim();
   var drinkTo=document.getElementById('e-drink-to').value.trim();
@@ -1367,3 +1544,5 @@ function spinWheel(){
 document.addEventListener('click',function(e){var el=e.target;if(el.closest('.nav-btn'))return haptic('selection');if(el.closest('.wine-card')||el.closest('.wine-list-item'))return haptic('light');if(el.closest('.filter-chip'))return haptic('selection');if(el.closest('.az-letter'))return haptic('selection');if(el.closest('.rack-tab'))return haptic('selection');if(el.closest('.slot'))return haptic('light');if(el.closest('.btn-primary'))return haptic('medium');if(el.closest('.btn-secondary'))return haptic('light');if(el.closest('.btn-danger'))return haptic('medium');if(el.closest('.btn-edit'))return haptic('light');if(el.closest('.nav-add'))return haptic('medium');if(el.closest('.scroll-top-btn'))return haptic('selection');if(el.closest('.view-btn'))return haptic('selection');if(el.closest('.rec-type-btn'))return haptic('selection');},true);
 function haptic(style){if(!window.navigator||!window.navigator.vibrate)return;var patterns={light:[10],medium:[20],heavy:[40],selection:[5]};navigator.vibrate(patterns[style]||patterns.light);}
 </script>
+</body>
+</html>
