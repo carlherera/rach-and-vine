@@ -237,7 +237,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .filter-chip{transition:background 0.15s ease,color 0.15s ease,transform 0.1s ease}
 .filter-chip:active{transform:scale(0.95)}
 @keyframes explode{0%{transform:translate(-50%,-50%) scale(0.3) rotate(-15deg);opacity:1}60%{transform:translate(-50%,-50%) scale(1.2) rotate(5deg);opacity:1}80%{transform:translate(-50%,-50%) scale(1.05) rotate(-2deg);opacity:1}100%{transform:translate(-50%,-50%) scale(1) rotate(0deg);opacity:0}}
-.spin-exclaim{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#cc0000;text-shadow:0 0 16px rgba(255,255,255,0.9),0 1px 0 rgba(255,255,255,0.7);pointer-events:none;white-space:normal;word-break:break-word;text-align:center;width:82%;letter-spacing:1px;line-height:1.2;animation:explode 1.4s cubic-bezier(0.36,0.07,0.19,0.97) forwards;z-index:10;}
+.spin-exclaim{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#cc0000;text-shadow:0 0 16px rgba(255,255,255,0.9),0 1px 0 rgba(255,255,255,0.7);pointer-events:none;white-space:normal;word-break:break-word;text-align:center;width:82%;letter-spacing:1px;line-height:1.2;animation:explode 3s cubic-bezier(0.36,0.07,0.19,0.97) forwards;z-index:10;}
 
 .va-cab{border-left-color:#4a2030!important}
 .va-merlot{border-left-color:#6a3045!important}
@@ -430,9 +430,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
     <div class="section-title">Spin the Wheel!</div>
     <div class="section-sub">Let fate choose your wine tonight</div>
     <div style="background:#fff;border:0.5px solid var(--border);border-radius:var(--border-radius-lg);margin-bottom:14px;overflow:hidden;">
-      <button onclick="toggleSpinFilters()" style="width:100%;background:none;border:none;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;touch-action:manipulation;">
-        <span style="font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;">Filters</span>
-        <span id="spin-filter-arrow" style="font-size:14px;color:var(--text-muted);transition:transform 0.2s;">▾</span>
+      <button onclick="toggleSpinFilters()" style="width:100%;background:none;border:none;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;touch-action:manipulation;">
+        <span style="font-size:13px;letter-spacing:1px;color:var(--text-secondary);font-weight:500;text-transform:uppercase;">Filters</span>
+        <span id="spin-filter-arrow" style="font-size:20px;color:var(--text-secondary);transition:transform 0.2s;">▾</span>
       </button>
       <div id="spin-filters-body" style="display:none;padding:0 16px 16px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
@@ -1563,7 +1563,7 @@ function spinWheel(){
       var old=wrap.querySelector('.spin-exclaim');if(old)old.remove();
       var el=document.createElement('div');el.className='spin-exclaim';el.textContent=ex;
       wrap.appendChild(el);
-      setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1400);
+      setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},3000);
     }
   }
   requestAnimationFrame(animate);
