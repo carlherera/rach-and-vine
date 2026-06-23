@@ -488,6 +488,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         </div>
         <div class="camera-hint" id="detail-camera-hint" style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.5);font-size:9px;text-align:center;padding:5px;letter-spacing:1px;color:#ccc;text-transform:uppercase;">Tap to add photo</div>
         <button id="add-second-photo-btn" onclick="event.stopPropagation();triggerDetailPhoto(2)" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:9px;letter-spacing:0.5px;padding:5px 9px;display:none;cursor:pointer;text-transform:uppercase;">+ Add 2nd Photo</button>
+        <button id="retake-photo-btn" onclick="event.stopPropagation();retakeCurrentPhoto()" style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:9px;letter-spacing:0.5px;padding:5px 9px;display:none;cursor:pointer;text-transform:uppercase;">↻ Retake</button>
         <input type="file" id="detail-photo-input" accept="image/*" style="display:none;" onchange="handleDetailPhoto(this,1)">
         <input type="file" id="detail-photo-input-2" accept="image/*" style="display:none;" onchange="handleDetailPhoto(this,2)">
       </div>
@@ -552,6 +553,16 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <button onclick="closeModal('add-wine-modal')" style="background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;">✕</button>
       </div>
       <div class="form-group"><label class="field-label">Vineyard / Wine Name</label><input class="field-input" id="a-name" placeholder="e.g. Stag's Leap FAY" autocomplete="off"></div>
+      <div class="form-group">
+        <label class="field-label">Photo (optional)</label>
+        <div id="a-photo-wrap" onclick="document.getElementById('a-photo-input').click()" style="height:140px;background:#fdf7f5;border:1.5px dashed var(--border-bright);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;">
+          <div id="a-photo-placeholder" style="text-align:center;color:var(--text-muted);font-size:11px;">
+            <div style="font-size:24px;margin-bottom:4px;">📷</div>
+            Tap to add a photo
+          </div>
+        </div>
+        <input type="file" id="a-photo-input" accept="image/*" style="display:none;" onchange="handleAddPhotoSelect(this)">
+      </div>
       <div id="a-rack-suggestion" style="display:none;background:#f0f7f0;border:1px solid rgba(45,107,69,0.3);border-radius:8px;padding:10px 12px;font-size:12px;color:#2d6b45;margin-bottom:12px;cursor:pointer;"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="form-group"><label class="field-label">Varietal</label>
@@ -630,6 +641,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
             <option value="left">Left Wine Rack</option>
             <option value="right">Right Wine Rack</option>
             <option value="table">Wine Table</option>
+            <option value="small">Small Wine Rack</option>
           </select>
           <input class="field-input" id="a-row" type="number" placeholder="Row" min="1">
           <input class="field-input" id="a-col-from" placeholder="A" maxlength="2" style="text-transform:uppercase;">
@@ -734,6 +746,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
             <option value="left">Left Wine Rack</option>
             <option value="right">Right Wine Rack</option>
             <option value="table">Wine Table</option>
+            <option value="small">Small Wine Rack</option>
           </select>
           <input class="field-input" id="e-row" type="number" placeholder="Row" min="1">
           <input class="field-input" id="e-col-from" placeholder="A" maxlength="2" style="text-transform:uppercase;">
@@ -1087,20 +1100,50 @@ function triggerDetailPhoto(slot){
 function handleDetailPhoto(input,slot){
   slot=slot||1;
   var file=input.files[0];if(!file||!currentDetailId)return;
+  var wineId=currentDetailId; // capture in case modal changes during async work
+  compressImage(file,1000,0.75,function(dataUrl){
+    savePhotoWithRetry(wineId,slot,dataUrl,0);
+  });
+  input.value='';
+}
+
+function compressImage(file,maxDim,quality,callback){
+  var img=new Image();
   var reader=new FileReader();
   reader.onload=function(e){
-    setSyncing(true);
-    var field=slot===2?'photo2':'photo';
-    var patch={};patch[field]=e.target.result;
-    fbPatch('/wines/'+currentDetailId,patch).then(function(){
-      wines[currentDetailId][field]=e.target.result;
-      setSyncing(false);
-      renderWineList();
-      refreshDetailPhotoView(currentDetailId);
-    });
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var w=img.width,h=img.height;
+      if(w>h){if(w>maxDim){h=Math.round(h*maxDim/w);w=maxDim;}}
+      else{if(h>maxDim){w=Math.round(w*maxDim/h);h=maxDim;}}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      callback(canvas.toDataURL('image/jpeg',quality));
+    };
+    img.onerror=function(){callback(e.target.result);}; // fallback to original
+    img.src=e.target.result;
   };
   reader.readAsDataURL(file);
-  input.value='';
+}
+
+function savePhotoWithRetry(wineId,slot,dataUrl,attempt){
+  setSyncing(true);
+  var field=slot===2?'photo2':'photo';
+  var patch={};patch[field]=dataUrl;
+  fbPatch('/wines/'+wineId,patch).then(function(){
+    if(wines[wineId])wines[wineId][field]=dataUrl;
+    setSyncing(false);
+    renderWineList();
+    if(currentDetailId===wineId)refreshDetailPhotoView(wineId);
+  }).catch(function(e){
+    console.error('Photo save error (attempt '+attempt+'):',e);
+    if(attempt<2){
+      setTimeout(function(){savePhotoWithRetry(wineId,slot,dataUrl,attempt+1);},800);
+    } else {
+      setSyncing(false);
+      alert('Photo failed to save after retrying. Please check your connection and try again.');
+    }
+  });
 }
 
 function refreshDetailPhotoView(id){
@@ -1109,11 +1152,13 @@ function refreshDetailPhotoView(id){
   var inner=document.getElementById('detail-img-inner');
   var hint=document.getElementById('detail-camera-hint');
   var addBtn=document.getElementById('add-second-photo-btn');
+  var retakeBtn=document.getElementById('retake-photo-btn');
   var dots=document.getElementById('photo-dot-indicator');
   if(w.photo){
     inner.innerHTML='<img src="'+w.photo+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px;">';
     hint.style.display='none';
     addBtn.style.display=w.photo2?'none':'block';
+    retakeBtn.style.display='block';
     dots.style.display=w.photo2?'flex':'none';
     document.getElementById('photo-dot-1').style.opacity='0.9';
     document.getElementById('photo-dot-2').style.opacity='0.4';
@@ -1121,8 +1166,14 @@ function refreshDetailPhotoView(id){
     inner.innerHTML='🍷';
     hint.style.display='block';
     addBtn.style.display='none';
+    retakeBtn.style.display='none';
     dots.style.display='none';
   }
+}
+
+function retakeCurrentPhoto(){
+  // Retake whichever photo is currently being viewed
+  triggerDetailPhoto(currentPhotoSlot);
 }
 
 function handleDetailImgTap(){
@@ -1158,6 +1209,18 @@ function getCountryValue(selectId, otherId){
 
 function updateAddColOptions(){}
 
+var pendingAddPhoto=null;
+
+function handleAddPhotoSelect(input){
+  var file=input.files[0];if(!file)return;
+  compressImage(file,1000,0.75,function(dataUrl){
+    pendingAddPhoto=dataUrl;
+    var wrap=document.getElementById('a-photo-wrap');
+    wrap.innerHTML='<img src="'+dataUrl+'" style="width:100%;height:100%;object-fit:cover;">';
+  });
+  input.value='';
+}
+
 function openAddWine(){
   // Clear form
   ['a-name','a-vintage','a-retail','a-country','a-notes'].forEach(function(id){
@@ -1173,6 +1236,9 @@ function openAddWine(){
   var acOther=document.getElementById('a-country-other');if(acOther){acOther.style.display='none';acOther.value='';}
   var acSel=document.getElementById('a-country');if(acSel)acSel.value='';
   var avint=document.getElementById('a-vintage');if(avint)avint.value='';
+  pendingAddPhoto=null;
+  var pw=document.getElementById('a-photo-wrap');
+  if(pw)pw.innerHTML='<div id="a-photo-placeholder" style="text-align:center;color:var(--text-muted);font-size:11px;"><div style="font-size:24px;margin-bottom:4px;">📷</div>Tap to add a photo</div>';
   var btn=document.getElementById('add-save-btn');if(btn)btn.disabled=false;
   document.getElementById('add-wine-modal').classList.add('open');
 }
@@ -1205,11 +1271,12 @@ function saveNewWine(){
   var wine={name:name,varietal:varietal,vintage:vintage,purchase:null,retail:retail,
     qty:slots.length||manualQty,country:country,region:'',slots:slots,
     rack:slots.length>0?slots[0].rackId:null,slotText:'',
-    drinkFrom:'',drinkTo:'',notes:notes,photo:null,
+    drinkFrom:'',drinkTo:'',notes:notes,photo:pendingAddPhoto||null,
     added:new Date().toISOString()};
   setSyncing(true);
   fbPut('/wines/'+wid,wine).then(function(){
     wines[wid]=wine;
+    pendingAddPhoto=null;
     setSyncing(false);
     closeModal('add-wine-modal');
     refreshAll();
@@ -1227,11 +1294,12 @@ function generateAutoNotes(wid, wine){
   var prompt='Wine: '+wine.name+(wine.vintage?' '+wine.vintage:'')+(wine.varietal?', '+wine.varietal:'')+(wine.country?', '+wine.country:'')+'\n\nProvide a response with exactly three sections separated by double newlines:\n1. A 2-3 sentence tasting note describing aromas, palate, and finish.\n2. Critic Scores: List any known scores from Robert Parker Wine Advocate, Wine Spectator, Jeb Dunnuck, James Suckling. If unknown write "Scores not available".\n3. Vintage Notes: 1-2 sentences on the vintage quality for this varietal and region. If unknown write "Vintage notes not available".\n\nFormat exactly as:\n[tasting note]\n\nCritic Scores: [scores]\n\nVintage Notes: [vintage context]';
   fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':cachedApiKey,'anthropic-version':'2023-06-01'},
+    headers:{'Content-Type':'application/json','x-api-key':cachedApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
     body:JSON.stringify({model:'claude-opus-4-5',max_tokens:400,messages:[{role:'user',content:prompt}]})
   }).then(function(r){return r.json();}).then(function(data){
+    if(data.error){console.error('Anthropic API error:',data.error);return;}
     var notes=data.content&&data.content[0]&&data.content[0].text?data.content[0].text.trim():'';
-    if(!notes)return;
+    if(!notes){console.log('Auto-notes: empty response',data);return;}
     // Also generate drinking window
     var yr=parseInt(wine.vintage)||new Date().getFullYear();
     var df=yr+5,dt=yr+20;
