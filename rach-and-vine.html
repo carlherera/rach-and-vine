@@ -615,7 +615,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-group"><label class="field-label">Country</label>
           <select class="field-input" id="a-country" onchange="handleCountryChange('a-country','a-country-other')">
             <option value="">Select country</option>
-            <option value="USA">USA</option>
+            <option value="USA" selected>USA</option>
 <option value="France">France</option>
 <option value="Italy">Italy</option>
 <option value="Spain">Spain</option>
@@ -720,7 +720,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
         <div class="form-group"><label class="field-label">Country</label>
           <select class="field-input" id="e-country" onchange="handleCountryChange('e-country','e-country-other')">
             <option value="">Select country</option>
-            <option value="USA">USA</option>
+            <option value="USA" selected>USA</option>
 <option value="France">France</option>
 <option value="Italy">Italy</option>
 <option value="Spain">Spain</option>
@@ -820,8 +820,18 @@ generateAppIcon();
 
 var FB='https://rach-and-vine-default-rtdb.firebaseio.com';
 function fbGet(p){return fetch(FB+p+'.json').then(function(r){return r.json();});}
-function fbPut(p,d){return fetch(FB+p+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json();});}
-function fbPatch(p,d){return fetch(FB+p+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json();});}
+function fbPut(p,d){return fetch(FB+p+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){
+  return r.json().then(function(json){
+    if(!r.ok||(json&&json.error)){throw new Error('Firebase error: '+(json&&json.error?json.error:r.status));}
+    return json;
+  });
+});}
+function fbPatch(p,d){return fetch(FB+p+'.json',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){
+  return r.json().then(function(json){
+    if(!r.ok||(json&&json.error)){throw new Error('Firebase error: '+(json&&json.error?json.error:r.status));}
+    return json;
+  });
+});}
 function fbPost(p,d){return fetch(FB+p+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json();});}
 function fbDelete(p){return fetch(FB+p+'.json',{method:'DELETE'});}
 
@@ -1101,7 +1111,7 @@ function handleDetailPhoto(input,slot){
   slot=slot||1;
   var file=input.files[0];if(!file||!currentDetailId)return;
   var wineId=currentDetailId; // capture in case modal changes during async work
-  compressImage(file,1000,0.75,function(dataUrl){
+  compressImage(file,800,0.65,function(dataUrl){
     savePhotoWithRetry(wineId,slot,dataUrl,0);
   });
   input.value='';
@@ -1199,6 +1209,35 @@ function removeEditPhoto(){editPhotoData=null;(document.getElementById('edit-pho
 function parseSlots(rackId,row,colFrom,colTo){if(!rackId||!row||!colFrom)return[];colFrom=colFrom.toUpperCase();colTo=colTo?colTo.toUpperCase():colFrom;var fromCode=colFrom.charCodeAt(0),toCode=colTo.charCodeAt(0);if(toCode<fromCode)toCode=fromCode;var slots=[];for(var c=fromCode;c<=toCode;c++){var letter=String.fromCharCode(c);slots.push({rackId:rackId,sid:rackId+'-'+row+'-'+letter});}return slots;}
 function saveEdit(){saveEditWine();}
 
+function titleCase(str){
+  return str.replace(/\w\S*/g,function(word){
+    return word.charAt(0).toUpperCase()+word.slice(1);
+  });
+}
+
+function wireTitleCaseInput(id){
+  var el=document.getElementById(id);
+  if(el)el.addEventListener('blur',function(){
+    if(this.value)this.value=titleCase(this.value);
+  });
+}
+wireTitleCaseInput('a-name');
+wireTitleCaseInput('e-name');
+wireTitleCaseInput('a-country-other');
+wireTitleCaseInput('e-country-other');
+
+function handleCountryChange(selectId, otherId){
+  var sel = document.getElementById(selectId);
+  var other = document.getElementById(otherId);
+  if(sel.value === 'Other'){
+    other.style.display = 'block';
+    other.focus();
+  } else {
+    other.style.display = 'none';
+    other.value = '';
+  }
+}
+
 function getCountryValue(selectId, otherId){
   var sel = document.getElementById(selectId);
   if(sel.value === 'Other'){
@@ -1213,7 +1252,7 @@ var pendingAddPhoto=null;
 
 function handleAddPhotoSelect(input){
   var file=input.files[0];if(!file)return;
-  compressImage(file,1000,0.75,function(dataUrl){
+  compressImage(file,800,0.65,function(dataUrl){
     pendingAddPhoto=dataUrl;
     var wrap=document.getElementById('a-photo-wrap');
     wrap.innerHTML='<img src="'+dataUrl+'" style="width:100%;height:100%;object-fit:cover;">';
@@ -1234,7 +1273,7 @@ function openAddWine(){
   var sug=document.getElementById('a-rack-suggestion');if(sug)sug.style.display='none';
   var aqty=document.getElementById('a-qty');if(aqty)aqty.value='1';
   var acOther=document.getElementById('a-country-other');if(acOther){acOther.style.display='none';acOther.value='';}
-  var acSel=document.getElementById('a-country');if(acSel)acSel.value='';
+  var acSel=document.getElementById('a-country');if(acSel)acSel.value='USA';
   var avint=document.getElementById('a-vintage');if(avint)avint.value='';
   pendingAddPhoto=null;
   var pw=document.getElementById('a-photo-wrap');
