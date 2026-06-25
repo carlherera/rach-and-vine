@@ -209,8 +209,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .dot{width:6px;height:6px;border-radius:50%;background:rgba(74,32,48,0.4);animation:pulse 1.2s ease-in-out infinite}
 .dot:nth-child(2){animation-delay:0.2s}.dot:nth-child(3){animation-delay:0.4s}
 @keyframes pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4}40%{transform:scale(1);opacity:1}}
-.value-insight{background:linear-gradient(135deg,rgba(45,107,69,0.08),rgba(45,107,69,0.03));border:1px solid rgba(45,107,69,0.2);border-radius:10px;padding:14px;margin-bottom:16px}
-.value-insight-title{font-size:10px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px}
+.value-insight{background:#fff;border:1px solid rgba(45,107,69,0.25);border-radius:10px;padding:16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.value-insight-title{font-size:11px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:10px;font-weight:600}
 .value-insight-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .wine-card{transition:transform 0.15s ease,box-shadow 0.15s ease}
@@ -290,7 +290,7 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
     </div>
     <!-- Settings pull-down menu -->
     <div id="settings-menu" style="display:none;position:absolute;top:100%;right:0;left:0;background:#4a2030;border-bottom:1px solid var(--border);border-top:1px solid rgba(232,213,163,0.15);z-index:200;backdrop-filter:blur(12px);padding:16px;max-height:70vh;overflow-y:auto;">
-      <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Cellar Settings</div>
+      <div style="font-size:11px;letter-spacing:2px;color:rgba(230,180,190,0.8);text-transform:uppercase;margin-bottom:12px;font-weight:500;">Cellar Settings</div>
       <div class="value-insight" id="value-insight-menu"></div>
       <div style="background:#fff;border:0.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
         <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Wine Rack Capacity</div>
