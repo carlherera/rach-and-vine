@@ -236,6 +236,20 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 @keyframes modalSlideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
 .filter-chip{transition:background 0.15s ease,color 0.15s ease,transform 0.1s ease}
 .filter-chip:active{transform:scale(0.95)}
+/* Universal tap feedback */
+button,.nav-btn,.rack-tab,.view-toggle-btn,.rec-type-btn,.btn-primary,.btn-edit,.btn-secondary,.btn-danger,.filter-chip,.wine-card,.wine-list-item,.slot,.rec-wine-item,#drink-it-btn,#nav-add{
+  transition:transform 0.1s ease,opacity 0.1s ease,background 0.15s ease,box-shadow 0.15s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type-btn:active,.btn-primary:active,.btn-edit:active,.btn-secondary:active,.btn-danger:active,.filter-chip:active,#drink-it-btn:active{
+  transform:scale(0.94);
+  opacity:0.85;
+}
+.nav-add:active .nav-add-circle{transform:scale(0.85)!important;box-shadow:0 1px 6px rgba(201,132,154,0.2)!important;}
+.rack-tab.active{box-shadow:inset 0 -2px 0 currentColor;}
+.tap-ripple{position:absolute;border-radius:50%;background:rgba(74,32,48,0.18);transform:scale(0);animation:rippleEffect 0.5s ease-out;pointer-events:none;}
+@keyframes rippleEffect{to{transform:scale(2.5);opacity:0;}}
+
 @keyframes explode{0%{transform:translate(-50%,-50%) scale(0.3) rotate(-15deg);opacity:1}60%{transform:translate(-50%,-50%) scale(1.2) rotate(5deg);opacity:1}80%{transform:translate(-50%,-50%) scale(1.05) rotate(-2deg);opacity:1}100%{transform:translate(-50%,-50%) scale(1) rotate(0deg);opacity:0}}
 .spin-exclaim{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:#cc0000;text-shadow:0 0 16px rgba(255,255,255,0.9),0 1px 0 rgba(255,255,255,0.7);pointer-events:none;white-space:normal;word-break:break-word;text-align:center;width:82%;letter-spacing:1px;line-height:1.2;animation:explode 3s cubic-bezier(0.36,0.07,0.19,0.97) forwards;z-index:10;}
 
@@ -296,6 +310,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       </div>
       <div style="background:#fff;border:0.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
         <div style="font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px;">Data</div>
+        <button class="btn-primary" onclick="exportToCSV()" style="margin-bottom:10px;">⬇ Export to CSV</button>
         <button class="btn-danger" onclick="clearAllData()">Clear All Wines</button>
       </div>
       <button class="btn-secondary" onclick="toggleSettingsMenu()" style="margin-top:4px;">Close</button>
@@ -551,6 +566,11 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
         <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--burgundy-rich);">Add Wine</div>
         <button onclick="closeModal('add-wine-modal')" style="background:none;border:none;font-size:22px;color:var(--text-muted);cursor:pointer;">✕</button>
+      </div>
+      <button id="scan-label-btn" onclick="document.getElementById('scan-label-input').click()" style="width:100%;padding:13px;background:linear-gradient(135deg,#6a3045,#4a2030);border:none;border-radius:10px;color:#fdf7f5;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;">📷✦ Scan Label with AI</button>
+      <input type="file" id="scan-label-input" accept="image/*" style="display:none;" onchange="handleScanLabel(this)">
+      <div id="scan-label-status" style="display:none;text-align:center;padding:10px;margin-bottom:14px;background:#fdf7f5;border-radius:10px;font-size:12px;color:var(--text-secondary);">
+        <span id="scan-label-status-text">Reading label...</span>
       </div>
       <div class="form-group"><label class="field-label">Vineyard / Wine Name</label><input class="field-input" id="a-name" placeholder="e.g. Stag's Leap FAY" autocomplete="off"></div>
       <div class="form-group">
@@ -935,11 +955,27 @@ function renderWineList(){
   var sort=document.getElementById('sort-select').value;
   function normalizeQ(s){return(s||'').toLowerCase().replace(/[.\'\-,]/g,' ').replace(/\s+/g,' ').trim();}
   var qn=normalizeQ(q);
+  var qWords=qn.split(' ').filter(Boolean);
+  function searchableText(w){
+    return normalizeQ([w.name,w.varietal,w.country,w.region,w.notes,w.vintage].filter(Boolean).join(' '));
+  }
   var list=Object.entries(wines).map(function(e){return Object.assign({},e[1],{id:e[0]});}).filter(function(w){
     if(!w.name)return false;
-    var match=!q||normalizeQ(w.name).indexOf(qn)>-1||normalizeQ(w.varietal||'').indexOf(qn)>-1||(w.vintage||'').indexOf(q)>-1||normalizeQ(w.country||'').indexOf(qn)>-1||normalizeQ(w.region||'').indexOf(qn)>-1||normalizeQ(w.notes||'').indexOf(qn)>-1;
+    var hay=searchableText(w);
+    // Every search word must appear somewhere in the combined text (order independent)
+    var match=!q||qWords.every(function(word){return hay.indexOf(word)>-1;});
     return match&&(activeVarietal==='all'||w.varietal===activeVarietal)&&(activeCountry==='all'||w.country===activeCountry);
-  });;
+  });
+  // When searching, rank results by relevance: exact name match first, then name-starts-with, then others
+  if(q&&qn){
+    list.sort(function(a,b){
+      var an=normalizeQ(a.name),bn=normalizeQ(b.name);
+      var aScore=an===qn?0:an.indexOf(qn)===0?1:an.indexOf(qn)>-1?2:3;
+      var bScore=bn===qn?0:bn.indexOf(qn)===0?1:bn.indexOf(qn)>-1?2:3;
+      if(aScore!==bScore)return aScore-bScore;
+      return an.localeCompare(bn);
+    });
+  };
   list.sort(function(a,b){
     if(sort==='name')return a.name.localeCompare(b.name);
     if(sort==='varietal')return(a.varietal||'').localeCompare(b.varietal||'');
@@ -1250,6 +1286,100 @@ function updateAddColOptions(){}
 
 var pendingAddPhoto=null;
 
+function handleScanLabel(input){
+  var file=input.files[0];if(!file)return;
+  if(!cachedApiKey){
+    alert('Please set your Sommelier API key in Settings first to use label scanning.');
+    input.value='';return;
+  }
+  var statusEl=document.getElementById('scan-label-status');
+  var statusText=document.getElementById('scan-label-status-text');
+  var btn=document.getElementById('scan-label-btn');
+  statusEl.style.display='block';
+  statusText.textContent='Reading label...';
+  btn.disabled=true;
+  btn.style.opacity='0.6';
+
+  compressImage(file,1000,0.85,function(dataUrl){
+    // Also use this as the wine's photo
+    pendingAddPhoto=dataUrl;
+    var wrap=document.getElementById('a-photo-wrap');
+    if(wrap)wrap.innerHTML='<img src="'+dataUrl+'" style="width:100%;height:100%;object-fit:cover;">';
+
+    var base64=dataUrl.split(',')[1];
+    var mediaType=dataUrl.split(';')[0].split(':')[1];
+
+    var prompt='Look at this wine label photo and extract the following details. Return ONLY a JSON object with no other text, no markdown formatting, no code fences. Use these exact keys: name (vineyard/producer and wine name together, properly capitalized), varietal (best guess grape variety, use standard names like "Cabernet Sauvignon"), vintage (4-digit year as a string, or empty string if not visible), country (country of origin, or "USA" if unclear from a Napa/California-style label), retail (estimated current retail price as a number with no currency symbol, or null if you cannot estimate). Example: {"name":"Stag\'s Leap FAY","varietal":"Cabernet Sauvignon","vintage":"2019","country":"USA","retail":85}';
+
+    fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':cachedApiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-opus-4-5',
+        max_tokens:300,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mediaType,data:base64}},
+          {type:'text',text:prompt}
+        ]}]
+      })
+    }).then(function(r){return r.json();}).then(function(data){
+      btn.disabled=false;btn.style.opacity='1';
+      if(data.error){
+        statusText.textContent='Could not read label. Please enter details manually.';
+        console.error('Scan label error:',data.error);
+        setTimeout(function(){statusEl.style.display='none';},3000);
+        return;
+      }
+      var text=data.content&&data.content[0]&&data.content[0].text?data.content[0].text.trim():'';
+      // Strip markdown fences if present
+      text=text.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+      var parsed;
+      try{parsed=JSON.parse(text);}catch(e){
+        statusText.textContent='Could not read label clearly. Please enter details manually.';
+        console.error('Scan label parse error:',e,text);
+        setTimeout(function(){statusEl.style.display='none';},3000);
+        return;
+      }
+      // Fill the form
+      if(parsed.name)document.getElementById('a-name').value=titleCase(parsed.name);
+      if(parsed.varietal){
+        var vSel=document.getElementById('a-varietal');
+        var found=false;
+        Array.from(vSel.options).forEach(function(o){if(o.value.toLowerCase()===parsed.varietal.toLowerCase()){o.selected=true;found=true;}});
+        if(!found&&parsed.varietal){
+          // Add a custom option if not in list
+          var opt=document.createElement('option');opt.value=parsed.varietal;opt.text=parsed.varietal;opt.selected=true;
+          vSel.appendChild(opt);
+        }
+      }
+      if(parsed.vintage){
+        var vintSel=document.getElementById('a-vintage');
+        Array.from(vintSel.options).forEach(function(o){o.selected=o.value===String(parsed.vintage);});
+      }
+      if(parsed.country){
+        var cSel=document.getElementById('a-country');
+        var knownCountries=['USA','France','Italy','Spain','Portugal','Argentina','Australia','Chile','Germany','Austria','New Zealand','South Africa','Brazil','Georgia','Japan'];
+        if(knownCountries.indexOf(parsed.country)>-1){
+          cSel.value=parsed.country;
+        } else {
+          cSel.value='Other';
+          handleCountryChange('a-country','a-country-other');
+          document.getElementById('a-country-other').value=parsed.country;
+        }
+      }
+      if(parsed.retail){document.getElementById('a-retail').value=parsed.retail;}
+      statusText.textContent='✓ Label scanned! Review the details below.';
+      setTimeout(function(){statusEl.style.display='none';},2500);
+    }).catch(function(e){
+      btn.disabled=false;btn.style.opacity='1';
+      statusText.textContent='Error reading label. Please try again or enter manually.';
+      console.error('Scan label fetch error:',e);
+      setTimeout(function(){statusEl.style.display='none';},3000);
+    });
+  });
+  input.value='';
+}
+
 function handleAddPhotoSelect(input){
   var file=input.files[0];if(!file)return;
   compressImage(file,800,0.65,function(dataUrl){
@@ -1550,6 +1680,43 @@ document.getElementById('rec-list').innerHTML=recHtml;}).catch(function(e){var a
     document.getElementById('rec-result').classList.add('show');document.getElementById('rec-list').innerHTML='<div style="color:var(--text-muted);font-size:13px;">Error: '+e.message+'</div>';});}
 
 function renderSettings(){var arr=Object.values(wines);var tp=arr.reduce(function(s,w){return s+parseFloat(w.purchase||0)*(parseInt(w.qty)||0);},0);var tr=arr.reduce(function(s,w){return s+parseFloat(w.retail||w.purchase||0)*(parseInt(w.qty)||0);},0);var tg=tr-tp,gp=tp>0?Math.round((tg/tp)*100):0,wp=arr.filter(function(w){return w.photo;}).length;document.getElementById('value-insight').innerHTML='<div class="value-insight-title">📊 Cellar Value Snapshot</div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Paid</span><span style="color:var(--text-primary)">$'+Math.round(tp).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Current Retail Value</span><span style="color:var(--text-primary)">$'+Math.round(tr).toLocaleString()+'</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Total Gain / Loss</span><span style="color:'+(tg>=0?'var(--green-light)':'#e34a49')+'">'+(tg>=0?'+':'')+'$'+Math.round(tg).toLocaleString()+' ('+(tg>=0?'+':'')+gp+'%)</span></div><div class="value-insight-row"><span style="color:var(--text-secondary)">Photos Added</span><span style="color:var(--text-primary)">'+wp+' / '+arr.length+' wines</span></div>';document.getElementById('rack-summary').innerHTML=RACKS.map(function(r){var total=r.specialRows?r.specialRows.reduce(function(s,row){return s+row.cols;},0):r.rows*r.cols;var used=arr.filter(function(w){return(w.slots||[]).some(function(s){return s.rackId===r.id;});}).length;return'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary)">'+r.name+'</span><span style="color:rgba(74,32,48,0.4)">'+used+' wines / '+total+' slots</span></div>';}).join('');var gainers=arr.filter(function(w){return w.retail&&w.purchase&&w.retail>w.purchase;}).map(function(w){return Object.assign({},w,{gain:w.retail-w.purchase});}).sort(function(a,b){return b.gain-a.gain;}).slice(0,5);document.getElementById('top-gainers').innerHTML=gainers.map(function(w){return'<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;"><span style="color:var(--text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+w.name+' '+(w.vintage||'')+'</span><span style="color:var(--green)">+$'+Math.round(w.gain)+'/btl</span></div>';}).join('')||'<div style="color:var(--text-muted);font-size:12px;">No gains tracked yet</div>';updateApiKeyStatus();}
+function exportToCSV(){
+  var rows=[['Wine Name','Varietal','Vintage','Country','Region','Quantity','Purchase Price','Retail Price','Drink From','Drink To','Rack Locations','Notes','Date Added']];
+  Object.values(wines).forEach(function(w){
+    if(!w.name)return;
+    var slotsStr=(w.slots||[]).map(function(s){
+      var parts=s.sid.split('-');
+      var rackName=(RACKS.find(function(r){return r.id===s.rackId;})||{name:s.rackId}).name;
+      return rackName+' Row '+parts[1]+' Col '+parts[2];
+    }).join('; ');
+    var notesClean=(w.notes||'').replace(/\n/g,' ').replace(/"/g,'""');
+    rows.push([
+      w.name||'',w.varietal||'',w.vintage||'',w.country||'',w.region||'',
+      w.qty||1,w.purchase||'',w.retail||'',w.drinkFrom||'',w.drinkTo||'',
+      slotsStr,notesClean,w.added?w.added.split('T')[0]:''
+    ]);
+  });
+  var csv=rows.map(function(row){
+    return row.map(function(cell){
+      var s=String(cell);
+      if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1){
+        return '"'+s.replace(/"/g,'""')+'"';
+      }
+      return s;
+    }).join(',');
+  }).join('\n');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  var dateStr=new Date().toISOString().split('T')[0];
+  a.download='rach-and-vine-cellar-'+dateStr+'.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function clearAllData(){if(!confirm('Clear ALL wines? This affects both phones and cannot be undone.'))return;setSyncing(true);fbPut('/wines',null).then(function(){wines={};setSyncing(false);refreshAll();});}
 
 function toggleSettingsMenu(){
@@ -1775,6 +1942,26 @@ function spinWheel(){
 // Haptics
 document.addEventListener('click',function(e){var el=e.target;if(el.closest('.nav-btn'))return haptic('selection');if(el.closest('.wine-card')||el.closest('.wine-list-item'))return haptic('light');if(el.closest('.filter-chip'))return haptic('selection');if(el.closest('.az-letter'))return haptic('selection');if(el.closest('.rack-tab'))return haptic('selection');if(el.closest('.slot'))return haptic('light');if(el.closest('.btn-primary'))return haptic('medium');if(el.closest('.btn-secondary'))return haptic('light');if(el.closest('.btn-danger'))return haptic('medium');if(el.closest('.btn-edit'))return haptic('light');if(el.closest('.nav-add'))return haptic('medium');if(el.closest('.scroll-top-btn'))return haptic('selection');if(el.closest('.view-btn'))return haptic('selection');if(el.closest('.rec-type-btn'))return haptic('selection');},true);
 function haptic(style){if(!window.navigator||!window.navigator.vibrate)return;var patterns={light:[10],medium:[20],heavy:[40],selection:[5]};navigator.vibrate(patterns[style]||patterns.light);}
+
+// Visual tap ripple — works reliably on iOS unlike vibration API
+document.addEventListener('touchstart',function(e){
+  var el=e.target.closest('button,.nav-btn,.rack-tab,.wine-card,.wine-list-item,.slot,.filter-chip,.rec-type-btn,.rec-wine-item');
+  if(!el)return;
+  var rect=el.getBoundingClientRect();
+  var ripple=document.createElement('span');
+  ripple.className='tap-ripple';
+  var size=Math.max(rect.width,rect.height);
+  var touch=e.touches[0];
+  ripple.style.width=ripple.style.height=size+'px';
+  ripple.style.left=(touch.clientX-rect.left-size/2)+'px';
+  ripple.style.top=(touch.clientY-rect.top-size/2)+'px';
+  var computedPos=getComputedStyle(el).position;
+  if(computedPos==='static')el.style.position='relative';
+  el.style.overflow='hidden';
+  el.appendChild(ripple);
+  setTimeout(function(){if(ripple.parentNode)ripple.parentNode.removeChild(ripple);},500);
+},{passive:true});
+
 </script>
 </body>
 </html>
