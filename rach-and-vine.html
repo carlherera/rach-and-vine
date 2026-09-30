@@ -53,8 +53,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .screen{display:none;flex:1;padding:16px 16px 90px;animation:fadeIn 0.3s ease}
 .screen.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--burgundy-rich);letter-spacing:2px;margin-bottom:4px}
-.section-sub{font-size:10px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:2px;margin-bottom:4px}
+.section-sub{font-size:10px;letter-spacing:2px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;margin-bottom:12px}
 .search-bar{display:flex;gap:8px;margin-bottom:8px}
 .search-wrap{flex:1;position:relative;display:flex;align-items:center}
 .search-input{width:100%;background:#faf7f2;border:1px solid var(--border);border-radius:8px;padding:10px 32px 10px 14px;color:var(--text-primary);font-family:'Montserrat',sans-serif;font-size:13px;outline:none}
@@ -71,7 +71,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .cellar-wrap{display:flex;gap:0;position:relative}
 .wine-list-wrap{flex:1;min-width:0;padding-right:24px}
 .az-sidebar{position:fixed;right:4px;top:55%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;z-index:50;max-height:60vh;overflow:hidden;padding-top:4px}
-.az-letter{font-size:10px;color:var(--text-muted);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:600;touch-action:manipulation;line-height:1.4;border-radius:3px}
+.az-letter{font-size:10px;color:var(--text-primary);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:700;touch-action:manipulation;line-height:1.4;border-radius:3px}
 .az-letter:active,.az-letter.has-wines{color:rgba(74,32,48,0.4)}
 .letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--burgundy-rich);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px;opacity:0.6}
 .wine-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;cursor:pointer;border-left:3px solid var(--border);position:relative;overflow:hidden;touch-action:manipulation}
@@ -278,15 +278,15 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
 <div class="app">
   <div class="sync-bar" id="sync-bar"></div>
   <div class="sync-status" id="sync-status"></div>
-  <div class="header">
+  <div class="header" style="position:relative;">
+    <button id="settings-gear-btn" onclick="toggleSettingsMenu()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(230,180,190,0.6);font-size:22px;cursor:pointer;padding:4px;touch-action:manipulation;z-index:10;">⚙️</button>
     <div class="header-logo-wrap">
       <span class="header-vine">🌿</span>
       <div class="header-logo">Rach <span class="header-ampersand">&amp;</span> Vine</div>
       <span class="header-vine">🍷</span>
     </div>
-    <div style="display:flex;align-items:center;justify-content:center;position:relative;">
-      <div class="header-subtitle" style="flex:1;">Your Personal Wine Cellar</div>
-      <button id="settings-gear-btn" onclick="toggleSettingsMenu()" style="position:absolute;right:0;background:none;border:none;color:rgba(230,180,190,0.5);font-size:20px;cursor:pointer;padding:4px 8px;touch-action:manipulation;">⚙️</button>
+    <div style="text-align:center;">
+      <div class="header-subtitle">Your Personal Wine Cellar</div>
     </div>
     <!-- Settings pull-down menu -->
     <div id="settings-menu" style="display:none;position:absolute;top:100%;right:0;left:0;background:#4a2030;border-bottom:1px solid var(--border);border-top:1px solid rgba(232,213,163,0.15);z-index:200;backdrop-filter:blur(12px);padding:16px;max-height:70vh;overflow-y:auto;">
@@ -332,7 +332,6 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
 
   <div class="screen active" id="screen-cellar">
     <div class="section-title">My Cellar</div>
-    <div class="section-sub">Tap a bottle to view details</div>
     <div class="search-bar">
       <div class="search-wrap">
         <input class="search-input" id="search-input" placeholder="Search wines..." type="text">
@@ -1054,7 +1053,7 @@ var ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 function buildAZSidebar(activeLetters){var sort=document.getElementById('sort-select').value;var sidebar=document.getElementById('az-sidebar');if(sort!=='name'||activeLetters.length===0){sidebar.innerHTML='';return;}sidebar.innerHTML=ALPHABET.map(function(l){var has=activeLetters.indexOf(l)>-1;return'<div class="az-letter'+(has?' has-wines':'')+'" onclick="jumpToLetter(\''+l+'\')">'+l+'</div>';}).join('');}
 function jumpToLetter(l){var el=document.getElementById('letter-'+l);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 
-function slotPx(cols){return cols>=12?26:cols>=8?30:36;}
+function slotPx(cols){return cols>=12?21:cols>=8?26:32;}
 function colLabelsHTML(cols,sz,dual){var sp='<div class="row-lbl"></div>';var lbls=Array.from({length:cols},function(_,i){return'<div class="rack-col-label" style="width:'+sz+'px;flex-shrink:0;">'+String.fromCharCode(65+i)+'</div>';}).join('');return'<div class="rack-col-label-row">'+sp+lbls+(dual?sp:'')+'</div>';}
 function renderRackSelector(){document.getElementById('rack-selector').innerHTML=RACKS.map(function(r){return'<div class="rack-tab'+(r.id===currentRack.id?' active':'')+'" onclick="selectRack(\''+r.id+'\')">'+r.name+'</div>';}).join('');}
 function selectRack(id){currentRack=RACKS.find(function(r){return r.id===id;});document.getElementById('slot-popup').classList.remove('show');renderRackSelector();renderRackGrid();}
@@ -1927,7 +1926,7 @@ function spinWheel(){
       // Scroll result tile into view smoothly
       setTimeout(function(){
         var resultEl=document.getElementById('spin-result');
-        if(resultEl)resultEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+        if(resultEl){resultEl.scrollIntoView({behavior:'smooth',block:'end'});}
       },150);
       // Show excitement exclamation
       var exclaims=['Boom!','Fate Has Spoken!','Uncork It!','Oh Mama!','Hide The Women and Children!','Pour It!','Kapow!','Bang!','Lord Almighty!'];
