@@ -39,7 +39,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .view-toggle{display:flex;justify-content:center;gap:6px;margin-top:8px}
 .view-btn{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-muted);padding:5px 10px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
 .view-btn.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.3);color:#fff}
-.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#4a2030;border-top:1px solid rgba(232,213,163,0.15);backdrop-filter:blur(16px);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#4a2030;border-top:1px solid rgba(232,213,163,0.15);backdrop-filter:blur(16px);display:flex;z-index:200;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 6px)}
 .nav-btn{flex:1;padding:12px 4px 16px;border:none;background:transparent;color:rgba(230,180,190,0.4);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'Montserrat',sans-serif;touch-action:manipulation}
 .nav-btn.active{color:#e6b4be}
 .nav-icon{font-size:22px;line-height:1}
@@ -977,9 +977,9 @@ function renderWineList(){
     });
   };
   list.sort(function(a,b){
-    if(sort==='name')return a.name.localeCompare(b.name);
-    if(sort==='varietal')return(a.varietal||'').localeCompare(b.varietal||'');
-    if(sort==='country')return(a.country||'').localeCompare(b.country||'');
+    if(sort==='name'){var nc=a.name.localeCompare(b.name);if(nc!==0)return nc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
+    if(sort==='varietal'){var vc=(a.varietal||'').localeCompare(b.varietal||'');if(vc!==0)return vc;var vnc=a.name.localeCompare(b.name);if(vnc!==0)return vnc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
+    if(sort==='country'){var cc=(a.country||'').localeCompare(b.country||'');if(cc!==0)return cc;var cnc=a.name.localeCompare(b.name);if(cnc!==0)return cnc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
     if(sort==='vintage')return parseInt(b.vintage||0)-parseInt(a.vintage||0);
     if(sort==='price_asc')return parseFloat(a.retail||a.purchase||0)-parseFloat(b.retail||b.purchase||0);
     if(sort==='price_desc')return parseFloat(b.retail||b.purchase||0)-parseFloat(a.retail||a.purchase||0);
@@ -1409,7 +1409,11 @@ function openAddWine(){
   var pw=document.getElementById('a-photo-wrap');
   if(pw)pw.innerHTML='<div id="a-photo-placeholder" style="text-align:center;color:var(--text-muted);font-size:11px;"><div style="font-size:24px;margin-bottom:4px;">📷</div>Tap to add a photo</div>';
   var btn=document.getElementById('add-save-btn');if(btn)btn.disabled=false;
-  document.getElementById('add-wine-modal').classList.add('open');
+  var awm=document.getElementById('add-wine-modal');
+  awm.classList.add('open');
+  // Scroll modal content to top so Scan Label button is visible immediately
+  var awmInner=awm.querySelector('.modal');
+  if(awmInner)awmInner.scrollTop=0;
 }
 
 function saveNewWine(){
@@ -1920,6 +1924,11 @@ function spinWheel(){
       document.getElementById('spin-result-meta').textContent=meta;
       document.getElementById('spin-result').style.display='block';
       document.getElementById('spin-wheel-canvas').style.cursor='pointer';
+      // Scroll result tile into view smoothly
+      setTimeout(function(){
+        var resultEl=document.getElementById('spin-result');
+        if(resultEl)resultEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+      },150);
       // Show excitement exclamation
       var exclaims=['Boom!','Fate Has Spoken!','Uncork It!','Oh Mama!','Hide The Women and Children!','Pour It!','Kapow!','Bang!','Lord Almighty!'];
       var ex=exclaims[Math.floor(Math.random()*exclaims.length)];
