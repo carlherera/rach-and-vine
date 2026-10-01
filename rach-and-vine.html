@@ -421,7 +421,7 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
       <!-- Prompt input -->
       <div style="position:relative;margin-bottom:12px;">
         <textarea id="rec-prompt" rows="2" placeholder="e.g. grilled ribeye with truffle butter..." style="width:100%;box-sizing:border-box;background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 40px 12px 14px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text-primary);resize:none;outline:none;line-height:1.5;"></textarea>
-        <button id="rec-clear" onclick="clearRecPrompt()" style="position:absolute;right:10px;top:10px;background:none;border:none;color:var(--text-muted);font-size:16px;cursor:pointer;display:none;padding:2px;">✕</button>
+        <button id="rec-clear" onclick="clearRecPrompt()" style="position:absolute;right:8px;top:8px;background:rgba(74,32,48,0.1);border:none;border-radius:50%;color:var(--text-secondary);font-size:14px;cursor:pointer;display:none;padding:0;width:28px;height:28px;align-items:center;justify-content:center;touch-action:manipulation;font-weight:600;">✕</button>
       </div>
       <button onclick="getRecommendations()" style="width:100%;padding:14px;background:linear-gradient(135deg,#4a2030,#3a1828);border:none;border-radius:10px;color:#fdf7f5;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;touch-action:manipulation;margin-bottom:20px;">Ask the Sommelier</button>
       <!-- Loading -->
@@ -943,7 +943,7 @@ document.getElementById('filter-country').addEventListener('click',function(e){
 
 document.getElementById('rec-prompt').addEventListener('input',function(){
   var btn=document.getElementById('rec-clear');
-  if(btn)btn.style.display=this.value.length>0?'block':'none';
+  if(btn)btn.style.display=this.value.length>0?'flex':'none';
 });
 document.getElementById('search-input').addEventListener('input',function(){document.getElementById('search-clear').classList.toggle('show',this.value.length>0);renderWineList();});
 function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-clear').classList.remove('show');renderWineList();}
@@ -1659,6 +1659,13 @@ function recOpenWine(id){
   refreshAll();
   setTimeout(function(){openDetail(id);},400);
 }
+function clearRecPrompt(){
+  var prompt=document.getElementById('rec-prompt');
+  if(prompt){prompt.value='';prompt.focus();}
+  var btn=document.getElementById('rec-clear');
+  if(btn)btn.style.display='none';
+}
+
 function selectRecType(btn,type){document.querySelectorAll('.rec-type-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');selectedRecType=type;var ph={meal:"e.g. Grilled ribeye, roasted lamb...",occasion:"e.g. Anniversary dinner, birthday...",window:"Show me wines at peak drinking now...",explore:"e.g. Something bold, or a hidden gem..."};document.getElementById('rec-prompt').placeholder=ph[type];}
 function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();return;}var prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}var askBtn=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
   if(askBtn){askBtn.disabled=true;askBtn.textContent='Consulting the cellar...';}
