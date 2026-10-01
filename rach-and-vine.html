@@ -384,11 +384,13 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
 
   <div class="screen" id="screen-recs">
     <!-- Sommelier header -->
-    <div style="background:linear-gradient(160deg,#3a1828 0%,#4a2030 60%,#6a3045 100%);margin:-16px -16px 20px;padding:36px 24px 28px;border-radius:0 0 24px 24px;position:relative;overflow:hidden;">
+    <div style="background:linear-gradient(160deg,#3a1828 0%,#4a2030 60%,#6a3045 100%);margin:-16px -16px 14px;padding:14px 18px 14px;border-radius:0 0 16px 16px;position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;">
       <div style="position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.05;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:12px 12px;"></div>
-      <div style="font-size:28px;margin-bottom:8px;">✦</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#fdf7f5;letter-spacing:2px;margin-bottom:4px;">Sommelier</div>
-      <div style="font-size:11px;letter-spacing:2px;color:rgba(249,245,236,0.6);text-transform:uppercase;">AI-powered wine recommendations</div>
+      <div style="font-size:18px;flex-shrink:0;position:relative;">✦</div>
+      <div style="position:relative;flex:1;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#fdf7f5;letter-spacing:2px;line-height:1.1;">Sommelier</div>
+        <div style="font-size:9px;letter-spacing:1.5px;color:rgba(249,245,236,0.5);text-transform:uppercase;margin-top:2px;">AI-powered recommendations</div>
+      </div>
     </div>
     <div class="api-setup" id="api-setup">
       <div class="api-setup-title">One-time setup required</div>
@@ -1675,10 +1677,21 @@ function selectRecType(btn,type){document.querySelectorAll('.rec-type-btn').forE
 function getRecommendations(){var apiKey=getApiKey();if(!apiKey){checkApiKey();return;}var prompt=document.getElementById('rec-prompt').value.trim();if(!prompt&&selectedRecType!=='window'){alert('Please describe what you\'re looking for.');return;}var askBtn=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
   if(askBtn){askBtn.disabled=true;askBtn.textContent='Consulting the cellar...';}
   document.getElementById('rec-loading').style.display='block';
-  document.getElementById('rec-result').classList.remove('show');var cl=Object.values(wines).map(function(w){return'- '+w.name+' ('+(w.varietal||'?')+', '+(w.vintage||'N/V')+', qty:'+(w.qty||1)+(w.drinkFrom&&w.drinkTo?', drink '+w.drinkFrom+'-'+w.drinkTo:'')+')';}).join('\n');var up=selectedRecType==='window'?'Year:'+new Date().getFullYear()+'. Top 5 at peak drinking from:\n'+cl+'\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences why it is at peak now"}]}'  :'Cellar:\n'+cl+'\n\n'+selectedRecType+': "'+prompt+'"\nTop 5. For each wine mention any critic scores (Parker, Spectator, etc.) if known, and vintage quality. Return JSON only: {"recommendations":[{"name":"wine name","reason":"2-3 sentences including critic scores and vintage notes if known"}]}';fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})}).then(function(r){return r.json();}).then(function(data){var text=(data.content||[]).map(function(c){return c.text||'';}).join('');var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());var askBtn2=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
+  document.getElementById('rec-result').classList.remove('show');
+  // Scroll so loading indicator is visible
+  setTimeout(function(){
+    var loadEl=document.getElementById('rec-loading');
+    if(loadEl){var rect=loadEl.getBoundingClientRect();var scrollTop=window.pageYOffset||document.documentElement.scrollTop;window.scrollTo({top:scrollTop+rect.top-80,behavior:'smooth'});}
+  },100);var cl=Object.values(wines).map(function(w){return'- '+w.name+' ('+(w.varietal||'?')+', '+(w.vintage||'N/V')+', qty:'+(w.qty||1)+(w.drinkFrom&&w.drinkTo?', drink '+w.drinkFrom+'-'+w.drinkTo:'')+')';}).join('\n');var up=selectedRecType==='window'?'Year:'+new Date().getFullYear()+'. Top 5 at peak drinking from:\n'+cl+'\nReturn JSON only: {"recommendations":[{"name":"wine name","reason":"1-2 sentences why it is at peak now"}]}'  :'Cellar:\n'+cl+'\n\n'+selectedRecType+': "'+prompt+'"\nTop 5. For each wine mention any critic scores (Parker, Spectator, etc.) if known, and vintage quality. Return JSON only: {"recommendations":[{"name":"wine name","reason":"2-3 sentences including critic scores and vintage notes if known"}]}';fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-6',max_tokens:1000,system:'Expert sommelier. Recommend only from provided cellar. Return valid JSON only.',messages:[{role:'user',content:up}]})}).then(function(r){return r.json();}).then(function(data){var text=(data.content||[]).map(function(c){return c.text||'';}).join('');var parsed=JSON.parse(text.replace(/```json|```/g,'').trim());var askBtn2=document.querySelector('#sommelier-main button[onclick="getRecommendations()"]');
     if(askBtn2){askBtn2.disabled=false;askBtn2.textContent='Ask the Sommelier';}
     document.getElementById('rec-loading').style.display='none';
-    document.getElementById('rec-result').classList.add('show');var recHtml=(parsed.recommendations||[]).map(function(r,i){
+    document.getElementById('rec-result').classList.add('show');
+    // Scroll so prompt is at top and results are visible below
+    setTimeout(function(){
+      var promptEl=document.getElementById('rec-prompt');
+      if(promptEl){var rect=promptEl.getBoundingClientRect();var scrollTop=window.pageYOffset||document.documentElement.scrollTop;window.scrollTo({top:scrollTop+rect.top-16,behavior:'smooth'});}
+    },150);
+    var recHtml=(parsed.recommendations||[]).map(function(r,i){
   // Try to find matching wine in cellar
   var matchId=null;
   var rNorm=r.name.toLowerCase().replace(/[.\'-,]/g,' ').replace(/\s+/g,' ').trim();
