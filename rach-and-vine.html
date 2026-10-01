@@ -439,6 +439,7 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
         <div id="rec-list"></div>
       </div>
     </div>
+  </div><!-- end screen-recs -->
 
   <!-- Spin Wheel Screen -->
   <div class="screen" id="screen-spin">
@@ -949,7 +950,7 @@ if(recClearBtn){
 }
 document.getElementById('rec-prompt').addEventListener('input',function(){
   var btn=document.getElementById('rec-clear');
-  if(btn){btn.style.display=this.value.length>0?'block':'none';
+  if(btn){btn.style.display=this.value.length>0?'block':'none';}
 });
 document.getElementById('search-input').addEventListener('input',function(){document.getElementById('search-clear').classList.toggle('show',this.value.length>0);renderWineList();});
 function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-clear').classList.remove('show');renderWineList();}
@@ -958,7 +959,7 @@ document.getElementById('sort-select').addEventListener('change',renderWineList)
 function renderWineList(){
   var q=document.getElementById('search-input').value.toLowerCase();
   var sort=document.getElementById('sort-select').value;
-  function normalizeQ(s){return(s||'').toLowerCase().replace(/[‘’‚‛′]/g,"'").replace(/[.,]/g,' ').replace(/\s+/g,' ').trim();}
+  function normalizeQ(s){return(s||'').toLowerCase().replace(/[\u2018\u2019\u201A\u201B\u2032]/g,"'").replace(/[.,]/g,' ').replace(/\s+/g,' ').trim();}
   var qn=normalizeQ(q);
   var qWords=qn.split(' ').filter(Boolean);
   function searchableText(w){
