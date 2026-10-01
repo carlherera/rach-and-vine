@@ -952,7 +952,7 @@ document.getElementById('sort-select').addEventListener('change',renderWineList)
 function renderWineList(){
   var q=document.getElementById('search-input').value.toLowerCase();
   var sort=document.getElementById('sort-select').value;
-  function normalizeQ(s){return(s||'').toLowerCase().replace(/[.,]/g,' ').replace(/\s+/g,' ').trim();}
+  function normalizeQ(s){return(s||'').toLowerCase().replace(/[‘’‚‛′]/g,"'").replace(/[.,]/g,' ').replace(/\s+/g,' ').trim();}
   var qn=normalizeQ(q);
   var qWords=qn.split(' ').filter(Boolean);
   function searchableText(w){
@@ -1081,7 +1081,7 @@ function renderRackGrid(){
     if(wasSelected){popup.classList.remove('show');return;}
     slot.classList.add('selected');popup.classList.add('show');
     popup.scrollIntoView({behavior:'smooth',block:'nearest'});
-    if(wine){var priceStr=wine.retail?'$'+parseFloat(wine.retail).toFixed(0):(wine.purchase?'$'+parseFloat(wine.purchase).toFixed(0):'');document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=(wine.vintage||'N/V')+' · '+(wine.varietal||'')+(priceStr?' · '+priceStr:'')+' · Row '+row+' Col '+col;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot'))openDetail(wine.id);};}
+    if(wine){var priceStr=wine.retail?'$'+parseFloat(wine.retail).toFixed(0):(wine.purchase?'$'+parseFloat(wine.purchase).toFixed(0):'');document.getElementById('slot-wine-name').textContent=wine.name;document.getElementById('slot-wine-meta').textContent=(wine.vintage||'N/V')+' · '+(wine.varietal||'')+(priceStr?' · '+priceStr:'')+' · Row '+row+' Col '+col;popup.style.cursor='pointer';popup.onclick=function(ev){if(!ev.target.closest('.slot')){var currentScreen=document.querySelector('.screen.active');var onRack=currentScreen&&currentScreen.id==='screen-rack';if(onRack){recOpenWine(wine.id);}else{openDetail(wine.id);}}};}
     else{document.getElementById('slot-wine-name').textContent='Empty Slot';document.getElementById('slot-wine-meta').textContent='Row '+row+', Column '+col+' — Available';popup.style.cursor='default';popup.onclick=null;}
   };
 }
@@ -1124,7 +1124,7 @@ function goToRackFromDetail(){var w=wines[currentDetailId];if(!w)return;var slot
       document.getElementById('slot-wine-name').textContent=w.name;
       var priceStr=w.retail?'$'+parseFloat(w.retail).toFixed(0):(w.purchase?'$'+parseFloat(w.purchase).toFixed(0):'');
       document.getElementById('slot-wine-meta').textContent=(w.vintage||'N/V')+' · '+(w.varietal||'')+(priceStr?' · '+priceStr:'')+' · Row '+sth[0].sid.split('-')[1]+' Col '+sth[0].sid.split('-')[2];
-      popup.style.cursor='default';popup.onclick=null;
+      popup.style.cursor='pointer';popup.onclick=function(){recOpenWine(currentDetailId);};
     }
   },150);
 }
