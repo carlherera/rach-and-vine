@@ -494,9 +494,9 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
   </div>
 
   <!-- Detail Modal -->
-  <div class="modal-overlay" id="detail-modal">
-    <div class="modal" style="max-width:420px;width:92%;max-height:88vh;overflow-y:auto;padding:0;border-radius:16px;">
-      <div id="detail-img" style="height:280px;background:linear-gradient(135deg,#4a2030 0%,#3a1828 100%);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;" onclick="handleDetailImgTap()">
+  <div class="modal-overlay" id="detail-modal" style="align-items:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + 10px);">
+    <div class="modal" style="max-width:420px;width:94%;max-height:calc(100vh - env(safe-area-inset-top,0px) - 24px);max-height:calc(100dvh - env(safe-area-inset-top,0px) - 24px);overflow-y:auto;padding:0;border-radius:16px;">
+      <div id="detail-img" style="height:220px;background:linear-gradient(135deg,#4a2030 0%,#3a1828 100%);border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;cursor:pointer;" onclick="handleDetailImgTap()">
         <div id="detail-img-inner" style="font-size:56px;">🍷</div>
         <div id="photo-dot-indicator" style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:none;gap:5px;">
           <span class="photo-dot active" id="photo-dot-1" style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block;opacity:0.9;"></span>
