@@ -921,8 +921,9 @@ function setView(v){currentView=v;document.getElementById('btn-grid-view').class
 
 function buildFilters(){
   var arr=Object.values(wines);
-  var vs=Array.from(new Set(arr.map(function(w){return w.varietal;}).filter(Boolean))).sort();
-  var cs=Array.from(new Set(arr.map(function(w){return w.country;}).filter(Boolean))).sort();
+  function byQty(field){var t={};arr.forEach(function(w){var k=w[field];if(!k)return;t[k]=(t[k]||0)+(parseInt(w.qty)||1);});return Object.keys(t).sort(function(a,b){return t[b]-t[a]||a.localeCompare(b);});}
+  var vs=byQty('varietal');
+  var cs=byQty('country');
   document.getElementById('filter-varietal').innerHTML='<div class="filter-chip active" data-filter="all">All</div>'+vs.map(function(x){return'<div class="filter-chip" data-filter="'+encodeURIComponent(x)+'">'+x+'</div>';}).join('');
   document.getElementById('filter-country').innerHTML='<div class="filter-chip active" data-filter="all">All</div>'+cs.map(function(x){return'<div class="filter-chip" data-filter="'+encodeURIComponent(x)+'">'+x+'</div>';}).join('');
 }
@@ -984,7 +985,7 @@ function renderWineList(){
     });
   };
   list.sort(function(a,b){
-    if(sort==='name'){var nc=a.name.localeCompare(b.name);if(nc!==0)return nc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
+    if(sort==='name'){var nc=a.name.localeCompare(b.name);if(nc!==0)return nc;var nvc=(a.varietal||'').localeCompare(b.varietal||'');if(nvc!==0)return nvc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
     if(sort==='varietal'){var vc=(a.varietal||'').localeCompare(b.varietal||'');if(vc!==0)return vc;var vnc=a.name.localeCompare(b.name);if(vnc!==0)return vnc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
     if(sort==='country'){var cc=(a.country||'').localeCompare(b.country||'');if(cc!==0)return cc;var cnc=a.name.localeCompare(b.name);if(cnc!==0)return cnc;return parseInt(a.vintage||9999)-parseInt(b.vintage||9999);}
     if(sort==='vintage')return parseInt(b.vintage||0)-parseInt(a.vintage||0);
@@ -1106,6 +1107,7 @@ function cancelSwap(){window._pendingSwapCallback=null;rearrangePickedSlot=null;
 function goToRackFromDetail(){var w=wines[currentDetailId];if(!w)return;var slots=w.slots&&w.slots.length>0?w.slots:[];if(slots.length===0&&!w.rack)return;var targetRackId=slots.length>0?slots[0].rackId:w.rack;var targetRack=RACKS.find(function(r){return r.id===targetRackId;});if(!targetRack)return;
   // Switch rack first, then highlight after render settles
   currentRack=targetRack;
+  if(document.getElementById('screen-cellar').classList.contains('active')){cellarScrollPos=window.scrollY;}
   closeModal('detail-modal');
   var rackBtn=document.getElementById('nav-rack');
   // Switch screen (this calls renderRack internally)
@@ -1664,7 +1666,9 @@ function recOpenWine(id){
   document.getElementById('screen-cellar').classList.add('active');
   cellarBtn.classList.add('active');
   refreshAll();
-  setTimeout(function(){openDetail(id);},400);
+  window.scrollTo(0,cellarScrollPos);
+  setTimeout(function(){window.scrollTo(0,cellarScrollPos);},50);
+  setTimeout(function(){openDetail(id);window.scrollTo(0,cellarScrollPos);},400);
 }
 function clearRecPrompt(){
   var prompt=document.getElementById('rec-prompt');
