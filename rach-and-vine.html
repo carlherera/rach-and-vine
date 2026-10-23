@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Rach & Vine">
 <title>Rach & Vine</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&family=Lora:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{--burgundy-deep:#fdf7f5;--burgundy-mid:#f5ece8;--burgundy-rich:#4a2030;--burgundy-accent:#6a3045;--burgundy-light:#9a5070;--gold:#e6b4be;--gold-light:#c9849a;--gold-dim:#a07880;--text-primary:#2a0f1a;--text-secondary:#4a2030;--text-muted:#7a5060;--surface-2:#ffffff;--surface-3:#fdf7f5;--border:rgba(74,32,48,0.10);--border-bright:rgba(74,32,48,0.30);--glass-bg:rgba(253,247,245,0.95);--green:#2d6b45;--green-light:#1f5a35;--red-neg:#c0392b}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -70,7 +70,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .filter-chip.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.4);color:#fff}
 .cellar-wrap{display:flex;gap:0;position:relative}
 .wine-list-wrap{flex:1;min-width:0;padding-right:24px}
-.az-sidebar{position:fixed;right:4px;top:55%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px;z-index:50;max-height:60vh;overflow:hidden;padding:6px 2px;background:rgba(74,32,48,0.10);border-radius:12px;backdrop-filter:blur(4px)}
+.az-sidebar{position:fixed;right:4px;top:150px;display:flex;flex-direction:column;gap:1px;z-index:50;max-height:calc(100vh - 150px - 100px);overflow:hidden;padding:6px 2px;background:rgba(74,32,48,0.10);border-radius:12px;backdrop-filter:blur(4px)}
 .az-letter{font-size:10px;color:var(--text-primary);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:700;touch-action:manipulation;line-height:1.4;border-radius:3px}
 .az-letter:active,.az-letter.has-wines{color:rgba(74,32,48,0.4)}
 .letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--burgundy-rich);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px;opacity:0.6}
@@ -91,14 +91,14 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .tag.drink-now{border-color:rgba(46,125,50,0.4);color:#2e7d32;background:rgba(232,245,233,0.8);font-weight:500}
 .tag.drink-wait{border-color:rgba(138,75,0,0.45);color:#7a4100;background:#fff0cc;font-weight:600;font-size:10px;letter-spacing:0.6px}
 .tag.drink-past{border-color:rgba(198,40,40,0.3);color:#c62828;background:rgba(252,228,236,0.9)}
-.wine-qty{position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(74,32,48,0.09);display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-variant-numeric:lining-nums;font-size:14px;color:var(--burgundy-rich);font-weight:600}
+.wine-qty{position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(74,32,48,0.09);display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-variant-numeric:lining-nums;font-size:12.5px;color:var(--burgundy-rich);font-weight:600}
 .wine-list-item{display:flex;align-items:center;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer;touch-action:manipulation;gap:10px}
 .wine-list-item:active{background:#f0e8de}
 .wine-list-item-main{flex:1;min-width:0}
 .wine-list-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wine-list-meta{font-size:11px;color:var(--text-muted);margin-top:1px}
 .wine-list-price{font-size:12px;color:var(--burgundy-rich);flex-shrink:0;text-align:right;opacity:0.7}
-.wine-list-qty{font-family:'Montserrat',sans-serif;font-variant-numeric:lining-nums;font-size:13px;font-weight:600;color:var(--burgundy-rich);width:26px;height:26px;border-radius:50%;background:rgba(74,32,48,0.09);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wine-list-qty{font-family:'Lora',serif;font-variant-numeric:lining-nums;font-size:11.5px;font-weight:600;color:var(--burgundy-rich);width:26px;height:26px;border-radius:50%;background:rgba(74,32,48,0.09);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .rack-selector{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .rack-selector::-webkit-scrollbar{display:none}
 .rack-tab{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:#faf7f2;color:var(--text-muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;white-space:nowrap;font-family:'Montserrat',sans-serif;touch-action:manipulation}
@@ -506,10 +506,6 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
         <input type="file" id="detail-photo-input" accept="image/*" style="display:none;" onchange="handleDetailPhoto(this,1)">
         <input type="file" id="detail-photo-input-2" accept="image/*" style="display:none;" onchange="handleDetailPhoto(this,2)">
       </div>
-      <div id="photo-actions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:0 16px;">
-        <button id="retake-photo-btn" onclick="event.stopPropagation();retakeCurrentPhoto()" style="background:#f3e3e7;border:1px solid rgba(74,32,48,0.25);border-radius:20px;color:#4a2030;font-size:11px;letter-spacing:0.8px;padding:8px 16px;margin-top:12px;display:none;cursor:pointer;text-transform:uppercase;font-family:'Montserrat',sans-serif;font-weight:600;">↻ Retake</button>
-        <button id="add-second-photo-btn" onclick="event.stopPropagation();triggerDetailPhoto(2)" style="background:#f3e3e7;border:1px solid rgba(74,32,48,0.25);border-radius:20px;color:#4a2030;font-size:11px;letter-spacing:0.8px;padding:8px 16px;margin-top:12px;display:none;cursor:pointer;text-transform:uppercase;font-family:'Montserrat',sans-serif;font-weight:600;">+ Add 2nd Photo</button>
-      </div>
       <div style="padding:20px 20px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;">
           <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--text-primary);flex:1;padding-right:12px;" id="detail-name">—</div>
@@ -559,6 +555,10 @@ button:active,.nav-btn:active,.rack-tab:active,.view-toggle-btn:active,.rec-type
           <button class="btn-secondary" id="d-remove-btn" style="flex:1;">Remove Bottle</button>
         </div>
         <button id="drink-it-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#4a2030,#3a1828);border:none;border-radius:10px;color:#fdf7f5;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;">🍷 Drink It!</button>
+        <div id="photo-actions" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:0;">
+        <button id="retake-photo-btn" onclick="event.stopPropagation();retakeCurrentPhoto()" style="background:#f3e3e7;border:1px solid rgba(74,32,48,0.25);border-radius:20px;color:#4a2030;font-size:11px;letter-spacing:0.8px;padding:8px 16px;margin-top:12px;display:none;cursor:pointer;text-transform:uppercase;font-family:'Montserrat',sans-serif;font-weight:600;">↻ Retake</button>
+        <button id="add-second-photo-btn" onclick="event.stopPropagation();triggerDetailPhoto(2)" style="background:#f3e3e7;border:1px solid rgba(74,32,48,0.25);border-radius:20px;color:#4a2030;font-size:11px;letter-spacing:0.8px;padding:8px 16px;margin-top:12px;display:none;cursor:pointer;text-transform:uppercase;font-family:'Montserrat',sans-serif;font-weight:600;">+ Add 2nd Photo</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1057,7 +1057,7 @@ function wineCardHTML(w){
     else if(now<df){var yrs=df-now;wineBadge='<span class="tag drink-wait">● Cellar '+yrs+' yr'+(yrs>1?'s':'')+' · ready '+w.drinkFrom+'</span>';}
     else wineBadge='<span class="tag drink-past">● Past peak · drank best '+w.drinkFrom+'–'+w.drinkTo+'</span>';
   }
-  var vc=getVarietalClass(w.varietal||'');return'<div class="wine-card'+(hg?' gain':'')+(vc?' '+vc:'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">'+retailStr+'</span></div><div class="wine-tags">'+(rn?'<span class="tag">'+rn+'</span>':'')+wineBadge+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
+  var vc=getVarietalClass(w.varietal||'');return'<div class="wine-card'+(hg?' gain':'')+(vc?' '+vc:'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">'+retailStr+'</span></div><div class="wine-tags">'+wineBadge+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
 }
 
 var ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
