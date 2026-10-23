@@ -70,7 +70,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .filter-chip.active{background:var(--burgundy-rich);border-color:rgba(74,32,48,0.4);color:#fff}
 .cellar-wrap{display:flex;gap:0;position:relative}
 .wine-list-wrap{flex:1;min-width:0;padding-right:24px}
-.az-sidebar{position:fixed;right:4px;top:150px;display:flex;flex-direction:column;gap:1px;z-index:50;max-height:calc(100vh - 150px - 100px);overflow:hidden;padding:6px 2px;background:rgba(74,32,48,0.10);border-radius:12px;backdrop-filter:blur(4px)}
+.az-sidebar{position:fixed;right:4px;top:215px;display:flex;flex-direction:column;gap:1px;z-index:50;max-height:calc(100vh - 215px - 100px);overflow:hidden;padding:6px 2px;background:rgba(74,32,48,0.10);border-radius:12px;backdrop-filter:blur(4px)}
 .az-letter{font-size:10px;color:var(--text-primary);cursor:pointer;padding:1px 4px;font-family:'Montserrat',sans-serif;font-weight:700;touch-action:manipulation;line-height:1.4;border-radius:3px}
 .az-letter:active,.az-letter.has-wines{color:rgba(74,32,48,0.4)}
 .letter-group-header{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--burgundy-rich);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;letter-spacing:2px;opacity:0.6}
@@ -85,13 +85,13 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .wine-meta{font-size:11px;color:var(--text-muted);margin-top:2px}
 .wine-price-row{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
 .wine-price{font-size:11px;color:var(--text-muted)}
-.wine-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.wine-tags{padding-right:38px;display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
 .tag{font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;border:1px solid var(--border);color:var(--text-muted)}
 .tag.other-v{border-color:rgba(45,107,69,0.3);color:var(--green)}
-.tag.drink-now{border-color:rgba(46,125,50,0.4);color:#2e7d32;background:rgba(232,245,233,0.8);font-weight:500}
-.tag.drink-wait{border-color:rgba(138,75,0,0.45);color:#7a4100;background:#fff0cc;font-weight:600;font-size:10px;letter-spacing:0.6px}
+.tag.drink-now{border-color:rgba(46,125,50,0.5);color:#1b6a20;background:#dcf0dd;font-weight:600;font-size:10px;letter-spacing:0.6px}
+.tag.drink-wait{border-color:rgba(138,75,0,0.3);color:#85520a;background:#fff6dc;font-weight:500;font-size:9.5px;letter-spacing:0.5px}
 .tag.drink-past{border-color:rgba(198,40,40,0.3);color:#c62828;background:rgba(252,228,236,0.9)}
-.wine-qty{position:absolute;top:10px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(74,32,48,0.09);display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-variant-numeric:lining-nums;font-size:12.5px;color:var(--burgundy-rich);font-weight:600}
+.wine-qty{position:absolute;bottom:10px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(74,32,48,0.09);display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-variant-numeric:lining-nums;font-size:12.5px;color:var(--burgundy-rich);font-weight:600}
 .wine-list-item{display:flex;align-items:center;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:6px;cursor:pointer;touch-action:manipulation;gap:10px}
 .wine-list-item:active{background:#f0e8de}
 .wine-list-item-main{flex:1;min-width:0}
@@ -1053,9 +1053,9 @@ function wineCardHTML(w){
   var wineBadge='';
   if(w.drinkFrom&&w.drinkTo){
     var now=new Date().getFullYear(),df=parseInt(w.drinkFrom),dt=parseInt(w.drinkTo);
-    if(now>=df&&now<=dt) wineBadge='<span class="tag drink-now">● Drinking now · peak to '+w.drinkTo+'</span>';
-    else if(now<df){var yrs=df-now;wineBadge='<span class="tag drink-wait">● Cellar '+yrs+' yr'+(yrs>1?'s':'')+' · ready '+w.drinkFrom+'</span>';}
-    else wineBadge='<span class="tag drink-past">● Past peak · drank best '+w.drinkFrom+'–'+w.drinkTo+'</span>';
+    if(now>=df&&now<=dt) wineBadge='<span class="tag drink-now">Drinking now · peak to '+w.drinkTo+'</span>';
+    else if(now<df){var yrs=df-now;wineBadge='<span class="tag drink-wait">Cellar '+yrs+' yr'+(yrs>1?'s':'')+' · ready '+w.drinkFrom+'</span>';}
+    else wineBadge='<span class="tag drink-past">Past peak · drank best '+w.drinkFrom+'–'+w.drinkTo+'</span>';
   }
   var vc=getVarietalClass(w.varietal||'');return'<div class="wine-card'+(hg?' gain':'')+(vc?' '+vc:'')+'" onclick="openDetail(\''+w.id+'\')"><div class="wine-thumb">'+(w.photo?'<img src="'+w.photo+'">'+'':'🍷')+'</div><div class="wine-info"><div class="wine-name">'+w.name+'</div><div class="wine-meta">'+(w.varietal||'Unknown')+' · '+(w.vintage||'N/V')+(w.country?' · '+w.country:'')+'</div><div class="wine-price-row"><span class="wine-price">'+retailStr+'</span></div><div class="wine-tags">'+wineBadge+'</div></div><div class="wine-qty">'+(w.qty||1)+'</div></div>';
 }
